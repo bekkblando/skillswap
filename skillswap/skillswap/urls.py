@@ -19,7 +19,7 @@ from swap.views import home, SkillLookup, add_skill
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^home/$', home),
-    url(r'addskill/$', add_skill),
-    url(r'^skill_lookup/$', SkillLookup.as_view()),
+    url(r'^home/$', home, name="home"),
+    url(r'addskill/$', add_skill, name="addskill"),
+    url(r'^skill_lookup/$', SkillLookup.as_view(), name="skilllookup"),
 ]
