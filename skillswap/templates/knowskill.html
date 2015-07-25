@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block body %}
+<body>
+<div id="skills">
+  <input class="typeahead" type="text" placeholder="Skills">
+</div>
+<script>
+var skills = new Bloodhound({
+  datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
+  queryTokenizer: Bloodhound.tokenizers.whitespace,
+  prefetch: '/skill_lookup/',
+  remote: {
+    url: '/skill_lookup/?search=%QUERY',
+    wildcard: '%QUERY'
+  }
+});
+
+$('#skills .typeahead').typeahead(null, {
+  name: 'skills',
+  display: 'name',
+  source: skills
+});
+ </script>
+
+</body>
+{% endblock %}
+</html>
