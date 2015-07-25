@@ -1,9 +1,14 @@
 {% extends 'base.html' %}
 {% block body %}
 <body>
+<form> method="POST">
 <div id="skills">
   <input class="typeahead" type="text" placeholder="Skills">
 </div>
+    <input type="radio">A skill you know</input>
+    <input type="radio">A skill you want to learn</input>
+    <button type="submit">Add</button>
+    </form>
 <script>
 var skills = new Bloodhound({
   datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
