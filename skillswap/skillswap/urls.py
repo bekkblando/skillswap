@@ -15,7 +15,11 @@ Including another URLconf
 """
 from django.conf.urls import include, url
 from django.contrib import admin
+from swap.views import home, SkillLookup, add_skill
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
+    url(r'^home/$', home),
+    url(r'addskill/$', add_skill),
+    url(r'^skill_lookup/$', SkillLookup.as_view()),
 ]
