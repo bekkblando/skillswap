@@ -58,12 +58,14 @@ def add_skill(request):
         if eskill:
             profile = Profile.objects.get(user = request.user)
             if skilltype == "learn":
-                addskill = SkillLearn.objects.create(description=description, user=profile, skill=eskill)
-                addskill.save()
+                if not eskill in profile.learn.all() and not eskill in profile.know.all():
+                    addskill = SkillLearn.objects.create(description=description, user=profile, skill=eskill)
+                    addskill.save()
             if skilltype == "know":
-                rank = request.POST['rank']
-                addskill = SkillKnow.objects.create(rank = rank , description=description, user=profile, skill=eskill)
-                addskill.save()
+                if not eskill in profile.skills.all() and not eskill in profile.learn.all():
+                    rank = request.POST['rank']
+                    addskill = SkillKnow.objects.create(rank = rank , description=description, user=profile, skill=eskill)
+                    addskill.save()
         else:
             profile = Profile.objects.get(user = request.user)
             if skilltype == "learn":
