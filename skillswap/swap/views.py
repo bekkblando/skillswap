@@ -1,7 +1,7 @@
 from django.core.urlresolvers import reverse_lazy
 from django.shortcuts import render_to_response
 from django.template import RequestContext
-from django.views.generic import DeleteView
+from django.views.generic import DeleteView, DetailView
 from swap.models import Skill, Profile, SkillLearn, SkillKnow
 from rest_framework import generics
 from rest_framework import serializers
@@ -12,21 +12,30 @@ from django.contrib.auth.decorators import login_required
 def home(request):
     return render_to_response("home.html", context_instance=RequestContext(request))
 
+
+@login_required(redirect_field_name='login')
 def profile(request):
     context = {}
     know = []
     learn = []
+    exact = []
     profile = Profile.objects.get(user = request.user)
     context['address'] = profile.address
     context['phone'] = profile.phone
     knowall = profile.skills.all()
     learnall = profile.learn.all()
     for item in knowall:
-        know.append(SkillKnow.objects.get(user=profile, skill=item ))
+        print(item)
+        know.append(SkillKnow.objects.get(user=profile, skill=item))
     for item in learnall:
         learn.append(SkillLearn.objects.get(user=profile, skill=item))
+        match = Profile.objects.filter(skills__in = [item] )
+        if len(match):
+            exact.append((item, match))
+    context['exact'] = exact
     context['learn'] = learn
     context['know'] = know
+
     return render_to_response("profile.html", context, context_instance=RequestContext(request))
 
 
@@ -138,6 +147,24 @@ class LearnDeleteView(DeleteView):
     model = SkillLearn
     success_url = reverse_lazy("profile")
 
+class UserPageView(DetailView):
+    model = Profile
+    template_name = 'userpage.html'
+    
+    def get_context_data(self, **kwargs):
+        context = super(UserPageView, self).get_context_data()
+        knowall = []
+        learnall = []
+        know = context['profile'].skills.all()
+        learn = context['profile'].learn.all()
+        for skill in know:
+            knowall.append((skill.name, SkillKnow.objects.get(user=context['profile'], skill=skill)))
+        for skill in learn:
+            learnall.append((skill.name, SkillLearn.objects.get(user=context['profile'], skill=skill)))
+        context['know'] = knowall
+        context['learn'] = learnall
+        print(context)
+        return context
 
 
 ###### API VIEWS

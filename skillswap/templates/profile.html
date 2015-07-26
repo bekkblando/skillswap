@@ -14,7 +14,14 @@
 {% for item in learn %}
     {{ item.skill }}<form method="POST" action="{% url 'deletelearn' item.id %}">{% csrf_token %}<button type="submit" >Delete</button></form>
 {% endfor %}
-
+<br/>
+<h1>Exact Skill Matches</h1>
+{% for tu in exact %}
+Skill: {{ tu.0.name }}<br/>
+    {% for user in tu.1 %}
+User:<a href="{% url 'userpage' user.user.id %}"> {{ user.user }}</a>
+        {% endfor %}
+{% endfor %}
 </body>
 {% endblock %}
 </html>

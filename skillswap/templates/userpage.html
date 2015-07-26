@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block body %}
+<body>
+<h1>User Name</h1>
+{{ object.user }}
+<h1>Skills they know</h1>
+{% for item in know  %}
+    <br/><h2>Skill</h2>
+{{ item.0 }}
+<br/><h2>Rank</h2>
+{{ item.1.rank }}
+    <br/><h2>Description</h2>
+{{ item.1.description }}
+{% endfor %}
+<h1>Skills they want to learn</h1>
+{% for item in learn  %}
+    <br/><h2>Skill</h2>
+{{ item.0 }}
+    <br/><h2>Description</h2>
+{{ item.1.description }}
+{% endfor %}
+</body>
+{% endblock %}
+</html>

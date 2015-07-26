@@ -39,7 +39,7 @@ class SkillLearn(models.Model):
     skill = models.ForeignKey(Skill)
 
     def __str__(self):
-        return "Rank {}, description {}, user {}, skill {}".format(self.rank, self.description, self.user, self.skill)
+        return "description {}, user {}, skill {}".format(self.description, self.user, self.skill)
 
 class Meeting(models.Model):
     meeting = models.TextField()
