@@ -58,7 +58,7 @@ def add_skill(request):
         if eskill:
             profile = Profile.objects.get(user = request.user)
             if skilltype == "learn":
-                if not eskill in profile.learn.all() and not eskill in profile.know.all():
+                if not eskill in profile.learn.all() and not eskill in profile.skills.all():
                     addskill = SkillLearn.objects.create(description=description, user=profile, skill=eskill)
                     addskill.save()
             if skilltype == "know":
