@@ -1,5 +1,7 @@
+from django.core.urlresolvers import reverse_lazy
 from django.shortcuts import render_to_response
 from django.template import RequestContext
+from django.views.generic import DeleteView
 from swap.models import Skill, Profile, SkillLearn, SkillKnow
 from rest_framework import generics
 from rest_framework import serializers
@@ -12,11 +14,19 @@ def home(request):
 
 def profile(request):
     context = {}
+    know = []
+    learn = []
     profile = Profile.objects.get(user = request.user)
     context['address'] = profile.address
     context['phone'] = profile.phone
-    context['know'] = profile.skills.all()
-    context['learn'] = profile.learn.all()
+    knowall = profile.skills.all()
+    learnall = profile.learn.all()
+    for item in knowall:
+        know.append(SkillKnow.objects.get(user=profile, skill=item ))
+    for item in learnall:
+        learn.append(SkillLearn.objects.get(user=profile, skill=item))
+    context['learn'] = learn
+    context['know'] = know
     return render_to_response("profile.html", context, context_instance=RequestContext(request))
 
 
@@ -119,6 +129,14 @@ def register(request):
             'register.html',
             {'user_form': user_form, 'profile_form': profile_form, 'registered': registered},
             context)
+
+class KnowDeleteView(DeleteView):
+    model = SkillKnow
+    success_url = reverse_lazy("profile")
+
+class LearnDeleteView(DeleteView):
+    model = SkillLearn
+    success_url = reverse_lazy("profile")
 
 
 

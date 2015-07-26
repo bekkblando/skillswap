@@ -5,9 +5,16 @@
 {{ address }}<br/>
 {{ phone }}
     <h1>Skills you know</h1>
-    {{ know }}
+    {% for item in know %}
+        {{ item.skill }}<form method="POST" action="{% url 'deleteknow' item.id %}">{% csrf_token %}<button type="submit" >Delete</button></form>
+        Rank: {{ item.rank }}<br/>
+        Description: {{ item.description }}
+    {% endfor %}
     <h1>Skills you want to know</h1>
-    {{ learn }}
+{% for item in learn %}
+    {{ item.skill }}<form method="POST" action="{% url 'deletelearn' item.id %}">{% csrf_token %}<button type="submit" >Delete</button></form>
+{% endfor %}
+
 </body>
 {% endblock %}
 </html>

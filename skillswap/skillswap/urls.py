@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.conf.urls import include, url
 from django.contrib import admin
-from swap.views import home, SkillLookup, add_skill, register, profile
+from swap.views import home, SkillLookup, add_skill, register, profile, KnowDeleteView, LearnDeleteView
 from django.contrib.auth.views import login, logout
 
 
@@ -27,5 +27,7 @@ urlpatterns = [
     url(r'^accounts/login/', login, name="login"),
     url(r'^logout/', logout, {'next_page': '/'}, name="logout"),
     url(r'^profile/$', profile, name="profile"),
+    url(r'deleteknow(?P<pk>\d+)',KnowDeleteView.as_view(), name="deleteknow" ),
+    url(r'deletelearn(?P<pk>\d+)',LearnDeleteView.as_view(), name="deletelearn" ),
     url(r'', home, name="home"),
 ]
