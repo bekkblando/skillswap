@@ -33,7 +33,7 @@ class SkillKnow(models.Model):
         return "Rank {}, description {}, user {}, skill {}".format(self.rank, self.description, self.user, self.skill)
 
 class SkillLearn(models.Model):
-    rank = models.IntegerField()
+    # rank = models.IntegerField()
     description = models.TextField()
     user = models.ForeignKey(Profile)
     skill = models.ForeignKey(Skill)
