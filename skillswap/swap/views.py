@@ -19,10 +19,22 @@ def add_skill(request):
         print(request.user)
         skilltype = request.POST['skill']
         name = request.POST['name']
-        eskill = Skill.objects.get(name=name)
+        try:
+            eskill = Skill.objects.get(name=name)
+        except:
+            eskill = Skill.objects.create(name=name)
         description = request.POST['description']
         print(eskill)
         if eskill:
+            profile = Profile.objects.get(user = request.user)
+            if skilltype == "learn":
+                addskill = SkillLearn.objects.create(description=description, user=profile, skill=eskill)
+                addskill.save()
+            if skilltype == "know":
+                rank = request.POST['rank']
+                addskill = SkillKnow.objects.create(rank = rank , description=description, user=profile, skill=eskill)
+                addskill.save()
+        else:
             profile = Profile.objects.get(user = request.user)
             if skilltype == "learn":
                 addskill = SkillLearn.objects.create(description=description, user=profile, skill=eskill)
