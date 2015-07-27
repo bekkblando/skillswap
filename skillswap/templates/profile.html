@@ -22,6 +22,14 @@ Skill: {{ tu.0.name }}<br/>
 User:<a href="{% url 'userpage' user.user.id %}"> {{ user.user }}</a>
         {% endfor %}
 {% endfor %}
+
+<h1>Similiar Skill Matches</h1>
+{% for tu in similiar %}
+Skill: {{ tu.0 }}<br/>
+    {% for user in tu.1 %}
+User:<a href="{% url 'userpage' user.user.id %}"> {{ user.user }}</a>
+        {% endfor %}
+{% endfor %}
 </body>
 {% endblock %}
 </html>

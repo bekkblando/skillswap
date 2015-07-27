@@ -8,6 +8,7 @@ from rest_framework import serializers
 from rest_framework import filters
 from swap.forms import UserForm, ProfileForm
 from django.contrib.auth.decorators import login_required
+from django.db.models import Q
 
 def home(request):
     return render_to_response("home.html", context_instance=RequestContext(request))
@@ -19,22 +20,34 @@ def profile(request):
     know = []
     learn = []
     exact = []
+    smatch = []
+    simmatch = []
     profile = Profile.objects.get(user = request.user)
     context['address'] = profile.address
     context['phone'] = profile.phone
     knowall = profile.skills.all()
     learnall = profile.learn.all()
     for item in knowall:
-        print(item)
         know.append(SkillKnow.objects.get(user=profile, skill=item))
-    for item in learnall:
-        learn.append(SkillLearn.objects.get(user=profile, skill=item))
-        match = Profile.objects.filter(skills__in = [item] )
+    for ite in learnall:
+        learn.append(SkillLearn.objects.get(user=profile, skill=ite))
+        match = Profile.objects.filter(skills__in = [ite] )
+        skillsvalue = Profile.objects.all().values_list('skills__name')
+        for item in skillsvalue:
+            skillname = str(item[0])
+            mat = skillname.find(ite.name)
+            if mat != -1:
+                skil = Skill.objects.get(name=item[0])
+                simmatch = Profile.objects.filter(skills__in = [skil])
         if len(match):
-            exact.append((item, match))
+            exact.append((ite, match))
+        if len(simmatch) and not skil in exact and item[0] != None:
+            print(skil)
+            smatch.append((item, simmatch, skil))
     context['exact'] = exact
     context['learn'] = learn
     context['know'] = know
+    context['similiar'] = smatch
 
     return render_to_response("profile.html", context, context_instance=RequestContext(request))
 
