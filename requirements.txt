@@ -10,3 +10,4 @@ wheel
 django-filter
 djangorestframework
 Markdown
+requests

@@ -8,7 +8,9 @@ from rest_framework import serializers
 from rest_framework import filters
 from swap.forms import UserForm, ProfileForm
 from django.contrib.auth.decorators import login_required
+import requests
 from django.db.models import Q
+
 
 def home(request):
     return render_to_response("home.html", context_instance=RequestContext(request))
@@ -17,33 +19,66 @@ def home(request):
 @login_required(redirect_field_name='login')
 def profile(request):
     context = {}
+    if request.POST:
+        people = []
+        distancemax = int(request.POST['distance'])
+        profiles = Profile.objects.all()
+        currentuser = Profile.objects.get(user=request.user)
+        streetad = currentuser.street.strip().replace(' ', '+')
+        print(streetad)
+        API_KEY = 'AIzaSyCLIdr-9-bc_jnnH4tfIfIPCmAhhfGkQg8'
+        currentuserdata = requests.get('https://maps.googleapis.com/maps/api/geocode/json?address=' + str(
+            currentuser.streetnumber) + streetad + ',' + currentuser.city + ',' + currentuser.state + '&key=' + API_KEY)
+        currentusercords = str(currentuserdata.json()['results'][0]['geometry']['location']['lat']) + ',' + str(
+            currentuserdata.json()['results'][0]['geometry']['location']['lng'])
+        for profile in profiles:
+            if profile != currentuser:
+                streetad = profile.street.strip().replace(' ', '+')
+                profiledata = requests.get('https://maps.googleapis.com/maps/api/geocode/json?address=' + str(
+                profile.streetnumber) + streetad + ',' + profile.city + ',' + profile.state + '&key=' + API_KEY)
+                print(profile, profiledata.content)
+                profilecords = str(profiledata.json()['results'][0]['geometry']['location']['lat']) + ',' + str(
+                profiledata.json()['results'][0]['geometry']['location']['lng'])
+                print(profilecords)
+                disdata = requests.get('https://maps.googleapis.com/maps/api/distancematrix/json?origins='+currentusercords+'&destinations='+profilecords+'&key='+API_KEY)
+                distance= disdata.json()['rows'][0]['elements'][0]['distance']['text']
+                miles = miles = 0.62137 * int(''.join(x for x in distance if x.isdigit()))
+                print(miles)
+                if miles <= distancemax:
+                    print(profile.skills.all())
+                    people.append((profile, profile.skills.all()))
+        context['people'] = people
     know = []
     learn = []
+    addedsimskill = []
     exact = []
     smatch = []
     simmatch = []
-    profile = Profile.objects.get(user = request.user)
-    context['address'] = profile.address
+    profile = Profile.objects.get(user=request.user)
+    context['address'] = '{} {}, {} , {} '.format(profile.streetnumber, profile.street, profile.city, profile.state)
     context['phone'] = profile.phone
     knowall = profile.skills.all()
     learnall = profile.learn.all()
     for item in knowall:
         know.append(SkillKnow.objects.get(user=profile, skill=item))
     for ite in learnall:
+        add = False
         learn.append(SkillLearn.objects.get(user=profile, skill=ite))
-        match = Profile.objects.filter(skills__in = [ite] )
+        match = Profile.objects.filter(skills__in=[ite])
         skillsvalue = Profile.objects.all().values_list('skills__name')
         for item in skillsvalue:
             skillname = str(item[0])
             mat = skillname.find(ite.name)
             if mat != -1:
                 skil = Skill.objects.get(name=item[0])
-                simmatch = Profile.objects.filter(skills__in = [skil])
+                simmatch = Profile.objects.filter(skills__in=[skil])
+                add = True
+                if len(simmatch) and not skillname == ite.name and skillname != 'None' and add:
+                    if not skillname in addedsimskill:
+                        addedsimskill.append(skillname)
+                        smatch.append((ite, simmatch, skillname))
         if len(match):
             exact.append((ite, match))
-        if len(simmatch) and not skil in exact and item[0] != None:
-            print(skil)
-            smatch.append((item, simmatch, skil))
     context['exact'] = exact
     context['learn'] = learn
     context['know'] = know
@@ -56,7 +91,7 @@ def profile(request):
 def add_skill(request):
     context = {}
     print(request.user)
-    profile = Profile.objects.get(user = request.user)
+    profile = Profile.objects.get(user=request.user)
     if request.POST:
         print("YO")
         print(request.user)
@@ -69,7 +104,7 @@ def add_skill(request):
         description = request.POST['description']
         print(eskill)
         if eskill:
-            profile = Profile.objects.get(user = request.user)
+            profile = Profile.objects.get(user=request.user)
             if skilltype == "learn":
                 if not eskill in profile.learn.all() and not eskill in profile.skills.all():
                     addskill = SkillLearn.objects.create(description=description, user=profile, skill=eskill)
@@ -77,21 +112,21 @@ def add_skill(request):
             if skilltype == "know":
                 if not eskill in profile.skills.all() and not eskill in profile.learn.all():
                     rank = request.POST['rank']
-                    addskill = SkillKnow.objects.create(rank = rank , description=description, user=profile, skill=eskill)
+                    addskill = SkillKnow.objects.create(rank=rank, description=description, user=profile, skill=eskill)
                     addskill.save()
         else:
-            profile = Profile.objects.get(user = request.user)
+            profile = Profile.objects.get(user=request.user)
             if skilltype == "learn":
                 addskill = SkillLearn.objects.create(description=description, user=profile, skill=eskill)
                 addskill.save()
             if skilltype == "know":
                 rank = request.POST['rank']
-                addskill = SkillKnow.objects.create(rank = rank , description=description, user=profile, skill=eskill)
+                addskill = SkillKnow.objects.create(rank=rank, description=description, user=profile, skill=eskill)
                 addskill.save()
     context['learn'] = profile.learn.all()
     context['know'] = profile.skills.all()
-    return render_to_response("knowskill.html", context, context_instance=RequestContext(request))
 
+    return render_to_response("knowskill.html", context, context_instance=RequestContext(request))
 
 
 def register(request):
@@ -114,22 +149,25 @@ def register(request):
         user_form = UserForm()
         profile_form = ProfileForm()
     return render_to_response(
-            'register.html',
-            {'user_form': user_form, 'profile_form': profile_form, 'registered': registered},
-            context)
+        'register.html',
+        {'user_form': user_form, 'profile_form': profile_form, 'registered': registered},
+        context)
+
 
 class KnowDeleteView(DeleteView):
     model = SkillKnow
     success_url = reverse_lazy("profile")
 
+
 class LearnDeleteView(DeleteView):
     model = SkillLearn
     success_url = reverse_lazy("profile")
 
+
 class UserPageView(DetailView):
     model = Profile
     template_name = 'userpage.html'
-    
+
     def get_context_data(self, **kwargs):
         context = super(UserPageView, self).get_context_data()
         knowall = []
@@ -149,10 +187,10 @@ class UserPageView(DetailView):
 ###### API VIEWS
 
 class SkillSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Skill
         fields = ['name']
+
 
 class SkillLookup(generics.ListAPIView):
     queryset = Skill.objects.all()

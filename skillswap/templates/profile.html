@@ -24,11 +24,34 @@ User:<a href="{% url 'userpage' user.user.id %}"> {{ user.user }}</a>
 {% endfor %}
 
 <h1>Similiar Skill Matches</h1>
-{% for tu in similiar %}
-Skill: {{ tu.0 }}<br/>
+{% for tu in similiar %}<br/><br/>
+Skill: {{ tu.2 }}<br/>Users with similiar Skill:
     {% for user in tu.1 %}
-User:<a href="{% url 'userpage' user.user.id %}"> {{ user.user }}</a>
+<a href="{% url 'userpage' user.user.id %}"> {{ user.user }}</a>
         {% endfor %}
+{% endfor %}
+<h1>Skills in Area</h1>
+<form method="POST">{% csrf_token %}
+    <select name="distance">
+        <option>10</option>
+        <option>20</option>
+        <option>30</option>
+        <option>40</option>
+        <option>50</option>
+        <option>60</option>
+        <option>70</option>
+        <option>80</option>
+        <option>90</option>
+        <option>100</option>
+
+    </select>
+    <button type="submit">Get Skills in Area</button>
+    </form>
+{% for person in people %}
+User:<a href="{% url 'userpage' person.0.user.id %}"> {{ person.0.user }}</a>
+{% for skill in person.1 %}
+{{ skill }}
+{% endfor %}
 {% endfor %}
 </body>
 {% endblock %}

@@ -15,13 +15,16 @@ class Profile(models.Model):
     user = models.OneToOneField(User)
     skills = models.ManyToManyField(Skill, through="SkillKnow", related_name='skills')
     learn = models.ManyToManyField(Skill, through="SkillLearn", related_name='learn')
-    address = models.CharField(max_length=140)
+    streetnumber = models.IntegerField()
+    street = models.CharField(max_length=140)
+    city = models.CharField(max_length=140)
+    state = models.CharField(max_length=2)
     created = models.DateTimeField(auto_now_add=True)
     phone_regex = RegexValidator(regex=r'^\+?1?\d{9,15}$', message="Phone number must be entered in the format: '+999999999'. Up to 15 digits allowed.")
     phone = models.CharField(validators=[phone_regex], blank=True, max_length=18) # validators should be a list
 
     def __str__(self):
-        return "Username {}, address {}, Skills {}, learn {}".format(self.user, self.address, self.skills, self.learn)
+        return "Username {},  Skills {}, learn {}".format(self.user, self.skills, self.learn)
 
 class SkillKnow(models.Model):
     rank = models.IntegerField()
@@ -30,7 +33,7 @@ class SkillKnow(models.Model):
     skill = models.ForeignKey(Skill)
 
     def __str__(self):
-        return "Rank {}, description {}, user {}, skill {}".format(self.rank, self.description, self.user, self.skill)
+        return "Rank {}, description {}, user {}".format(self.rank, self.description, self.user)
 
 class SkillLearn(models.Model):
     # rank = models.IntegerField()
@@ -39,7 +42,7 @@ class SkillLearn(models.Model):
     skill = models.ForeignKey(Skill)
 
     def __str__(self):
-        return "description {}, user {}, skill {}".format(self.description, self.user, self.skill)
+        return "description {}, user {}".format(self.description, self.user)
 
 class Meeting(models.Model):
     meeting = models.TextField()
