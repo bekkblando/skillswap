@@ -20,7 +20,17 @@
 {{ item.1.description }}
 {% endfor %}
 <h1>Meeting with them</h1>
+{% for item in review %}
+<br/>
+{{ item }}
+{% endfor %}
+<br/><div>
+<form method="POST" action="{% url 'meetingcreate' %}">{% csrf_token %}
 
+<div><textarea name="content">Type how it went here</textarea></div>
+    <input type="hidden" name="user" value="{{ object.user.id }}"/>
+    <button type="submit">Talk about it</button>
+</form></div>
 </body>
 {% endblock %}
 </html>

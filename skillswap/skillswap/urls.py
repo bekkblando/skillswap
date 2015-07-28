@@ -16,7 +16,7 @@ Including another URLconf
 from django.conf.urls import include, url
 from django.contrib import admin
 from swap.views import home, SkillLookup, add_skill, register, profile, KnowDeleteView, LearnDeleteView, UserPageView, userchatview, \
-    ChatListView
+    ChatListView, meetingcreate
 from django.contrib.auth.views import login, logout
 
 
@@ -32,6 +32,7 @@ urlpatterns = [
     url(r'deleteknow(?P<pk>\d+)',KnowDeleteView.as_view(), name="deleteknow" ),
     url(r'deletelearn(?P<pk>\d+)',LearnDeleteView.as_view(), name="deletelearn" ),
     url(r'createuserchat', userchatview, name="userchatcreate"),
+    url(r'createmeeting', meetingcreate, name="meetingcreate"),
     url(r'chat/', ChatListView.as_view(), name='chatlist'),
     url(r'', home, name="home"),
 ]

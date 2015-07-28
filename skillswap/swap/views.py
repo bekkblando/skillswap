@@ -5,7 +5,7 @@ from django.template import RequestContext
 from django.views.generic import DeleteView, DetailView, ListView, CreateView
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from swap.models import Skill, Profile, SkillLearn, SkillKnow, UserChat, Message
+from swap.models import Skill, Profile, SkillLearn, SkillKnow, UserChat, Message, Meeting
 from rest_framework import generics
 from rest_framework import serializers
 from rest_framework import filters
@@ -176,16 +176,15 @@ class UserPageView(DetailView):
         context = super(UserPageView, self).get_context_data()
         knowall = []
         learnall = []
-        print("hey")
-        print(kwargs['object'])
-        message = Message.objects.filter()
+        profile = kwargs['object']
+        reviews = Meeting.objects.filter(usercommentedon=profile)
         know = context['profile'].skills.all()
         learn = context['profile'].learn.all()
         for skill in know:
             knowall.append((skill.name, SkillKnow.objects.get(user=context['profile'], skill=skill)))
         for skill in learn:
             learnall.append((skill.name, SkillLearn.objects.get(user=context['profile'], skill=skill)))
-        # context['reviews'] = reviews
+        context['review'] = reviews
         context['know'] = knowall
         context['learn'] = learnall
         print(context)
@@ -206,11 +205,15 @@ def userchatview(request):
         chat = UserChat.objects.create(user1=profile1, user2=profile2)
         return redirect('chatlist')
 
-"""def messagecreate(request):
+def meetingcreate(request):
     if request.POST:
         print("hello")
         profile1 = Profile.objects.get(user=request.user)
-        profile2 = Profile.objects.get(user__username=request.POST['user2'])"""
+        profile2 = Profile.objects.get(user__id=request.POST['user'])
+        content = request.POST['content']
+        print(content, profile1, profile2)
+        meeting = Meeting.objects.create(meeting=content, usercommenting=profile1, usercommentedon=profile2)
+        return redirect('userpage', int(request.POST['user']) )
 
 
 ###### API VIEWS
