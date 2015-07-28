@@ -24,7 +24,7 @@ class Profile(models.Model):
     phone = models.CharField(validators=[phone_regex], blank=True, max_length=18) # validators should be a list
 
     def __str__(self):
-        return "Username {},  Skills {}, learn {}".format(self.user, self.skills, self.learn)
+        return "Username {}".format(self.user)
 
 class SkillKnow(models.Model):
     rank = models.IntegerField()
@@ -50,4 +50,22 @@ class Meeting(models.Model):
     usercommentedon = models.ForeignKey(Profile, related_name="commentedon")
 
     def __str__(self):
-        return "How {}, user commenting {}, usercommented on {}".format(self.meeting, self.usercommenting, self.usercommentedon)
+        return "How it went: {}, user commenting: {}, usercommented on: {}".format(self.meeting, self.usercommenting, self.usercommentedon)
+
+
+class UserChat(models.Model):
+    user1 = models.ForeignKey(Profile, related_name="user1")
+    user2 = models.ForeignKey(Profile, related_name="user2")
+    datetime = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return "User1: {} , User2: {}".format(self.user1, self.user2)
+
+class Message(models.Model):
+    text = models.CharField(max_length=300)
+    chat = models.ForeignKey(UserChat)
+    sender = models.ForeignKey(Profile)
+    datetime = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['datetime']

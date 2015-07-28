@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block body %}
+<body>
+
+{% for item in object_list %}
+<br/>
+{{ item }}<div class="{{ item }}"></div><button class="b{{ item.user1 }}">Open Chat</button>
+
+
+<script type="application/javascript">
+    var openchat = function (){
+        //var xList = $(".{{ item }}")[0].value;
+        console.log("Hey")
+        var getUrl = "http://localhost:8000/api/graph/?x=";
+        $.getJSON(getUrl, function (response){
+            $(".{{ item }}").html(newGraph);
+        });
+    };
+    $('document').ready(function (){
+        $(".b{{ item.user1 }}").click(openchat);
+    });
+</script>
+
+{% endfor %}
+
+</body>
+{% endblock %}
+</html>

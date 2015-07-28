@@ -19,7 +19,9 @@
 {% for tu in exact %}
 Skill: {{ tu.0.name }}<br/>
     {% for user in tu.1 %}
-User:<a href="{% url 'userpage' user.user.id %}"> {{ user.user }}</a>
+User:<a href="{% url 'userpage' user.user.id %}"> {{ user.user }}</a><form method="POST" action="{% url 'userchatcreate'%}">{% csrf_token %}
+<input type="hidden" name="user2" value="{{ user.user }}"/>
+        <button>Create Chat</button></form>
         {% endfor %}
 {% endfor %}
 
@@ -27,7 +29,9 @@ User:<a href="{% url 'userpage' user.user.id %}"> {{ user.user }}</a>
 {% for tu in similiar %}<br/><br/>
 Skill: {{ tu.2 }}<br/>Users with similiar Skill:
     {% for user in tu.1 %}
-<a href="{% url 'userpage' user.user.id %}"> {{ user.user }}</a>
+<a href="{% url 'userpage' user.user.id %}"> {{ user.user }}</a><form method="POST" action="{% url 'userchatcreate'%}">{% csrf_token %}
+<input type="hidden" name="user2" value="{{ user.user }}"/>
+        <button>Create Chat</button></form>
         {% endfor %}
 {% endfor %}
 <h1>Skills in Area</h1>

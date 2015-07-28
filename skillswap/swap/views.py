@@ -1,14 +1,18 @@
 from django.core.urlresolvers import reverse_lazy
-from django.shortcuts import render_to_response
+from django.http import JsonResponse
+from django.shortcuts import render_to_response, redirect
 from django.template import RequestContext
-from django.views.generic import DeleteView, DetailView
-from swap.models import Skill, Profile, SkillLearn, SkillKnow
+from django.views.generic import DeleteView, DetailView, ListView, CreateView
+from rest_framework.response import Response
+from rest_framework.views import APIView
+from swap.models import Skill, Profile, SkillLearn, SkillKnow, UserChat, Message
 from rest_framework import generics
 from rest_framework import serializers
 from rest_framework import filters
 from swap.forms import UserForm, ProfileForm
 from django.contrib.auth.decorators import login_required
 import requests
+from rest_framework import status
 from django.db.models import Q
 
 
@@ -172,16 +176,41 @@ class UserPageView(DetailView):
         context = super(UserPageView, self).get_context_data()
         knowall = []
         learnall = []
+        print("hey")
+        print(kwargs['object'])
+        message = Message.objects.filter()
         know = context['profile'].skills.all()
         learn = context['profile'].learn.all()
         for skill in know:
             knowall.append((skill.name, SkillKnow.objects.get(user=context['profile'], skill=skill)))
         for skill in learn:
             learnall.append((skill.name, SkillLearn.objects.get(user=context['profile'], skill=skill)))
+        # context['reviews'] = reviews
         context['know'] = knowall
         context['learn'] = learnall
         print(context)
         return context
+
+class ChatListView(ListView):
+    model = UserChat
+    #profile = Profile.objects.get(user=request.user)
+    #queryset = UserChat.objects.filter(Q(user1=request.user)|Q(user2=request.user))
+    template_name = "chat.html"
+
+
+def userchatview(request):
+    if request.POST:
+        profile1 = Profile.objects.get(user=request.user)
+        profile2 = Profile.objects.get(user__username=request.POST['user2'])
+        print(profile1, profile2)
+        chat = UserChat.objects.create(user1=profile1, user2=profile2)
+        return redirect('chatlist')
+
+"""def messagecreate(request):
+    if request.POST:
+        print("hello")
+        profile1 = Profile.objects.get(user=request.user)
+        profile2 = Profile.objects.get(user__username=request.POST['user2'])"""
 
 
 ###### API VIEWS
@@ -190,6 +219,13 @@ class SkillSerializer(serializers.ModelSerializer):
     class Meta:
         model = Skill
         fields = ['name']
+
+
+class UserChatSerializer(serializers.ModelSerializer):
+
+
+    class Meta:
+        model = UserChat
 
 
 class SkillLookup(generics.ListAPIView):
