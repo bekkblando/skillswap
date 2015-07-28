@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse_lazy
 from django.http import JsonResponse
 from django.shortcuts import render_to_response, redirect
@@ -262,9 +263,26 @@ class MessagesListView(generics.ListAPIView):
         print(messages)
         return messages
 
-class MessagesCreateView(generics.CreateAPIView):
-    model = Message
+class MessagesCreateView(generics.GenericAPIView):
     print("makin it")
-    serializer_class = MessageSerializer
     authentication_classes = (TokenAuthentication,)
     permission_classes = (IsAuthenticated,)
+
+    def post(self, request, *args, **kwargs):
+        #request.data = [request.data]
+        print(request.data)
+        chat=request.data['chat']
+        text=request.data['text']
+        user1=request.data['user1']
+        print(chat, text, user1)
+        print("USER1", type(user1))
+        sender = Profile.objects.get(user = User.objects.get(username=user1))
+        print("here")
+        chat = UserChat.objects.get(id=chat)
+        print("HERE", chat, text, user1)
+        print("FINAL CHECK", type(chat), type(text), type(sender))
+        message = Message.objects.create(chat=chat, text=text, sender=sender)
+        message.save()
+        print("Downhere")
+        print(message)
+        return Response(status=status.HTTP_201_CREATED)

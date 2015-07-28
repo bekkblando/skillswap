@@ -28,7 +28,7 @@ class Profile(models.Model):
     phone = models.CharField(validators=[phone_regex], blank=True, max_length=18) # validators should be a list
 
     def __str__(self):
-        return "Username {}".format(self.user)
+        return "{}".format(self.user)
 
 class SkillKnow(models.Model):
     rank = models.IntegerField()
@@ -63,7 +63,7 @@ class UserChat(models.Model):
     datetime = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return "User1: {} , User2: {}".format(self.user1, self.user2)
+        return "Chat, User1: {} , User2: {}".format(self.user1, self.user2)
 
 class Message(models.Model):
     text = models.CharField(max_length=300)
