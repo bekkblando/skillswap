@@ -2,24 +2,72 @@
 
 {% block body %}
 <body>
-
 {% for item in object_list %}
 <br/>
-{{ item }}<div class="{{ item }}"></div><button class="b{{ item.user1 }}">Open Chat</button>
+{{ item }}{{ item.id }}<div class="m{{ item.id }}"></div>
+    <form class="f{{ item.id }}">
+
+
+    <input type="hidden" value="{{ request.user }}" id="user{{ request.user.id }}"/>
+    <textarea id="textbox{{ item.id }}">Message Here</textarea>
+
+        {% if request.user.get_profile == item.user1  %}
+    <input type="hidden" value="item.user2" id="user{{ item.id }}"/>
+            <input type="hidden" value="check1" id="check{{ item.id }}"/>
+           {% else %}
+            <input type="hidden" value="check2" id="check{{ item.id }}"/>
+
+        <input type="hidden" value="item.user1" id="user{{ item.id }}"/>
+    {% endif %}
+    <input type="hidden" value="item.id" id="chat{{ item.id }}"/>
+<button class="b1{{ item.user2.id }}" onclick="formread{{ item.id }}()" type="button">Send Message</button>
+    </form>
+    <button class="b{{ item.user2.id }}">Open Chat</button>
 
 
 <script type="application/javascript">
-    var openchat = function (){
-        //var xList = $(".{{ item }}")[0].value;
+    var openchat{{ item.id }} = function (){
         console.log("Hey")
-        var getUrl = "http://localhost:8000/api/graph/?x=";
-        $.getJSON(getUrl, function (response){
-            $(".{{ item }}").html(newGraph);
+        var getUrl = "{% url 'messagelist' item.id %}";
+        $.getJSON(getUrl, function (data){
+            for (var i = 0; i < data.length; i++) {
+                var message = (data[i].text);
+                //var message = "he"
+            $(".m{{ item.id }}").html(message);}
         });
     };
     $('document').ready(function (){
-        $(".b{{ item.user1 }}").click(openchat);
+        $(".b{{ item.user2.id }}").click(openchat{{ item.id }});
     });
+
+    var formread{{ item.id }} = function() {
+        console.log("hey");
+        var check = document.getElementById("check{{ item.id }}").value;
+        if (check == 'check1') {
+            var user1 = document.getElementById("user{{ request.user.id }}").value;
+            var user2 = document.getElementById("user{{ item.id }}").value;
+            var chat = document.getElementById("chat{{ item.id }}").value;
+            var text = document.getElementById("textbox{{ item.id }}").value;
+            console.log(user1, user2, chat, text)
+            $.post("{% url 'messagecreate' %}", {user1: user1, user2: user2, chat: chat, text: text});
+        }
+        else{
+            var user2 = document.getElementById("user{{ request.user.id }}").value;
+            var user1 = document.getElementById("user{{ item.id }}").value;
+            var chat = document.getElementById("chat{{ item.id }}").value;
+            var text = document.getElementById("textbox{{ item.id }}").value;
+            console.log(user1, user2, chat, text);
+            //$.post("{% url 'messagecreate' %}",headers: {Authorization:'Token '}, {user1: user1, user2: user2, chat: chat, text: text});
+            $.ajax({
+              type: 'POST',
+              url: {% url 'messagecreate' %},
+              data: {user1: user1, user2: user2, chat: chat, text: text},
+              beforeSend: function(xhr) {
+                xhr.setRequestHeader('Authorization','Token {{ token }}' );
+              }})
+
+};
+        }
 </script>
 
 {% endfor %}

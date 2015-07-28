@@ -3,6 +3,9 @@ from django.http import JsonResponse
 from django.shortcuts import render_to_response, redirect
 from django.template import RequestContext
 from django.views.generic import DeleteView, DetailView, ListView, CreateView
+from rest_framework.authentication import TokenAuthentication
+from rest_framework.authtoken.models import Token
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from swap.models import Skill, Profile, SkillLearn, SkillKnow, UserChat, Message, Meeting
@@ -11,6 +14,7 @@ from rest_framework import serializers
 from rest_framework import filters
 from swap.forms import UserForm, ProfileForm
 from django.contrib.auth.decorators import login_required
+from rest_framework import authentication, permissions
 import requests
 from rest_framework import status
 from django.db.models import Q
@@ -196,6 +200,12 @@ class ChatListView(ListView):
     #queryset = UserChat.objects.filter(Q(user1=request.user)|Q(user2=request.user))
     template_name = "chat.html"
 
+    def get_context_data(self, **kwargs):
+        print("hey")
+        context = super().get_context_data(**kwargs)
+        context['token'] = Token.objects.get(user=self.request.user)
+        return context
+
 
 def userchatview(request):
     if request.POST:
@@ -207,12 +217,11 @@ def userchatview(request):
 
 def meetingcreate(request):
     if request.POST:
-        print("hello")
         profile1 = Profile.objects.get(user=request.user)
         profile2 = Profile.objects.get(user__id=request.POST['user'])
         content = request.POST['content']
-        print(content, profile1, profile2)
         meeting = Meeting.objects.create(meeting=content, usercommenting=profile1, usercommentedon=profile2)
+        meeting.save()
         return redirect('userpage', int(request.POST['user']) )
 
 
@@ -230,9 +239,32 @@ class UserChatSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserChat
 
+class MessageSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Message
+        # field = ['chat', 'user1', 'user2', 'text']
+
 
 class SkillLookup(generics.ListAPIView):
     queryset = Skill.objects.all()
     serializer_class = SkillSerializer
     filter_backends = (filters.SearchFilter,)
     search_fields = ('name',)
+
+class MessagesListView(generics.ListAPIView):
+    serializer_class = MessageSerializer
+
+    def get_queryset(self):
+        chatid = self.kwargs['pk']
+        userchatinstance = UserChat.objects.get(id=chatid)
+        messages = Message.objects.filter(chat=userchatinstance)
+        print(messages)
+        return messages
+
+class MessagesCreateView(generics.CreateAPIView):
+    model = Message
+    print("makin it")
+    serializer_class = MessageSerializer
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = (IsAuthenticated,)
