@@ -11,7 +11,9 @@ https://docs.djangoproject.com/en/1.8/ref/settings/
 """
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+from celery import app
 import os
+import djcelery
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -43,6 +45,7 @@ INSTALLED_APPS = (
     'rest_framework',
     'swap',
     'rest_framework.authtoken',
+    'djcelery',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -89,6 +92,8 @@ DATABASES = {
         'HOST':'localhost',
     }
 }
+
+
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.TokenAuthentication',
@@ -108,12 +113,6 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
-
-djcelery.setup_loader()
-
-BROKER_URL = 'amqp://guest:guest@localhost:5672/'
-CELERY_RESULT_BACKEND='djcelery.backends.database:DatabaseBackend'
-CELERYBEAT_SCHEDULER = 'djcelery.schedulers.DatabaseScheduler'
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
