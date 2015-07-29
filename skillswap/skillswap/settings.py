@@ -109,6 +109,11 @@ USE_L10N = True
 
 USE_TZ = True
 
+djcelery.setup_loader()
+
+BROKER_URL = 'amqp://guest:guest@localhost:5672/'
+CELERY_RESULT_BACKEND='djcelery.backends.database:DatabaseBackend'
+CELERYBEAT_SCHEDULER = 'djcelery.schedulers.DatabaseScheduler'
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.8/howto/static-files/

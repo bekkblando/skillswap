@@ -11,6 +11,9 @@ import os
 
 from django.core.wsgi import get_wsgi_application
 
+
+GOOGLE_API_KEY = os.environ["GOOGLE_API_KEY"]
+
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "skillswap.settings")
 
 application = get_wsgi_application()

@@ -11,14 +11,14 @@
     <input type="hidden" value="{{ request.user }}" id="user{{ request.user.id }}"/>
     <textarea id="textbox{{ item.id }}">Message Here</textarea>
 
-    {% comment %}    {% if request.user == item.user1.user  %}
+    {% if request.user == item.user1.user  %}
     <input type="hidden" value="{{ item.user2}}" id="user{{ item.id }}"/>
             <input type="hidden" value="check1" id="check{{ item.id }}"/>
            {% else %}
             <input type="hidden" value="check2" id="check{{ item.id }}"/>
 
         <input type="hidden" value="{{ item.user1 }}" id="user{{ item.id }}"/>
-    {% endif %}{% endcomment %}
+    {% endif %}
     <input type="hidden" value="{{ item.id }}" id="chat{{ item.id }}"/>
 <button class="b1{{ item.user2.id }}" onclick="formread{{ item.id }}()" type="button">Send Message</button>
     </form>
@@ -27,27 +27,33 @@
 
 <script type="application/javascript">
     var openchat{{ item.id }} = function (){
-        console.log("Hey")
         var getUrl = "{% url 'messagelist' item.id %}";
+        var messages = [];
         $.getJSON(getUrl, function (data){
             for (var i = 0; i < data.length; i++) {
                 var message = (data[i].text);
-                console.log(message)
-            $(".m{{ item.id }}").append("<div>"+message+"</div>");}
+                messages.push(message);
+            $(".m{{ item.id }}").html("<div>"+messages+"</div>");}
         });
+        var poll{{ item.id }} = (function poll() {
+                setTimeout(function() {
+        openchat{{ item.id }}();
+    }, 10000);
+    })();
     };
+
+
     $('document').ready(function (){
         $(".b{{ item.user2.id }}").click(openchat{{ item.id }});
     });
 
     var formread{{ item.id }} = function() {
-        console.log("hey");
         var check = document.getElementById("check{{ item.id }}").value;
         if (check == 'check1') {
             var user1 = document.getElementById("user{{ request.user.id }}").value;
             var chat = document.getElementById("chat{{ item.id }}").value;
             var text = document.getElementById("textbox{{ item.id }}").value;
-            console.log(user1, user2, chat, text);
+
             $.ajax({
               type: 'POST',
               url: {% url 'messagecreate' %},
@@ -55,19 +61,22 @@
               beforeSend: function(xhr) {
                 xhr.setRequestHeader('Authorization','Token {{ token }}' );
               }})
+            openchat{{ item.id }}();
         }
         else{
             var user1 = document.getElementById("user{{ request.user.id }}").value;
             var chat = document.getElementById("chat{{ item.id }}").value;
             var text = document.getElementById("textbox{{ item.id }}").value;
-            console.log(user1, user2, chat, text);
+
+
             $.ajax({
               type: 'POST',
               url: {% url 'messagecreate' %},
               data: {user1: user1, chat: chat, text: text},
               beforeSend: function(xhr) {
                 xhr.setRequestHeader('Authorization','Token {{ token }}' );
-              }})
+              }});
+            openchat{{ item.id }}();
 
 };
         }

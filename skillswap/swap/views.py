@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse_lazy
-from django.http import JsonResponse
+from django.db.models import Q
 from django.shortcuts import render_to_response, redirect
 from django.template import RequestContext
 from django.views.generic import DeleteView, DetailView, ListView, CreateView
@@ -8,17 +8,15 @@ from rest_framework.authentication import TokenAuthentication
 from rest_framework.authtoken.models import Token
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from rest_framework.views import APIView
 from swap.models import Skill, Profile, SkillLearn, SkillKnow, UserChat, Message, Meeting
 from rest_framework import generics
 from rest_framework import serializers
 from rest_framework import filters
 from swap.forms import UserForm, ProfileForm
 from django.contrib.auth.decorators import login_required
-from rest_framework import authentication, permissions
 import requests
 from rest_framework import status
-from django.db.models import Q
+import os
 
 
 def home(request):
@@ -34,8 +32,7 @@ def profile(request):
         profiles = Profile.objects.all()
         currentuser = Profile.objects.get(user=request.user)
         streetad = currentuser.street.strip().replace(' ', '+')
-        print(streetad)
-        API_KEY = 'AIzaSyCLIdr-9-bc_jnnH4tfIfIPCmAhhfGkQg8'
+        API_KEY = os.environ.get('GOOGLE_API_KEY')
         currentuserdata = requests.get('https://maps.googleapis.com/maps/api/geocode/json?address=' + str(
             currentuser.streetnumber) + streetad + ',' + currentuser.city + ',' + currentuser.state + '&key=' + API_KEY)
         currentusercords = str(currentuserdata.json()['results'][0]['geometry']['location']['lat']) + ',' + str(
@@ -44,17 +41,14 @@ def profile(request):
             if profile != currentuser:
                 streetad = profile.street.strip().replace(' ', '+')
                 profiledata = requests.get('https://maps.googleapis.com/maps/api/geocode/json?address=' + str(
-                profile.streetnumber) + streetad + ',' + profile.city + ',' + profile.state + '&key=' + API_KEY)
-                print(profile, profiledata.content)
+                    profile.streetnumber) + streetad + ',' + profile.city + ',' + profile.state + '&key=' + API_KEY)
                 profilecords = str(profiledata.json()['results'][0]['geometry']['location']['lat']) + ',' + str(
-                profiledata.json()['results'][0]['geometry']['location']['lng'])
-                print(profilecords)
-                disdata = requests.get('https://maps.googleapis.com/maps/api/distancematrix/json?origins='+currentusercords+'&destinations='+profilecords+'&key='+API_KEY)
-                distance= disdata.json()['rows'][0]['elements'][0]['distance']['text']
-                miles = miles = 0.62137 * int(''.join(x for x in distance if x.isdigit()))
-                print(miles)
+                    profiledata.json()['results'][0]['geometry']['location']['lng'])
+                disdata = requests.get(
+                    'https://maps.googleapis.com/maps/api/distancematrix/json?origins=' + currentusercords + '&destinations=' + profilecords + '&key=' + API_KEY)
+                distance = disdata.json()['rows'][0]['elements'][0]['distance']['text']
+                miles = 0.62137 * int(''.join(x for x in distance if x.isdigit()))
                 if miles <= distancemax:
-                    print(profile.skills.all())
                     people.append((profile, profile.skills.all()))
         context['people'] = people
     know = []
@@ -99,11 +93,8 @@ def profile(request):
 @login_required(redirect_field_name='login')
 def add_skill(request):
     context = {}
-    print(request.user)
     profile = Profile.objects.get(user=request.user)
     if request.POST:
-        print("YO")
-        print(request.user)
         skilltype = request.POST['skill']
         name = request.POST['name'].lower()
         try:
@@ -111,7 +102,6 @@ def add_skill(request):
         except:
             eskill = Skill.objects.create(name=name)
         description = request.POST['description']
-        print(eskill)
         if eskill:
             profile = Profile.objects.get(user=request.user)
             if skilltype == "learn":
@@ -153,7 +143,7 @@ def register(request):
             profile.save()
             registered = True
         else:
-            print(user_form.errors, profile_form.errors)
+            pass
     else:
         user_form = UserForm()
         profile_form = ProfileForm()
@@ -192,29 +182,32 @@ class UserPageView(DetailView):
         context['review'] = reviews
         context['know'] = knowall
         context['learn'] = learnall
-        print(context)
         return context
+
 
 class ChatListView(ListView):
     model = UserChat
-    #profile = Profile.objects.get(user=request.user)
-    #queryset = UserChat.objects.filter(Q(user1=request.user)|Q(user2=request.user))
     template_name = "chat.html"
 
     def get_context_data(self, **kwargs):
-        print("hey")
         context = super().get_context_data(**kwargs)
         context['token'] = Token.objects.get(user=self.request.user)
         return context
+
+    def get_queryset(self):
+        profile = Profile.objects.get(user=self.request.user)
+        return UserChat.objects.filter(Q(user1=profile)|Q(user2=profile))
 
 
 def userchatview(request):
     if request.POST:
         profile1 = Profile.objects.get(user=request.user)
         profile2 = Profile.objects.get(user__username=request.POST['user2'])
-        print(profile1, profile2)
-        chat = UserChat.objects.create(user1=profile1, user2=profile2)
+        if not UserChat.objects.filter(user1=profile1, user2=profile2) and not UserChat.objects.filter(user1=profile2, user2=profile1):
+            chat = UserChat.objects.create(user1=profile1, user2=profile2)
+            chat.save()
         return redirect('chatlist')
+
 
 def meetingcreate(request):
     if request.POST:
@@ -223,7 +216,7 @@ def meetingcreate(request):
         content = request.POST['content']
         meeting = Meeting.objects.create(meeting=content, usercommenting=profile1, usercommentedon=profile2)
         meeting.save()
-        return redirect('userpage', int(request.POST['user']) )
+        return redirect('userpage', int(request.POST['user']))
 
 
 ###### API VIEWS
@@ -235,16 +228,13 @@ class SkillSerializer(serializers.ModelSerializer):
 
 
 class UserChatSerializer(serializers.ModelSerializer):
-
-
     class Meta:
         model = UserChat
 
-class MessageSerializer(serializers.ModelSerializer):
 
+class MessageSerializer(serializers.ModelSerializer):
     class Meta:
         model = Message
-        # field = ['chat', 'user1', 'user2', 'text']
 
 
 class SkillLookup(generics.ListAPIView):
@@ -252,6 +242,7 @@ class SkillLookup(generics.ListAPIView):
     serializer_class = SkillSerializer
     filter_backends = (filters.SearchFilter,)
     search_fields = ('name',)
+
 
 class MessagesListView(generics.ListAPIView):
     serializer_class = MessageSerializer
@@ -263,26 +254,17 @@ class MessagesListView(generics.ListAPIView):
         print(messages)
         return messages
 
+
 class MessagesCreateView(generics.GenericAPIView):
-    print("makin it")
     authentication_classes = (TokenAuthentication,)
     permission_classes = (IsAuthenticated,)
 
     def post(self, request, *args, **kwargs):
-        #request.data = [request.data]
-        print(request.data)
-        chat=request.data['chat']
-        text=request.data['text']
-        user1=request.data['user1']
-        print(chat, text, user1)
-        print("USER1", type(user1))
-        sender = Profile.objects.get(user = User.objects.get(username=user1))
-        print("here")
+        chat = request.data['chat']
+        text = request.data['text']
+        user1 = request.data['user1']
+        sender = Profile.objects.get(user=User.objects.get(username=user1))
         chat = UserChat.objects.get(id=chat)
-        print("HERE", chat, text, user1)
-        print("FINAL CHECK", type(chat), type(text), type(sender))
         message = Message.objects.create(chat=chat, text=text, sender=sender)
         message.save()
-        print("Downhere")
-        print(message)
         return Response(status=status.HTTP_201_CREATED)
