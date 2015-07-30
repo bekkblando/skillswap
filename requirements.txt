@@ -11,3 +11,15 @@ django-filter
 djangorestframework
 Markdown
 requests
+amqp
+anyjson
+billiard
+celery
+django-celery
+kombu
+Naked
+pip
+PyYAML
+setuptools
+status
+
