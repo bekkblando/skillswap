@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/1.8/ref/settings/
 """
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+from datetime import timedelta
 from celery import app
 import os
 import djcelery
@@ -93,7 +94,6 @@ DATABASES = {
     }
 }
 
-
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.TokenAuthentication',
@@ -118,3 +118,14 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 
 STATIC_URL = '/static/'
+
+CELERY_IMPORTS=("swap.tasks",)
+CELERYBEAT_SCHEDULER = 'djcelery.schedulers.DatabaseScheduler'
+CELERYBEAT_SCHEDULE = {
+    'add-every-30-seconds': {
+        'task': 'tasks.recommend',
+        'schedule': timedelta(seconds=10),
+    },
+}
+
+CELERY_TIMEZONE = 'UTC'
