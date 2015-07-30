@@ -3,7 +3,7 @@ from django.core.urlresolvers import reverse_lazy
 from django.db.models import Q
 from django.shortcuts import render_to_response, redirect
 from django.template import RequestContext
-from django.views.generic import DeleteView, DetailView, ListView, CreateView
+from django.views.generic import DeleteView, DetailView, ListView, CreateView, UpdateView
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.authtoken.models import Token
 from rest_framework.permissions import IsAuthenticated
@@ -18,6 +18,16 @@ import requests
 from rest_framework import status
 import os
 
+
+
+class UpdateProfile(UpdateView):
+    model = Profile
+    fields = ['streetnumber', 'street', 'city', 'state', 'phone']
+    template_name = 'user_update.html'
+    success_url = reverse_lazy('profile')
+
+    def get_object(self, queryset=None):
+        return Profile.objects.get(user=self.request.user)
 
 def home(request):
     return render_to_response("home.html", context_instance=RequestContext(request))
@@ -57,7 +67,14 @@ def profile(request):
     exact = []
     smatch = []
     simmatch = []
+    recommend = []
     profile = Profile.objects.get(user=request.user)
+    recommendation = profile.recommendation.all()
+    print(recommendation)
+    if len(recommendation):
+        for item in recommendation:
+            recommend.append(item)
+        context['recommendation'] = recommend
     context['address'] = '{} {}, {} , {} '.format(profile.streetnumber, profile.street, profile.city, profile.state)
     context['phone'] = profile.phone
     knowall = profile.skills.all()

@@ -31,9 +31,14 @@ def recommend():
     for item in learnrules:
         numberset = list(item)
         itemlearnsets.append([lookupvalues[numberset[0]], lookupvalues[numberset[1]]])
+    testing=[]
     for profile in profiles:
         for rules in itemlearnsets:
-            if rules[0] in profile.learn.all() and rules[0] not in profile.learn.all() and rules[0] not in profile.skills.all() \
-                and rules[1] not in profile.skills.all() and rules[1] not in profile.learn.all() and rules[1] not in profile.recommendation.all():
+            testing.append(rules)
+            if rules[0] in profile.learn.all() and not rules[1] in profile.learn.all() and not rules[0] in profile.skills.all() \
+                and not rules[1] in profile.skills.all() and not rules[1] in profile.recommendation.all():
+                print(profile)
                 profile.recommendation.add(rules[1])
-    return "Recommendation Ran"
+                #testing.append((profile.recommendation.all(), profile))
+        profile.save()
+    return testing

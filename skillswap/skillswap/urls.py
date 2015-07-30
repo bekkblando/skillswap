@@ -16,12 +16,15 @@ Including another URLconf
 from django.conf.urls import include, url
 from django.contrib import admin
 from swap.views import home, SkillLookup, add_skill, register, profile, KnowDeleteView, LearnDeleteView, UserPageView, userchatview, \
-    ChatListView, meetingcreate, MessagesListView, MessagesCreateView
+    ChatListView, meetingcreate, MessagesListView, MessagesCreateView, UpdateProfile
 from django.contrib.auth.views import login, logout
 
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
+
+    url(r'^accounts/update/$', UpdateProfile.as_view(), name='update_user'),
+
     url(r'addskill/$', add_skill, name="addskill"),
     url(r'^register/$', register, name="register"),
     url(r'^skill_lookup/$', SkillLookup.as_view(), name="skilllookup"),

@@ -2,6 +2,8 @@
 {% block body %}
 <body>
 <h1>User Information</h1>
+<form method="get"  action="{% url 'update_user' %}">
+<button type="submit">Edit Information</button></form>
 {{ address }}<br/>
 {{ phone }}
     <h1>Skills you know</h1>
@@ -56,6 +58,10 @@ User:<a href="{% url 'userpage' person.0.user.id %}"> {{ person.0.user }}</a>
 {% for skill in person.1 %}
 {{ skill }}
 {% endfor %}
+{% endfor %}
+<h1>Recommendations</h1>
+{% for item in recommendation %}
+{{ item }}
 {% endfor %}
 </body>
 {% endblock %}
