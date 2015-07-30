@@ -21,10 +21,11 @@ from django.contrib.auth.views import login, logout
 
 
 urlpatterns = [
+
+    url(r'^search/', include('haystack.urls')),
+
     url(r'^admin/', include(admin.site.urls)),
-
     url(r'^accounts/update/$', UpdateProfile.as_view(), name='update_user'),
-
     url(r'addskill/$', add_skill, name="addskill"),
     url(r'^register/$', register, name="register"),
     url(r'^skill_lookup/$', SkillLookup.as_view(), name="skilllookup"),

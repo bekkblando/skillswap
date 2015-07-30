@@ -22,4 +22,9 @@ pip
 PyYAML
 setuptools
 status
-
+datetime
+elasticsearch
+django-haystack
+kombu
+urllib3
+zope.interface

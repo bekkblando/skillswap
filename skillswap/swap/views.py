@@ -17,7 +17,7 @@ from django.contrib.auth.decorators import login_required
 import requests
 from rest_framework import status
 import os
-
+from haystack.query import SearchQuerySet
 
 
 class UpdateProfile(UpdateView):
@@ -70,7 +70,6 @@ def profile(request):
     recommend = []
     profile = Profile.objects.get(user=request.user)
     recommendation = profile.recommendation.all()
-    print(recommendation)
     if len(recommendation):
         for item in recommendation:
             recommend.append(item)
@@ -88,15 +87,17 @@ def profile(request):
         skillsvalue = Profile.objects.all().values_list('skills__name')
         for item in skillsvalue:
             skillname = str(item[0])
-            mat = skillname.find(ite.name)
+            mat = list(SearchQuerySet().filter(content=ite.name))
             if mat != -1:
-                skil = Skill.objects.get(name=item[0])
-                simmatch = Profile.objects.filter(skills__in=[skil])
-                add = True
-                if len(simmatch) and not skillname == ite.name and skillname != 'None' and add:
-                    if not skillname in addedsimskill:
-                        addedsimskill.append(skillname)
-                        smatch.append((ite, simmatch, skillname))
+                for item in mat:
+                    skil = Skill.objects.get(id=item.pk)
+                    simmatch = Profile.objects.filter(skills__in=[skil])
+                    add = True
+                    if len(simmatch) and not skillname == ite.name and skillname != 'None' and add:
+                        if not skillname in addedsimskill:
+                            addedsimskill.append(skillname)
+                            smatch.append((ite, simmatch, skillname))
+                            print(smatch)
         if len(match):
             exact.append((ite, match))
     context['exact'] = exact

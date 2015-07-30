@@ -47,6 +47,7 @@ INSTALLED_APPS = (
     'swap',
     'rest_framework.authtoken',
     'djcelery',
+    'haystack',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -119,6 +120,17 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+
+###Haystack
+HAYSTACK_CONNECTIONS = {
+    'default': {
+        'ENGINE': 'haystack.backends.elasticsearch_backend.ElasticsearchSearchEngine',
+        'URL': 'http://127.0.0.1:9200/',
+        'INDEX_NAME': 'haystack',
+    },
+}
+
+#### Celery
 CELERY_IMPORTS=("swap.tasks",)
 CELERYBEAT_SCHEDULER = 'djcelery.schedulers.DatabaseScheduler'
 CELERYBEAT_SCHEDULE = {

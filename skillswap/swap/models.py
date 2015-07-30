@@ -12,7 +12,7 @@ class Skill(models.Model):
     created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return "Skill {}".format(self.name)
+        return "{}".format(self.name)
 
 
 class Profile(models.Model):
