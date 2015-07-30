@@ -119,6 +119,9 @@ def add_skill(request):
         except:
             eskill = Skill.objects.create(name=name)
         description = request.POST['description']
+        if eskill in profile.recommendation.all():
+            profile.recommendation.remove(eskill)
+            profile.save()
         if eskill:
             profile = Profile.objects.get(user=request.user)
             if skilltype == "learn":
