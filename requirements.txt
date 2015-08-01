@@ -27,3 +27,5 @@ elasticsearch
 django-haystack
 urllib3
 zope.interface
+django-material
+
