@@ -1,10 +1,33 @@
 {% extends 'base.html' %}
 {% block body %}
 <body>
-<div class="col s12" style="background:#00e5ff; height:100%; display:block;
- buttom:40px; top:20px;">Home </div>
-<div class="col s12" style="background:#84ffff; height:100%; display:block;
- buttom:40px; top:20px;">Next Page </div>
+<div class="col s12" style="background:#00e5ff; height:100%; display:block; margin-top:0; width:100%; ">
+    <div class="container"><div style="margin-top:10%; color:white; position:absolute; margin-left: auto;
+margin-right: auto;
+left: 0;
+right: 0;">
+    <h1>Want do you want to learn?</h1>
+        <p class="flow-text">Skill Swap is a way for you to trade skills with people in your community.</p>
+        <a class="waves-effect waves-lighten-2 deep-purple lighten-3 btn-large" href="{% url 'register' %}">sign up</a>
+    </div></div></div>
+
+<div class="col s12" style="background:#84ffff; height:100%; display:block; margin-top:0; width:100%;">
+
+
+    <div id="about" class="container"><div style="margin-top:10%; color:white; position:absolute; margin-left: auto;
+margin-right: auto;
+left: 0;
+right: 0;">
+    <h1>Who are we?</h1>
+        <p class="flow-text">This is a project made by Bekk Blando for his Iron Yard Final Project.  We hope you enjoy
+        looking at the site!</p>
+
+        <a class="waves-effect waves-lighten-2 deep-purple lighten-3 btn-large" href="{% url 'register' %}">Read More About Bekk</a>
+    </div></div>
+
+
+
+</div>
 </body>
 {% endblock %}
 </html>
