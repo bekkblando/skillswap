@@ -307,14 +307,3 @@ class SkillZipcode(generics.ListAPIView):
                 print(skills)
         listofskills = Skill.objects.filter(pk__in=skills)
         return listofskills
-
-    """TOGO BOX
-                context = {}
-    if request.POST:
-        skills = []
-        profiles = Profile.objects.filter(zipcode=request.POST['zipcode'])
-        for profile in profiles:
-            if profile.user != request.user:
-                for skill in profile.skills.all():
-                    skills.append(skill.name.title())
-        context['skills'] = skills"""

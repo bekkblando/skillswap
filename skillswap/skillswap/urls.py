@@ -41,4 +41,6 @@ urlpatterns = [
     url(r'messagelist(?P<pk>\d+)', MessagesListView.as_view(), name='messagelist'),
     url(r'sendmessage/', MessagesCreateView.as_view(), name='messagecreate'),
     url(r'home', home, name="home"),
+    url(r'', home, name="hom"),
+
 ]
