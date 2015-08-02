@@ -16,21 +16,21 @@ Including another URLconf
 from django.conf.urls import include, url
 from django.contrib import admin
 from swap.views import home, SkillLookup, add_skill, register, profile, KnowDeleteView, LearnDeleteView, UserPageView, userchatview, \
-    ChatListView, meetingcreate, MessagesListView, MessagesCreateView, UpdateProfile
+    ChatListView, meetingcreate, MessagesListView, MessagesCreateView, UpdateProfile, SkillZipcode
 from django.contrib.auth.views import login, logout
 
 
 urlpatterns = [
 
     url(r'^search/', include('haystack.urls')),
-
+    url(r'zipcodesearch/(?P<zip>\d+)',SkillZipcode.as_view(), name='zipcode' ),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^accounts/update/$', UpdateProfile.as_view(), name='update_user'),
     url(r'addskill/$', add_skill, name="addskill"),
     url(r'^register/$', register, name="register"),
     url(r'^skill_lookup/$', SkillLookup.as_view(), name="skilllookup"),
     url(r'^accounts/login/', login, name="login"),
-    url(r'^logout/', logout, {'next_page': '/'}, name="logout"),
+    url(r'^logout/', logout, {'next_page': '/home'}, name="logout"),
     url(r'^profile/$', profile, name="profile"),
     url(r'userpage/(?P<pk>\d+)', UserPageView.as_view(), name='userpage'),
     url(r'deleteknow(?P<pk>\d+)',KnowDeleteView.as_view(), name="deleteknow" ),

@@ -30,7 +30,7 @@ class UpdateProfile(UpdateView):
         return Profile.objects.get(user=self.request.user)
 
 def home(request):
-    return render_to_response("home.html", context_instance=RequestContext(request))
+    return render_to_response("home.html",context_instance=RequestContext(request))
 
 
 @login_required(redirect_field_name='login')
@@ -247,7 +247,6 @@ class SkillSerializer(serializers.ModelSerializer):
         model = Skill
         fields = ['name']
 
-
 class UserChatSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserChat
@@ -289,3 +288,33 @@ class MessagesCreateView(generics.GenericAPIView):
         message = Message.objects.create(chat=chat, text=text, sender=sender)
         message.save()
         return Response(status=status.HTTP_201_CREATED)
+
+
+class SkillZipcode(generics.ListAPIView):
+    #queryset = Skill.objects.all()
+    serializer_class = SkillSerializer
+
+    def get_queryset(self):
+        skills = []
+        zip = self.kwargs['zip']
+        profiles = Profile.objects.filter(zipcode=zip)
+        for profile in profiles:
+            if profile.user != self.request.user:
+                for skill in profile.skills.all():
+                    print(skill)
+                    skills.append(skill.id)
+                    print("we")
+                print(skills)
+        listofskills = Skill.objects.filter(pk__in=skills)
+        return listofskills
+
+    """TOGO BOX
+                context = {}
+    if request.POST:
+        skills = []
+        profiles = Profile.objects.filter(zipcode=request.POST['zipcode'])
+        for profile in profiles:
+            if profile.user != request.user:
+                for skill in profile.skills.all():
+                    skills.append(skill.name.title())
+        context['skills'] = skills"""

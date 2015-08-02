@@ -7,9 +7,7 @@
      <!-- Compiled and minified CSS -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.0/css/materialize.min.css">
 
-  <!-- Compiled and minified JavaScript -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.0/js/materialize.min.js"></script>
-
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
 <script src="{% static 'twitter_typeahead.js' %}"></script>
 <link rel="stylesheet" type="text/css"  href = "{% static 'style.css' %}"/>
@@ -22,6 +20,7 @@
     <div class="navbar-fixed" >
     <nav>
       <div class="nav-wrapper" style="background:#01579b">
+<a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
           <ul class="left hide-on-med-and-down">
               <li><a href="{% url 'home' %}"> Home </a></li>
            <li><a href="{% url 'profile' %}"> Profile</a></li>
@@ -30,6 +29,12 @@
         <ul class="right hide-on-med-and-down">
             <li><a href="{% url 'logout' %}">Logout</a></li>
         </ul>
+          <ul class="side-nav" id="mobile-demo">
+              <li><a href="{% url 'home' %}"> Home </a></li>
+              <li><a href="#about">About</a></li>
+              <li><a href="{% url 'profile' %}"> Profile</a></li>
+             <li> <a href="{% url 'logout' %}">Logout</a></li>
+      </ul>
       </div>
     </nav>
   </div>
@@ -42,6 +47,8 @@
         <div class="navbar-fixed">
     <nav>
       <div class="nav-wrapper">
+          <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
+
           <ul class="left hide-on-med-and-down">
           <li><a href="{% url 'home' %}"> Home </a></li>
                             <li><a href="#about">About</a></li>
@@ -50,12 +57,29 @@
              <li> <a href="{% url 'login' %}">Login</a></li>
             <li><a href="{% url 'register' %}">SignUp</a></li>
         </ul>
+          <ul class="side-nav" id="mobile-demo">
+              <li><a href="{% url 'home' %}"> Home </a></li>
+              <li><a href="#about">About</a></li>
+             <li> <a href="{% url 'login' %}">Login</a></li>
+            <li><a href="{% url 'register' %}">SignUp</a></li>
+      </ul>
       </div>
     </nav>
   </div>
 {% endif %}
 
 {% endblock %}
+
+<script>
+
+    $(document).ready(function(){
+       $(".button-collapse").sideNav();
+
+    });
+
+</script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.0/js/materialize.min.js"></script>
+
 
 {% block body %}
 

@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% block body %}
 <body>
-<div class="col s12" style="background:#00e5ff; height:100%; display:block; margin-top:0; width:100%; ">
+<div class="col s12" style="background:#00b8d4; height:100%; display:block; margin-top:0; width:100%; ">
     <div class="container"><div style="margin-top:10%; color:white; position:absolute; margin-left: auto;
 margin-right: auto;
 left: 0;
@@ -11,7 +11,7 @@ right: 0;">
         <a class="waves-effect waves-lighten-2 deep-purple lighten-3 btn-large" href="{% url 'register' %}">sign up</a>
     </div></div></div>
 
-<div class="col s12" style="background:#84ffff; height:100%; display:block; margin-top:0; width:100%;">
+<div class="col s12" style="background:#00e5ff; height:100%; display:block; margin-top:0; width:100%;">
 
 
     <div id="about" class="container"><div style="margin-top:10%; color:white; position:absolute; margin-left: auto;
@@ -27,6 +27,84 @@ right: 0;">
 
 
 
+</div>
+
+
+<div class="col s12" style="background:#18ffff ; height:100%; display:block; margin-top:0; width:100%;">
+
+
+    <div id="use" class="container"><div style="margin-top:10%; color:white; position:absolute; margin-left: auto;
+margin-right: auto;
+left: 0;
+right: 0;">
+    <h1>Site Help</h1>
+        <p class="flow-text">We hope the site is self explanatory but if not this tutorial should help!</p>
+
+    </div></div>
+
+
+</div>
+
+
+<div class="col s12" style="background:#84ffff; height:100%; display:block; margin-top:0; width:100%;">
+
+
+    <div id="area" class="container"><div style="margin-top:10%; color:white; position:absolute; margin-left: auto;
+margin-right: auto;
+left: 0;
+right: 0;">
+
+    <h1>Find skills in your area</h1>
+<style>
+
+    input, select, textarea{
+    color: #212121;
+}
+
+textarea:focus, input:focus {
+    color: #212121;
+}
+</style>
+
+        <p class="flow-text">Enter you zipcode below</p>
+
+
+
+        <input id="zipinput"/><div style="margin-top:3%">
+
+             <button id="zip" class="btn waves-effect deep-purple lighten-3" type="submit" style="vertical-align: top;">Submit <i class="material-icons">send</i>
+  </button>
+            </div>
+                <p class="flow-text">Here are the skills available in your area.</p>
+<div class="skillsinarea" style="margin-top:3%">
+
+
+</div>
+        <div>
+<script>
+$(document).ready(function(){
+    String.prototype.toProperCase = function () {
+    return this.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+};
+    $('#zip').click(function zip(){
+    var zipcode = document.getElementById("zipinput").value;
+    var getUrl = "http://localhost:8000/zipcodesearch/" + zipcode;
+    var skill = []
+    $.getJSON(getUrl, function (response){
+        console.log(response)
+        for (i = 0, len = response.length; i < len; i++){
+            var newskill = "<div>"+response[i]['name'].toProperCase() +"</div>";
+            console.log(newskill)
+            $(".skillsinarea").append(newskill);}
+        });
+    })
+});
+    </script>
+
+
+</div>
+    </div>
+    </div>
 </div>
 </body>
 {% endblock %}

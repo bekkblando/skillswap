@@ -23,6 +23,7 @@ class Profile(models.Model):
     street = models.CharField(max_length=140)
     city = models.CharField(max_length=140)
     state = models.CharField(max_length=2)
+    zipcode = models.CharField(max_length=5)
     created = models.DateTimeField(auto_now_add=True)
     phone_regex = RegexValidator(regex=r'^\+?1?\d{9,15}$', message="Phone number must be entered in the format: '+999999999'. Up to 15 digits allowed.")
     phone = models.CharField(validators=[phone_regex], blank=True, max_length=18) # validators should be a list
