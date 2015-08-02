@@ -291,7 +291,6 @@ class MessagesCreateView(generics.GenericAPIView):
 
 
 class SkillZipcode(generics.ListAPIView):
-    #queryset = Skill.objects.all()
     serializer_class = SkillSerializer
 
     def get_queryset(self):
@@ -306,4 +305,5 @@ class SkillZipcode(generics.ListAPIView):
                     print("we")
                 print(skills)
         listofskills = Skill.objects.filter(pk__in=skills)
+        print(listofskills)
         return listofskills

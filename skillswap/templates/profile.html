@@ -1,6 +1,22 @@
 {% extends 'base.html' %}
 {% block body %}
 <body>
+    <div class="navbar-fixed" >
+    <nav>
+      <div class="nav-wrapper" style="background:#84ffff; text-align: center">
+          <a href="{% url 'home' %}/#about" ><h5 style="margin:0; padding-top:1%">Matches</h5></a>
+<a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
+          <ul class="side-nav" id="mobile-demo">
+              <li><a href="{% url 'home' %}"> Home </a></li>
+              <li><a href="#about">About</a></li>
+              <li><a href="{% url 'profile' %}"> Profile</a></li>
+             <li> <a href="{% url 'logout' %}">Logout</a></li>
+      </ul>
+      </div>
+    </nav>
+  </div>
+
+{% comment %}
 <h1>User Information</h1>
 <form method="get"  action="{% url 'update_user' %}">
 <button type="submit">Edit Information</button></form>
@@ -16,14 +32,32 @@
 {% for item in learn %}
     {{ item.skill }}<form method="POST" action="{% url 'deletelearn' item.id %}">{% csrf_token %}<button type="submit" >Delete</button></form>
 {% endfor %}
-<br/>
+<br/>{% endcomment %}
+      <ul class="collection with-header">
+        <li class="collection-header"><h4>Matches</h4></li>
+          {% for tu in exact %}<li>
+
+<div class="valign"> Skill: {{ tu.0.name }}</div>
+    {% for user in tu.1 %}
+
+<div align="center">User:<a href="{% url 'userpage' user.user.id %}" > {{ user.user }}</a></div>
+
+<form style="float:right;margin:0;" method="POST" action="{% url 'userchatcreate'%}">{% csrf_token %}
+        <input type="hidden" name="user2" value="{{ user.user }}"/>
+        <a class="waves-effect waves-light btn" >Create Chat</a>
+</form>
+        {% endfor %}
+{% endfor %}</li>
+      </ul>
+
+
 <h1>Exact Skill Matches</h1>
 {% for tu in exact %}
 Skill: {{ tu.0.name }}<br/>
     {% for user in tu.1 %}
 User:<a href="{% url 'userpage' user.user.id %}"> {{ user.user }}</a><form method="POST" action="{% url 'userchatcreate'%}">{% csrf_token %}
 <input type="hidden" name="user2" value="{{ user.user }}"/>
-        <button>Create Chat</button></form>
+       <a class="waves-effect waves-light btn">Create Chat</a></form>
         {% endfor %}
 {% endfor %}
 
