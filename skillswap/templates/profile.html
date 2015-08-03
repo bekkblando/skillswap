@@ -76,36 +76,37 @@
 
       </ul>{% endcomment %}
       <ul class="collection" id="match">
-              <li class="collection-item avatar"><h4 align="center">Matches</h4></li>
+              <li class="collection-item avatar" style="padding-left:0;padding-right:0"><h4 class="center-align" style="margin:0">Matches</h4></li>
 
-        {% for tu in exact %}<li class="collection-item avatar" style="text-align:center;">
-
-<div class="left"  style="vertical-align: middle" > Skill: {{ tu.0.name }}</div>
+        {% for tu in exact %}<li class="collection-item avatar" style="padding-left:0;padding-right:0">
+            <div class="row" style="margin:0;">
+<div class="col s4"  style="vertical-align: middle" > Skill: {{ tu.0.name }}</div>
     {% for user in tu.1 %}
 
-<div class="center-align" align="center" style="display:inline-block;text-align:center;vertical-align: middle">User:<a href="{% url 'userpage' user.user.id %}" > {{ user.user }}</a></div>
+<div class="col s4" style="text-align:center;: middle">User:<a href="{% url 'userpage' user.user.id %}" > {{ user.user }}</a></div>
 
-<form class="right" method="POST" action="{% url 'userchatcreate'%}" style="vertical-align: middle; margin-bottom:0">{% csrf_token %}
+<form class="right col s4" method="POST" action="{% url 'userchatcreate'%}" style="vertical-align: middle; margin-bottom:0">{% csrf_token %}
         <input type="hidden" name="user2" value="{{ user.user }}"/>
         <button class="waves-effect waves-light btn right" >Create Chat</button>
 </form>
         {% endfor %}
-{% endfor %}</li>
+{% endfor %}</div></li>
 
-                     {% for tu in similiar %}<li class="collection-item avatar" style="text-align:center;">
+                     {% for tu in similiar %}<li class="collection-item avatar" style="padding-left:0;padding-right:0">
 
+<div class="row" style="margin:0;">
 
-<div class="left"  style="vertical-align: middle" > Skill: {{ tu.2 }}</div>
+<div class="col s4"  style="vertical-align: middle" > Skill: {{ tu.2 }}</div>
     {% for user in tu.1 %}
 
-<div class="center-align" align="center" style="display:inline-block;text-align:center;vertical-align: middle;">User:<a href="{% url 'userpage' user.user.id %}" > {{ user.user }}</a></div>
+<span class="col s4"  style="display:inline-block;text-align:center;vertical-align: middle;">User:<a href="{% url 'userpage' user.user.id %}" > {{ user.user }}</a></span>
 
-<form class="right" method="POST" action="{% url 'userchatcreate'%}" style="vertical-align: middle; margin-bottom:0; ">{% csrf_token %}
+<form class="col s4" method="POST" action="{% url 'userchatcreate'%}" style="vertical-align: middle; margin-bottom:0; ">{% csrf_token %}
         <input type="hidden" name="user2" value="{{ user.user }}"/>
         <button class="waves-effect waves-light btn right">Create Chat</button>
 </form>
         {% endfor %}
-{% endfor %}</li>
+{% endfor %}</div></li>
   </ul>
 
 

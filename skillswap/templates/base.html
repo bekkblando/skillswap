@@ -18,7 +18,7 @@
     
 {% if user.is_authenticated %}
    {% comment %} <div class="navbar-fixed" >{% endcomment %}
-    <nav class="z-depth-5">
+    <nav class="z-depth-2">
       <div class="nav-wrapper" style="background:#01579b">
 <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
           <ul class="left hide-on-med-and-down">
@@ -27,6 +27,7 @@
               <li><a href="{% url 'home' %}/#about">About</a></li>
               </ul>
         <ul class="right hide-on-med-and-down">
+            <li><a href="{% url 'chatlist' %}"><i class="material-icons">add_alert</i></a></li>
             <li><a href="{% url 'logout' %}">Logout</a></li>
         </ul>
           <ul class="side-nav" id="mobile-demo">
