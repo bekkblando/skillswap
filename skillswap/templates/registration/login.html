@@ -1,10 +1,22 @@
 {% extends 'base.html' %}
 {% block body %}
+<body style="background:#00B8D4">
+<div class="container" style="margin-top: 10%">
+    <style>
+        input {
+            color: #FFFFFF;
+        }
+        label {
+            color: #FFFFFF;
+        }
+
+    </style>
     <form method="Post">
         {% csrf_token %}
         {{ form.as_table }}
-        <button type="submit">Login</button>
+        <button class="waves-effect btn" type="submit" style="background:#EE6E73">Login</button>
         <input type="hidden" name="next" value='{% url "home"  %}' />
     </form>
-
+    </div>
+</body>
 {% endblock %}

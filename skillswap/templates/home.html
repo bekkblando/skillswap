@@ -8,7 +8,12 @@ left: 0;
 right: 0;">
     <h1>What do you want to learn?</h1>
         <p class="flow-text">Skill Swap is a way for you to trade skills with people in your community.</p>
-        <a class="waves-effect waves-lighten-2 deep-purple lighten-3 btn-large" href="{% url 'register' %}">sign up</a>
+        {% if user.is_authenticated %}
+        <a class="waves-effect waves-lighten-2  btn-large" href="{% url 'profile' %}" style="background:#F78F66;">Profile</a>
+        {% else %}
+            <a class="waves-effect waves-lighten-2  btn-large" href="{% url 'register' %}" style="background:#EE6E73;">sign up</a>
+        {% endif %}
+
     </div></div></div>
 
 <div class="col s12" style="background:#00e5ff; height:100%; display:block; margin-top:0; width:100%;">
@@ -88,7 +93,7 @@ $(document).ready(function(){
 };
     $('#zip').click(function zip(){
     var zipcode = document.getElementById("zipinput").value;
-    var getUrl = "http://localhost:8000/zipcodesearch/" + zipcode;
+    var getUrl = '/zipcodesearch/' + zipcode;
     var skill = []
     $.getJSON(getUrl, function (response){
         console.log(response)

@@ -5,7 +5,10 @@
 {% for item in object_list %}
 <br/>  <button class="waves-effect cyan darken-4 btn b{{ item.user2.id }}">Show Chat</button>
     <button class="waves-effect cyan darken-4 btn hide{{ item.user2.id }}">Hide Chat</button>
-<div class="m{{ item.id }}" style="width:100%;"><h6 class="center-align">{{ item }}</h6></div>
+    <h6 id="titl{{ item.id }}" class="center-align"></h6>
+<div class="m{{ item.id }}" style="width:100%;">
+    <h6 class="center-align">{{ item }}</h6>
+</div>
     <form class="f{{ item.id }}">
 
 
@@ -21,7 +24,7 @@
         <input type="hidden" value="{{ item.user1 }}" id="user{{ item.id }}"/>
     {% endif %}
     <input type="hidden" value="{{ item.id }}" id="chat{{ item.id }}"/>
-<button class="b1{{ item.user2.id }}" onclick="formread{{ item.id }}()" type="button">Send Message</button>
+<button class="waves-effect cyan darken-4 btn b1{{ item.user2.id }}" onclick="formread{{ item.id }}()" type="button">Send Message</button>
     </form>
 
 
@@ -42,6 +45,7 @@
                 }
             }
             $(".m{{ item.id }}").html(content);
+
         });
         var poll{{ item.id }} = (function poll() {
                 setTimeout(function() {
@@ -52,12 +56,20 @@
     var hidechat{{ item.id }} = function(){
         var content = " ";
         $(".m{{ item.id }}").html(content);
+        $(".m{{ item.id }}").css({display: 'none'});
+        $("#titl{{ item.id }}").html('{{ item }}')
 
     };
 
+    var showchat{{ item.id }} = function(){
+        $(".m{{ item.id }}").css({display: 'block'})
+
+    };
 
     $('document').ready(function (){
         $(".b{{ item.user2.id }}").click(openchat{{ item.id }});
+        $(".b{{ item.user2.id }}").click(showchat{{ item.id }});
+
         $(".hide{{ item.user2.id }}").click(hidechat{{ item.id }})
     });
 
@@ -74,7 +86,7 @@
               data: {user1: user1, chat: chat, text: text},
               beforeSend: function(xhr) {
                 xhr.setRequestHeader('Authorization','Token {{ token }}' );
-              }})
+              }});
             openchat{{ item.id }}();
         }
         else{
