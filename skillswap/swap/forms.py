@@ -13,4 +13,4 @@ class UserForm(forms.ModelForm):
 class ProfileForm(forms.ModelForm):
     class Meta:
         model = Profile
-        fields = ('streetnumber', 'street','city','state','phone')
+        fields = ('streetnumber', 'street','city','zipcode','state','phone')

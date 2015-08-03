@@ -1,10 +1,17 @@
 {% extends 'base.html' %}
 {% block body %}
 <body>
-    <div class="navbar-fixed" >
-    <nav>
-      <div class="nav-wrapper" style="background:#84ffff; text-align: center">
-          <a href="{% url 'home' %}/#about" ><h5 style="margin:0; padding-top:1%">Matches</h5></a>
+    <nav id="submenu" style="z-index: 10;">
+      <div class="nav-wrapper" style="background:#009688; text-align: center;">
+                   <a href="#match" >Matches</a>
+
+<ul class="left hide-on-med-and-down">
+          <li><a href="#area" >Skills In Area</a></li>
+    </ul>
+    <ul class="right hide-on-med-and-down">
+
+          <li><a href="#recommend" >Recommendations</a></li>
+</ul>
 <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
           <ul class="side-nav" id="mobile-demo">
               <li><a href="{% url 'home' %}"> Home </a></li>
@@ -14,7 +21,6 @@
       </ul>
       </div>
     </nav>
-  </div>
 
 {% comment %}
 <h1>User Information</h1>
@@ -32,47 +38,88 @@
 {% for item in learn %}
     {{ item.skill }}<form method="POST" action="{% url 'deletelearn' item.id %}">{% csrf_token %}<button type="submit" >Delete</button></form>
 {% endfor %}
-<br/>{% endcomment %}
+<br/>
       <ul class="collection with-header">
         <li class="collection-header"><h4>Matches</h4></li>
-          {% for tu in exact %}<li>
+          {% for tu in exact %}<li style="text-align:center;">
 
-<div class="valign"> Skill: {{ tu.0.name }}</div>
+
+<div class="left"  style="vertical-align: middle" > Skill: {{ tu.0.name }}</div>
     {% for user in tu.1 %}
 
-<div align="center">User:<a href="{% url 'userpage' user.user.id %}" > {{ user.user }}</a></div>
+<div class="center-align" align="center" style="display:inline-block;text-align:center;vertical-align: middle">User:<a href="{% url 'userpage' user.user.id %}" > {{ user.user }}</a></div>
 
-<form style="float:right;margin:0;" method="POST" action="{% url 'userchatcreate'%}">{% csrf_token %}
+<form class="right" method="POST" action="{% url 'userchatcreate'%}" style="vertical-align: middle; margin-bottom:0">{% csrf_token %}
         <input type="hidden" name="user2" value="{{ user.user }}"/>
-        <a class="waves-effect waves-light btn" >Create Chat</a>
+        <a class="waves-effect waves-light btn right" style=" height:8%;">Create Chat</a>
+</form>
+        {% endfor %}
+{% endfor %}</li>
+
+                {% for tu in similiar %}<li style="text-align:center;">
+
+
+<div class="left"  style="vertical-align: middle" > Skill: {{ tu.2 }}</div>
+    {% for user in tu.1 %}
+
+<div class="center-align" align="center" style="display:inline-block;text-align:center;vertical-align: middle;">User:<a href="{% url 'userpage' user.user.id %}" > {{ user.user }}</a></div>
+
+<form class="right" method="POST" action="{% url 'userchatcreate'%}" style="vertical-align: middle; margin-bottom:0; position:absolute">{% csrf_token %}
+        <input type="hidden" name="user2" value="{{ user.user }}"/>
+        <a class="waves-effect waves-light btn right" style=" height:8%;" >Create Chat</a>
 </form>
         {% endfor %}
 {% endfor %}</li>
       </ul>
 
 
-<h1>Exact Skill Matches</h1>
-{% for tu in exact %}
-Skill: {{ tu.0.name }}<br/>
-    {% for user in tu.1 %}
-User:<a href="{% url 'userpage' user.user.id %}"> {{ user.user }}</a><form method="POST" action="{% url 'userchatcreate'%}">{% csrf_token %}
-<input type="hidden" name="user2" value="{{ user.user }}"/>
-       <a class="waves-effect waves-light btn">Create Chat</a></form>
-        {% endfor %}
-{% endfor %}
 
-<h1>Similiar Skill Matches</h1>
-{% for tu in similiar %}<br/><br/>
-Skill: {{ tu.2 }}<br/>Users with similiar Skill:
+      </ul>{% endcomment %}
+      <ul class="collection" id="match">
+              <li class="collection-item avatar"><h4 align="center">Matches</h4></li>
+
+        {% for tu in exact %}<li class="collection-item avatar" style="text-align:center;">
+
+<div class="left"  style="vertical-align: middle" > Skill: {{ tu.0.name }}</div>
     {% for user in tu.1 %}
-<a href="{% url 'userpage' user.user.id %}"> {{ user.user }}</a><form method="POST" action="{% url 'userchatcreate'%}">{% csrf_token %}
-<input type="hidden" name="user2" value="{{ user.user }}"/>
-        <button>Create Chat</button></form>
+
+<div class="center-align" align="center" style="display:inline-block;text-align:center;vertical-align: middle">User:<a href="{% url 'userpage' user.user.id %}" > {{ user.user }}</a></div>
+
+<form class="right" method="POST" action="{% url 'userchatcreate'%}" style="vertical-align: middle; margin-bottom:0">{% csrf_token %}
+        <input type="hidden" name="user2" value="{{ user.user }}"/>
+        <button class="waves-effect waves-light btn right" >Create Chat</button>
+</form>
         {% endfor %}
-{% endfor %}
-<h1>Skills in Area</h1>
+{% endfor %}</li>
+
+                     {% for tu in similiar %}<li class="collection-item avatar" style="text-align:center;">
+
+
+<div class="left"  style="vertical-align: middle" > Skill: {{ tu.2 }}</div>
+    {% for user in tu.1 %}
+
+<div class="center-align" align="center" style="display:inline-block;text-align:center;vertical-align: middle;">User:<a href="{% url 'userpage' user.user.id %}" > {{ user.user }}</a></div>
+
+<form class="right" method="POST" action="{% url 'userchatcreate'%}" style="vertical-align: middle; margin-bottom:0; ">{% csrf_token %}
+        <input type="hidden" name="user2" value="{{ user.user }}"/>
+        <button class="waves-effect waves-light btn right">Create Chat</button>
+</form>
+        {% endfor %}
+{% endfor %}</li>
+  </ul>
+
+
+
+
+
+
+<div class="row" id="area">
+    <div class="col s12 m12">
+      <div class="card teal">
+        <div class="card-content white-text">
+          <span class="card-title " ><h3 class="center-align">Skills in Area</h3></span>
 <form method="POST">{% csrf_token %}
-    <select name="distance">
+    <select name="distance" style="visibility: visible;display:inline-block;background:#009688;">
         <option>10</option>
         <option>20</option>
         <option>30</option>
@@ -83,20 +130,67 @@ Skill: {{ tu.2 }}<br/>Users with similiar Skill:
         <option>80</option>
         <option>90</option>
         <option>100</option>
-
     </select>
-    <button type="submit">Get Skills in Area</button>
+    <button type="submit" class="waves-effect blue accent-2 btn">Get Skills in Area</button>
     </form>
-{% for person in people %}
-User:<a href="{% url 'userpage' person.0.user.id %}"> {{ person.0.user }}</a>
+        </div>
+        <div class="card-action">
+{% for person in people %}<div class="flow-text" >
+<div style="color:#424242;font-weight: 800 ;">User:<a href="{% url 'userpage' person.0.user.id %}" style="color:#424242"> {{ person.0.user }}</a>
+    </div>
+<div style="color:whitesmoke; display:inline">Skills Available: </div>
 {% for skill in person.1 %}
-{{ skill }}
+    <div style="color:whitesmoke;display:inline">{{ skill }}</div>
 {% endfor %}
-{% endfor %}
-<h1>Recommendations</h1>
+{% endfor %}</div>
+        </div>
+      </div>
+    </div>
+</div>
+
+
+
+
+
+<div class="row" id="recommend">
+    <div class="col s12 m12">
+      <div class="card teal">
+        <div class="card-content white-text">
+          <span class="card-title"><h3 class="center-align">You may also like</h3></span>
+        </div>
+        <div class="card-action flow-text center-align" style="font-weight: 600; color:whitesmoke">
 {% for item in recommendation %}
-{{ item }}
+<p>{{ item }}</p>
 {% endfor %}
+        </div>
+      </div>
+    </div>
+</div>
+
+
+<script>
+
+    $(document).ready(function(){ // document ready
+
+  var stickyTop = $('#submenu').offset().top; // returns number
+
+  $(window).scroll(function(){ // scroll event
+
+    var windowTop = $(window).scrollTop(); // returns number
+
+    if (stickyTop < windowTop) {
+      $('#submenu').css({ position: 'fixed', top: 0 });
+    }
+    else {
+      $('#submenu').css({ position: 'static'});
+    }
+
+  });
+
+});
+
+
+</script>
 </body>
 {% endblock %}
 </html>
