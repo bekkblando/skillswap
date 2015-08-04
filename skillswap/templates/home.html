@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% block body %}
-<body>
+<body style="background:#00B8D4;">
 <div class="col s12" style="background:#00b8d4; height:100%; display:block; margin-top:0; width:100%; ">
     <div class="container"><div class="container" style="margin-top:10%; color:white; position:absolute; margin-left: auto;
 margin-right: auto;
@@ -105,7 +105,7 @@ $(document).ready(function(){
     $.getJSON(getUrl, function (response){
         console.log(response)
         for (i = 0, len = response.length; i < len; i++){
-            var newskill = "<p class='flow-text'><a href='{% url 'register' %}'>"+response[i]['name'].toProperCase() +"</a></p>";
+            var newskill = "<p class='flow-text'><a href='{% url 'register' %}' style='color:white'>"+response[i]['name'].toProperCase() +"</a></p>";
             $(".skillsinarea").append(newskill);}
         });
     })

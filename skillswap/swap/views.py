@@ -18,6 +18,7 @@ import requests
 from rest_framework import status
 import os
 from haystack.query import SearchQuerySet
+import re
 
 
 class UpdateProfile(UpdateView):
@@ -38,7 +39,8 @@ def profile(request):
     context = {}
     if request.POST:
         people = []
-        distancemax = int(request.POST['distance'])
+        distancemax = request.POST['distance']
+        distancemax = int(''.join(x for x in distancemax if x.isdigit()))
         profiles = Profile.objects.all()
         currentuser = Profile.objects.get(user=request.user)
         streetad = currentuser.street.strip().replace(' ', '+')
@@ -48,7 +50,7 @@ def profile(request):
         currentusercords = str(currentuserdata.json()['results'][0]['geometry']['location']['lat']) + ',' + str(
             currentuserdata.json()['results'][0]['geometry']['location']['lng'])
         for profile in profiles:
-            if profile != currentuser:
+            if profile != currentuser and profile.skills.all():
                 streetad = profile.street.strip().replace(' ', '+')
                 profiledata = requests.get('https://maps.googleapis.com/maps/api/geocode/json?address=' + str(
                     profile.streetnumber) + streetad + ',' + profile.city + ',' + profile.state + '&key=' + API_KEY)
@@ -57,6 +59,8 @@ def profile(request):
                 disdata = requests.get(
                     'https://maps.googleapis.com/maps/api/distancematrix/json?origins=' + currentusercords + '&destinations=' + profilecords + '&key=' + API_KEY)
                 distance = disdata.json()['rows'][0]['elements'][0]['distance']['text']
+                #distance = re.search('^(\d+)', distance)
+                print(distance)
                 miles = 0.62137 * int(''.join(x for x in distance if x.isdigit()))
                 if miles <= distancemax:
                     people.append((profile, profile.skills.all()))

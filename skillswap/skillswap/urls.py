@@ -30,6 +30,7 @@ urlpatterns = [
     url(r'^register/$', register, name="register"),
     url(r'^skill_lookup/$', SkillLookup.as_view(), name="skilllookup"),
     url(r'^accounts/login/', login, name="login"),
+    url(r'^accounts/profile/', profile),
     url(r'^logout/', logout, {'next_page': '/home'}, name="logout"),
     url(r'^profile/$', profile, name="profile"),
     url(r'userpage/(?P<pk>\d+)', UserPageView.as_view(), name='userpage'),

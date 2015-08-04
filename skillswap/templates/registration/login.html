@@ -14,8 +14,9 @@
     <form method="Post">
         {% csrf_token %}
         {{ form.as_table }}
+        <input type="hidden" name="next" value='{% url "profile" %}' />
+
         <button class="waves-effect btn" type="submit" style="background:#EE6E73">Login</button>
-        <input type="hidden" name="next" value='{% url "home"  %}' />
     </form>
     </div>
 </body>

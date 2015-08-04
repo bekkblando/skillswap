@@ -131,6 +131,8 @@ HAYSTACK_CONNECTIONS = {
     },
 }
 
+LOGIN_REDIRECT_URL = '/profile/'
+
 #### Celery
 CELERY_IMPORTS=("swap.tasks",)
 CELERYBEAT_SCHEDULER = 'djcelery.schedulers.DatabaseScheduler'
