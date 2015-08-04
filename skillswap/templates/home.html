@@ -2,7 +2,7 @@
 {% block body %}
 <body>
 <div class="col s12" style="background:#00b8d4; height:100%; display:block; margin-top:0; width:100%; ">
-    <div class="container"><div style="margin-top:10%; color:white; position:absolute; margin-left: auto;
+    <div class="container"><div class="container" style="margin-top:10%; color:white; position:absolute; margin-left: auto;
 margin-right: auto;
 left: 0;
 right: 0;">
@@ -16,18 +16,21 @@ right: 0;">
 
     </div></div></div>
 
-<div class="col s12" style="background:#00e5ff; height:100%; display:block; margin-top:0; width:100%;">
+<div class="col s12" style="background:#19E1FF; height:100%; display:block; margin-top:0; width:100%;">
 
 
-    <div id="about" class="container"><div style="margin-top:10%; color:white; position:absolute; margin-left: auto;
+    <div id="about" class="container"><div class="container" style="margin-top:10%; color:white; position:absolute; margin-left: auto;
 margin-right: auto;
 left: 0;
 right: 0;">
     <h1>Who are we?</h1>
         <p class="flow-text">This is a project made by Bekk Blando for his Iron Yard Final Project.  We hope you enjoy
         looking at the site!</p>
-
-        <a class="waves-effect waves-lighten-2 deep-purple lighten-3 btn-large" href="{% url 'register' %}">Read More About Bekk</a>
+        {% if user.is_authenticated %}
+        <a class="waves-effect waves-lighten-2  btn-large" href="{% url 'profile' %}" style="background:#F78F66;">Read More About Bekk</a>
+        {% else %}
+            <a class="waves-effect waves-lighten-2  btn-large" href="{% url 'register' %}" style="background:#EE6E73;">Read More About Bekk</a>
+        {% endif %}
     </div></div>
 
 
@@ -35,10 +38,10 @@ right: 0;">
 </div>
 
 
-<div class="col s12" style="background:#18ffff ; height:100%; display:block; margin-top:0; width:100%;">
+<div class="col s12" style="background:#6EEE8F ; height:100%; display:block; margin-top:0; width:100%;">
 
 
-    <div id="use" class="container"><div style="margin-top:10%; color:white; position:absolute; margin-left: auto;
+    <div id="use" class="container"><div class="container" style="margin-top:10%; color:white; position:absolute; margin-left: auto;
 margin-right: auto;
 left: 0;
 right: 0;">
@@ -51,10 +54,10 @@ right: 0;">
 </div>
 
 
-<div class="col s12" style="background:#84ffff; height:100%; display:block; margin-top:0; width:100%;">
+<div class="col s12" style="background:#00B8D4; height:100%; display:block; margin-top:0; width:100%;">
 
 
-    <div id="area" class="container"><div style="margin-top:10%; color:white; position:absolute; margin-left: auto;
+    <div id="area" class="container"><div class="container" style="margin-top:10%; color:white; position:absolute; margin-left: auto;
 margin-right: auto;
 left: 0;
 right: 0;">
@@ -76,8 +79,12 @@ textarea:focus, input:focus {
 
 
         <input id="zipinput"/><div style="margin-top:3%">
+        {% if user.is_authenticated %}
+            <button id="zip" class="btn waves-effect" type="submit" style="vertical-align: top;background:#F78F66;">Submit <i class="material-icons">send</i>
+        {% else %}
+            <button id="zip" class="btn waves-effect" type="submit" style="vertical-align: top;background:#EE6E73;"">Submit <i class="material-icons">send</i>
 
-             <button id="zip" class="btn waves-effect deep-purple lighten-3" type="submit" style="vertical-align: top;">Submit <i class="material-icons">send</i>
+        {% endif %}
   </button>
             </div>
                 <p class="flow-text">Here are the skills available in your area.</p>
@@ -85,7 +92,7 @@ textarea:focus, input:focus {
 
 
 </div>
-        <div>
+        <div></div>
 <script>
 $(document).ready(function(){
     String.prototype.toProperCase = function () {
@@ -98,8 +105,7 @@ $(document).ready(function(){
     $.getJSON(getUrl, function (response){
         console.log(response)
         for (i = 0, len = response.length; i < len; i++){
-            var newskill = "<div>"+response[i]['name'].toProperCase() +"</div>";
-            console.log(newskill)
+            var newskill = "<p class='flow-text'><a href='{% url 'register' %}'>"+response[i]['name'].toProperCase() +"</a></p>";
             $(".skillsinarea").append(newskill);}
         });
     })
