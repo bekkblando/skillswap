@@ -60,8 +60,6 @@ def profile(request):
                 disdata = requests.get(
                     'https://maps.googleapis.com/maps/api/distancematrix/json?origins=' + currentusercords + '&destinations=' + profilecords + '&key=' + API_KEY)
                 distance = disdata.json()['rows'][0]['elements'][0]['distance']['text']
-                # distance = re.search('^(\d+)', distance)
-                print(distance)
                 miles = 0.62137 * int(''.join(x for x in distance if x.isdigit()))
                 if miles <= distancemax:
                     people.append((profile, profile.skills.all()))
@@ -102,9 +100,15 @@ def profile(request):
                         if not skillname in addedsimskill:
                             addedsimskill.append(skillname)
                             smatch.append((ite, simmatch, skillname))
-                            print(smatch)
         if len(match):
             exact.append((ite, match))
+    for sitem in smatch:
+        skillcheck = Skill.objects.get(name=sitem[2])
+        for item in exact:
+            if skillcheck == item[0]:
+                smatch.remove(sitem)
+    print(smatch)
+    print(exact)
     context['exact'] = exact
     context['learn'] = learn
     context['know'] = know

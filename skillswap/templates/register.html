@@ -1,11 +1,21 @@
 {% extends 'base.html' %}
 {% block body %}
-    <body>
-        <h1>Register with SkillSwap</h1>
+    <body style="background:#00B8D4">
+<div class="container" style="margin-top: 10%">
+<style>
+    input {
+        color: #FFFFFF;
+    }
+    label {
+        color: #FFFFFF;
+    }
+
+</style>
+        <h4>Register with SkillSwap</h4>
 
         {% if registered %}
        <strong>thank you for registering!</strong>
-        <a href="/home/">Return to the homepage.</a><br />
+        <a href="{% url 'login' %}">Click here to login!</a><br />
         {% else %}
          <strong>Apartment not needed, Your address will never be given out to other users</strong><br />
 
@@ -14,16 +24,12 @@
 
             {% csrf_token %}
 
-            <!-- Display each form. The as_p method wraps each element in a paragraph
-                 (<p>) element. This ensures each element appears on a new line,
-                 making everything look neater. -->
+
             {{ user_form.as_p }}
             {{ profile_form.as_p }}
-
-            <!-- Provide a button to click to submit the form. -->
-            <input type="submit" name="submit" value="Register" />
+<button class="waves-effect btn" type="submit" name="submit" value="Register" style="background:#EE6E73">Register</button>
         </form>
-        {% endif %}
+        {% endif %}</div>
     </body>
 {% endblock %}
 </html>
