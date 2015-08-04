@@ -1,8 +1,11 @@
 {% load static from staticfiles %}
 {% block header %}
+    <html>
+    <head>
 <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
       <script type="text/javascript" src="js/materialize.min.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
      <!-- Compiled and minified CSS -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.0/css/materialize.min.css">
 <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
@@ -12,7 +15,7 @@
 <script src="{% static 'twitter_typeahead.js' %}"></script>
 <link rel="stylesheet" type="text/css"  href = "{% static 'style.css' %}"/>
 
-
+</head>
 
 
     
@@ -52,7 +55,6 @@
 
           <ul class="left hide-on-med-and-down">
           <li><a href="{% url 'home' %}"> Home </a></li>
-          <li><a href="{% url 'addskill' %}">Skills</a></li>
               </ul>
         <ul class="right hide-on-med-and-down">
              <li> <a href="{% url 'login' %}">Login</a></li>
@@ -60,7 +62,6 @@
         </ul>
           <ul class="side-nav" id="mobile-demo">
               <li><a href="{% url 'home' %}"> Home </a></li>
-              <li><a href="{% url 'addskill' %}">Skills</a></li>
              <li> <a href="{% url 'login' %}">Login</a></li>
             <li><a href="{% url 'register' %}">SignUp</a></li>
       </ul>

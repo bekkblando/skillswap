@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.conf.urls import include, url
 from django.contrib import admin
-from swap.views import home, SkillLookup, add_skill, register, profile, KnowDeleteView, LearnDeleteView, UserPageView, userchatview, \
+from swap.views import home, SkillLookup, add_skill, register, profile, knowdelete, learndelete, UserPageView, userchatview, \
     ChatListView, meetingcreate, MessagesListView, MessagesCreateView, UpdateProfile, SkillZipcode
 from django.contrib.auth.views import login, logout
 
@@ -34,8 +34,8 @@ urlpatterns = [
     url(r'^logout/', logout, {'next_page': '/home'}, name="logout"),
     url(r'^profile/$', profile, name="profile"),
     url(r'userpage/(?P<pk>\d+)', UserPageView.as_view(), name='userpage'),
-    url(r'deleteknow(?P<pk>\d+)',KnowDeleteView.as_view(), name="deleteknow" ),
-    url(r'deletelearn(?P<pk>\d+)',LearnDeleteView.as_view(), name="deletelearn" ),
+    url(r'deleteknow/(?P<pk>\d+)',knowdelete, name="deleteknow" ),
+    url(r'deletelearn/(?P<pk>\d+)',learndelete, name="deletelearn" ),
     url(r'createuserchat', userchatview, name="userchatcreate"),
     url(r'createmeeting', meetingcreate, name="meetingcreate"),
     url(r'chat/', ChatListView.as_view(), name='chatlist'),

@@ -30,8 +30,9 @@ class UpdateProfile(UpdateView):
     def get_object(self, queryset=None):
         return Profile.objects.get(user=self.request.user)
 
+
 def home(request):
-    return render_to_response("home.html",context_instance=RequestContext(request))
+    return render_to_response("home.html", context_instance=RequestContext(request))
 
 
 @login_required(redirect_field_name='login')
@@ -59,7 +60,7 @@ def profile(request):
                 disdata = requests.get(
                     'https://maps.googleapis.com/maps/api/distancematrix/json?origins=' + currentusercords + '&destinations=' + profilecords + '&key=' + API_KEY)
                 distance = disdata.json()['rows'][0]['elements'][0]['distance']['text']
-                #distance = re.search('^(\d+)', distance)
+                # distance = re.search('^(\d+)', distance)
                 print(distance)
                 miles = 0.62137 * int(''.join(x for x in distance if x.isdigit()))
                 if miles <= distancemax:
@@ -178,14 +179,20 @@ def register(request):
         context)
 
 
-class KnowDeleteView(DeleteView):
-    model = SkillKnow
-    success_url = reverse_lazy("profile")
+def knowdelete(request, pk):
+    if request.POST:
+        profile = Profile.objects.get(user=request.user)
+        knowskill = SkillKnow.objects.get(user=profile, skill_id=pk)
+        knowskill.delete()
+        return redirect('addskill')
 
 
-class LearnDeleteView(DeleteView):
-    model = SkillLearn
-    success_url = reverse_lazy("profile")
+def learndelete(request, pk):
+    if request.POST:
+        profile = Profile.objects.get(user=request.user)
+        learnskill = SkillLearn.objects.get(user=profile, skill_id=pk)
+        learnskill.delete()
+        return redirect('addskill')
 
 
 class UserPageView(DetailView):
@@ -221,14 +228,15 @@ class ChatListView(ListView):
 
     def get_queryset(self):
         profile = Profile.objects.get(user=self.request.user)
-        return UserChat.objects.filter(Q(user1=profile)|Q(user2=profile))
+        return UserChat.objects.filter(Q(user1=profile) | Q(user2=profile))
 
 
 def userchatview(request):
     if request.POST:
         profile1 = Profile.objects.get(user=request.user)
         profile2 = Profile.objects.get(user__username=request.POST['user2'])
-        if not UserChat.objects.filter(user1=profile1, user2=profile2) and not UserChat.objects.filter(user1=profile2, user2=profile1):
+        if not UserChat.objects.filter(user1=profile1, user2=profile2) and not UserChat.objects.filter(user1=profile2,
+                                                                                                       user2=profile1):
             chat = UserChat.objects.create(user1=profile1, user2=profile2)
             chat.save()
         return redirect('chatlist')
@@ -250,6 +258,7 @@ class SkillSerializer(serializers.ModelSerializer):
     class Meta:
         model = Skill
         fields = ['name']
+
 
 class UserChatSerializer(serializers.ModelSerializer):
     class Meta:
