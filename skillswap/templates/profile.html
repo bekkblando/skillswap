@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% block body %}
-<body style="background:#00B8D4">{% comment %}
+<body style="background:#00B8D4">
+{% comment %}
     <nav id="submenu" style="z-index: 10;height:2.6em">
       <div class="nav-wrapper" style="background:#00B8D4; text-align: center;">
                    <a href="{% url 'profile' %}#match" >Matches</a>
@@ -173,6 +174,7 @@
       <div class="card" style="background:#007687;">
         <div class="card-content white-text">
           <span class="card-title " ><h3 class="center-align">Skills in Area</h3></span>
+{% if user.profile.geo_enabled %}
 <form method="POST">{% csrf_token %}
     <select name="distance" style="visibility: visible;display:inline-block;background:#007687;">
         <option>10 Miles</option>
@@ -188,7 +190,12 @@
     </select>
     <button type="submit" class="waves-effect blue accent-2 btn">Get Skills in Area</button>
     </form>
+{% else %}
         </div>
+<div class="container">
+    <p class="flow-text" style="color:white;"><a href="{% url 'update_user' %}">
+        You must add your address to your profile to use this feature</a></p></div>
+{% endif %}
         <div class="card-action"><p class="flow-text">
 {% for person in people %}
 
@@ -197,7 +204,8 @@
 {% for skill in person.1 %}
     <div style="color:whitesmoke;display:inline">{{ skill }}</div>
 {% endfor %}
-{% endfor %}</p>
+{% endfor %}
+            </p>
             </div>
         </div>
       </div>

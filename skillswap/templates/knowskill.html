@@ -56,7 +56,7 @@ select {
 </div>
 
 
- <div class="col s12 m3" style="text-align:center;background:#34F7D6;height:100%;">Learn<i class="fa fa-cogs"></i>
+ <div class="col s12 m3" style="text-align:center;background:#19E1FF;height:100%;">Learn<i class="fa fa-cogs"></i>
      {% for skill in learn %}
         <div>{{ skill.name }}</div><div><form method="post" action="{% url 'deletelearn'  skill.id  %}">
          {% csrf_token %}

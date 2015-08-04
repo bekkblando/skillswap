@@ -23,7 +23,7 @@ import re
 
 class UpdateProfile(UpdateView):
     model = Profile
-    fields = ['streetnumber', 'street', 'city', 'state', 'phone']
+    fields = ['streetnumber', 'street', 'city', 'state','zipcode', 'phone']
     template_name = 'user_update.html'
     success_url = reverse_lazy('profile')
 
@@ -163,23 +163,26 @@ def register(request):
     registered = False
     if request.method == 'POST':
         user_form = UserForm(data=request.POST)
-        profile_form = ProfileForm(data=request.POST)
-        if user_form.is_valid() and profile_form.is_valid():
+        print("here")
+        # profile_form = ProfileForm(data=request.POST)
+        if user_form.is_valid(): #  and profile_form.is_valid():
+            print("madeit")
             user = user_form.save()
             user.set_password(user.password)
             user.save()
-            profile = profile_form.save(commit=False)
-            profile.user = user
+            #profile = profile_form.save(commit=False)
+            profile = Profile.objects.create(user=user)
             profile.save()
             registered = True
+            print("Ran")
         else:
             pass
     else:
         user_form = UserForm()
-        profile_form = ProfileForm()
+        # profile_form = ProfileForm()
     return render_to_response(
         'register.html',
-        {'user_form': user_form, 'profile_form': profile_form, 'registered': registered},
+        {'user_form': user_form, 'registered': registered},
         context)
 
 

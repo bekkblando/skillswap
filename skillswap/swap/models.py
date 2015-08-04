@@ -19,15 +19,26 @@ class Profile(models.Model):
     user = models.OneToOneField(User)
     skills = models.ManyToManyField(Skill, through="SkillKnow", related_name='skills')
     learn = models.ManyToManyField(Skill, through="SkillLearn", related_name='learn')
-    streetnumber = models.IntegerField()
-    street = models.CharField(max_length=140)
-    city = models.CharField(max_length=140)
-    state = models.CharField(max_length=2)
-    zipcode = models.CharField(max_length=5)
+    streetnumber = models.IntegerField(null=True)
+    street = models.CharField(max_length=140, blank=True)
+    city = models.CharField(max_length=140, blank=True)
+    state = models.CharField(max_length=2, blank=True)
+    zipcode = models.CharField(max_length=5, blank=True)
     created = models.DateTimeField(auto_now_add=True)
     phone_regex = RegexValidator(regex=r'^\+?1?\d{9,15}$', message="Phone number must be entered in the format: '+999999999'. Up to 15 digits allowed.")
     phone = models.CharField(validators=[phone_regex], blank=True, max_length=18) # validators should be a list
     recommendation = models.ManyToManyField(Skill, related_name="recommend")
+
+
+    @property
+    def geo_enabled(self):
+        if self.streetnumber and self.street and self.city and self.state and self.zipcode:
+            print(self.streetnumber, self.street ,self.city , self.state , self.zipcode)
+            return True
+        else:
+            print(self.streetnumber, self.street ,self.city , self.state , self.zipcode)
+            print("Fail")
+            return False
 
     def __str__(self):
         return "{}".format(self.user)
