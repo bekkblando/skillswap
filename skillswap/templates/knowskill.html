@@ -68,6 +68,9 @@ select {
 
 <script>
 $(document).ready(function(){
+    if($(window).height() <= 768){
+  $('.m3').css({height: 'auto'})
+}
     $(function () {
 $('input:radio').change(
     function(){
