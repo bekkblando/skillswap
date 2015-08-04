@@ -68,7 +68,8 @@ select {
 
 <script>
 $(document).ready(function(){
-    if($(window).height() <= 768){
+    console.log($(window).width());
+    if($(window).width() <= 480){
   $('.m3').css({height: 'auto'})
 }
     $(function () {
