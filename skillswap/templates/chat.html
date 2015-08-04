@@ -1,13 +1,28 @@
 {% extends 'base.html' %}
 
 {% block body %}
-<body>
+<body style="background:#00B8D4">
+<style>
+    input {
+        color: #FFFFFF;
+    }
+    label {
+        color: #FFFFFF;
+    }
+
+</style>
+<div class="container">
 {% for item in object_list %}
-<br/>  <button class="waves-effect cyan darken-4 btn b{{ item.user2.id }}">Show Chat</button>
-    <button class="waves-effect cyan darken-4 btn hide{{ item.user2.id }}">Hide Chat</button>
+<br/>  <button class="waves-effect btn b{{ item.user2.id }}" style="background:#0BE186">Show Chat</button>
+    <button class="waves-effect btn hide{{ item.user2.id }}" style="background:#0BE186">Hide Chat</button>
     <h6 id="titl{{ item.id }}" class="center-align"></h6>
-<div class="m{{ item.id }}" style="width:100%;">
-    <h6 class="center-align">{{ item }}</h6>
+    <h6 class="left" style="color:white">{{ item.user1 }}</h6>
+    <h6 class="right" style="color:white">{{ item.user2 }}</h6>
+
+<div class="card" id="cht{{ item.id }}" style="width:100%;margin-top: 6%; background:#0C93EB;display:none;">
+ <div class="card-content m{{ item.id }}">
+
+</div>
 </div>
     <form class="f{{ item.id }}">
 
@@ -24,24 +39,31 @@
         <input type="hidden" value="{{ item.user1 }}" id="user{{ item.id }}"/>
     {% endif %}
     <input type="hidden" value="{{ item.id }}" id="chat{{ item.id }}"/>
-<button class="waves-effect cyan darken-4 btn b1{{ item.user2.id }}" onclick="formread{{ item.id }}()" type="button">Send Message</button>
+<button class="waves-effect btn b1{{ item.user2.id }}" onclick="formread{{ item.id }}()" type="button" style="background:#0BE186">
+    Send Message</button>
     </form>
-
 
 
 <script type="application/javascript">
     var openchat{{ item.id }} = function (){
+        var content = ' ';
         var getUrl = "{% url 'messagelist' item.id %}";
         var messages = [];
         $.getJSON(getUrl, function (data){
             for (var i = 0; i < data.length; i++) {
                 var message = (data[i].text);
                 messages.push(message);
+                console.log(messages);
                 console.log("SENDER", data[i].sender);
+                console.log(message);
+
+                if (message === "undefined"){
+                    console.log(message)
+                }
                 if (data[i].sender == 1) {
-                    var content = content + "<div class='left'>" + message + "</div><br/>"
+                    content = content + "<div class='left'>" + message + "</div><br/>";
                 } else {
-                    var content = content + "<div class='right'>" + message + "</div><br/>"
+                    content = content + "<div class='right'>" + message + "</div><br/>";
                 }
             }
             $(".m{{ item.id }}").html(content);
@@ -57,12 +79,12 @@
         var content = " ";
         $(".m{{ item.id }}").html(content);
         $(".m{{ item.id }}").css({display: 'none'});
-        $("#titl{{ item.id }}").html('{{ item }}')
 
     };
 
     var showchat{{ item.id }} = function(){
         $(".m{{ item.id }}").css({display: 'block'})
+        $("#cht{{ item.id }}").css({display: 'block'})
 
     };
 
@@ -109,7 +131,7 @@
 </script>
 
 {% endfor %}
-
+</div>
 </body>
 {% endblock %}
 </html>
