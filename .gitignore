@@ -69,3 +69,4 @@ data/
 *.sqlite
 *.sqlite3
 celerybeat-schedule
+skillswap/static
