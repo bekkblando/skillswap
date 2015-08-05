@@ -1,17 +1,6 @@
 {% extends 'base.html' %}
 {% block body %}
-<body style="background:#00B8D4">
-<div class="row">
-<div class="col s12 m3" style="text-align:center;background:#3DC461;height:100%;">Know<i class="fa fa-graduation-cap"></i>
- {% for skill in know %}
-    <div>{{ skill.name }}</div>
-     <div><form method="post" action="{% url 'deleteknow'  skill.id  %}">
-         {% csrf_token %}
-         <button onclick="Materialize.toast('Deleted {{ skill.name }}', 2000)" type='submit' class="btn waves-effect">
-         Delete</button></form></div>
- {% endfor %}
-</div>
-<style>
+    <style>
 input {
     color: #FFFFFF;
 }
@@ -24,12 +13,36 @@ select {
     line-height: 4%;
     border: 1px solid #ccc;
 }
+
+@media only screen and (min-width:600px) {
+    .sideskill {
+        height: 100%;
+    }
+}
+@media only screen and (max-width:599px) {
+    .sideskill {
+        height: auto;
+    }
+}
 </style>
+<body style="background:#19E1FF">
+<div class="row">
+<div class="sideskill col s12 m3" style="text-align:center;background:#6EEE8F;"><div style="margin-top:3%;margin-bottom: 3%;">Know <i class="fa fa-graduation-cap"></i></div>
+ {% for skill in know %}
+    <div>{{ skill.name }}&nbsp;<form method="post" action="{% url 'deleteknow'  skill.id  %}" style="display:inline">
+         {% csrf_token %}
+         <button onclick="Materialize.toast('Deleted {{ skill.name }}', 2000)" type='submit'
+                 style="background-color: Transparent;outline:none;border: none;">
+             <i class="fa fa-minus"></i>
+         </button>
+
+     </form></div>
+ {% endfor %}
+</div>
+
 <div class="col s12 m6">
 <form method="POST" class="center-align">{% csrf_token %}
-<div id="skills" class="center-align">
-  <input class="typeahead" type="text" placeholder="Skills" name="name" required>
-</div>
+
 
     <p>
     <input id="know" type="radio"  required name="skill" value="know"/>
@@ -37,7 +50,12 @@ select {
     <input id='learn' type="radio" name="skill" value="learn"  />
         <label for="learn" style="float:right">A Skill You Want To Learn</label>
     </p>
-    <input type="text" name="description" value="description"/>
+    <div id="skills" class="left">
+  <input class="typeahead" type="text" placeholder="Skills" name="name" required>
+</div>
+    <div class="right">
+    <input type="text" name="description" placeholder="Description"/>
+</div>
 <div id="rankinput" style="display:none;margin-bottom: 2%">
 <div style="color:white">Rank Yourself</div>
     <select name="rank" style>
@@ -46,7 +64,8 @@ select {
         <option>Journeyman</option>
         <option>Expert</option>
         <option>Master</option>
-    </select></div><div>
+    </select></div>
+    <div style="margin-top: 5%;">
      <button id="addbutton" class="btn waves-effect waves-light" type="submit" name="action">Add
     <i class="fa fa-plus"></i>
   </button></div>
@@ -54,36 +73,34 @@ select {
 </div>
 
 
- <div class="col s12 m3" style="text-align:center;background:#19E1FF;height:100%;">Learn<i class="fa fa-cogs"></i>
-     {% for skill in learn %}
-        <div>{{ skill.name }}</div><div><form method="post" action="{% url 'deletelearn'  skill.id  %}">
+ <div class="sideskill col s12 m3" style="text-align:center;background:#00B8D4;"><div style="margin-top:3%;margin-bottom: 3%;">Learn <i class="fa fa-cogs"></i></div>
+     {% for skill in learn %}<div>
+        {{ skill.name }}&nbsp;<form method="post" action="{% url 'deletelearn'  skill.id  %}" style="display:inline">
          {% csrf_token %}
-         <button onclick="Materialize.toast('Deleted {{ skill.name }}', 2000)" type='submit' class="btn waves-effect">
-         Delete</button></form></div>
+         <button style="background-color: Transparent;outline:none;border: none;" onclick="Materialize.toast('Deleted {{ skill.name }}', 2000)" type='submit'>
+             <i class="fa fa-minus"></i>
+         </button></form></div>
      {% endfor %}
  </div>
 
 
 <script>
 $(document).ready(function(){
-    console.log($(window).width());
-    if($(window).width() <= 480){
-  $('.m3').css({height: 'auto'})
-}
+
     $(function () {
 $('input:radio').change(
     function(){
         if ($('#know').is(':checked')){
             $('#rankinput').css({display:'inline-block'});
             $('#addbutton').html('Know <i class="fa fa-graduation-cap"></i>');
-            $('#addbutton').css({background: '#3DC461'})
+            $('#addbutton').css({background: '#6EEE8F'})
 
 
         }
         else{
            $('#rankinput').css({display:'none'});
            $('#addbutton').html('Learn <i class="fa fa-cogs"></i>')
-           $('#addbutton').css({background: '#34F7D6'})
+           $('#addbutton').css({background: '#00B8D4'})
 
         }
     }

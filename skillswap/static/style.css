@@ -12,15 +12,29 @@ html {
   text-align: center;
 }
 
+h4 {
+    color:#FFFFFF;
+}
+strong {
+    color:#FFFFFF;
+}
 input {
     color: #FFFFFF;
     border-bottom: #FFFFFF;
+    text-align:center;
 }
 label {
     color: #FFFFFF;
 }
-
+.helptext{
+    color:#FFFFFF;
+}
 input[type=text]
+{
+    color: #FFFFFF;
+    border-bottom: #FFFFFF;
+}
+input[type=email]
 {
     color: #FFFFFF;
     border-bottom: #FFFFFF;
@@ -128,10 +142,11 @@ p + p {
      -moz-border-radius: 8px;
           border-radius: 8px;
   outline: none;
+  text-align:left;
 }
 
 .typeahead {
-  background-color: #fffff;
+  background-color: #FFFFFF;
 }
 
 
@@ -169,12 +184,7 @@ p + p {
 .tt-suggestion:hover {
   cursor: pointer;
   color: #fff;
-  background-color: #0097cf;
-}
-
-.tt-suggestion.tt-cursor {
-  background-color: #0097cf;
-
+  background-color: Transparent;
 }
 
 .tt-suggestion p {
