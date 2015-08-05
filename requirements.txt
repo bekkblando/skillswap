@@ -1,6 +1,5 @@
 Django
 numpy
-pandas
 python-dateutil
 pytz
 six
