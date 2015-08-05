@@ -1,4 +1,4 @@
-from django.core.validators import RegexValidator
+from django.core.validators import RegexValidator, MinValueValidator
 from django.db import models
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
@@ -19,7 +19,7 @@ class Profile(models.Model):
     user = models.OneToOneField(User)
     skills = models.ManyToManyField(Skill, through="SkillKnow", related_name='skills')
     learn = models.ManyToManyField(Skill, through="SkillLearn", related_name='learn')
-    streetnumber = models.IntegerField(null=True)
+    streetnumber = models.PositiveIntegerField(validators=[MinValueValidator(1)], null=True)
     street = models.CharField(max_length=140, blank=True)
     city = models.CharField(max_length=140, blank=True)
     state = models.CharField(max_length=2, blank=True)
