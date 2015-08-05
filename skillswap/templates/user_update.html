@@ -1,9 +1,15 @@
 {% extends 'base.html' %}
 {% block body %}
 <body style="background:#00B8D4">
+<style>
+    label{
+        text-align: center;
+    }
+</style>
 <form action="" method="post">{% csrf_token %}
     {{ form.as_p }}
-    <button class="waves-effect btn" type="submit"   style="background:#EE6E73" >Update</button>
+    <div style="text-align: center;">
+    <button class="waves-effect btn" type="submit"   style="background:#EE6E73" >Update</button></div>
 </form>
 </body>
 {% endblock %}

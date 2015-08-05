@@ -36,6 +36,39 @@ def home(request):
 
 
 @login_required(redirect_field_name='login')
+def geo_skills(request):
+    context = {}
+    if request.POST:
+        people = []
+        distancemax = request.POST['distance']
+        distancemax = int(''.join(x for x in distancemax if x.isdigit()))
+        profiles = Profile.objects.all()
+        currentuser = Profile.objects.get(user=request.user)
+        streetad = currentuser.street.strip().replace(' ', '+')
+        API_KEY = os.environ.get('GOOGLE_API_KEY')
+        currentuserdata = requests.get('https://maps.googleapis.com/maps/api/geocode/json?address=' + str(
+            currentuser.streetnumber) + streetad + ',' + currentuser.city + ',' + currentuser.state + '&key=' + API_KEY)
+        currentusercords = str(currentuserdata.json()['results'][0]['geometry']['location']['lat']) + ',' + str(
+            currentuserdata.json()['results'][0]['geometry']['location']['lng'])
+        for profile in profiles:
+            if profile != currentuser and profile.skills.all():
+                streetad = profile.street.strip().replace(' ', '+')
+                profiledata = requests.get('https://maps.googleapis.com/maps/api/geocode/json?address=' + str(
+                    profile.streetnumber) + streetad + ',' + profile.city + ',' + profile.state + '&key=' + API_KEY)
+                profilecords = str(profiledata.json()['results'][0]['geometry']['location']['lat']) + ',' + str(
+                    profiledata.json()['results'][0]['geometry']['location']['lng'])
+                disdata = requests.get(
+                    'https://maps.googleapis.com/maps/api/distancematrix/json?origins=' + currentusercords + '&destinations=' + profilecords + '&key=' + API_KEY)
+                distance = disdata.json()['rows'][0]['elements'][0]['distance']['text']
+                miles = 0.62137 * int(''.join(x for x in distance if x.isdigit()))
+                if miles <= distancemax:
+                    people.append((profile, profile.skills.all()))
+        context['people'] = people
+        print(context)
+    return render_to_response("geo_skills.html", context, context_instance=RequestContext(request))
+
+
+@login_required(redirect_field_name='login')
 def profile(request):
     context = {}
     if request.POST:
@@ -201,6 +234,43 @@ def learndelete(request, pk):
         learnskill.delete()
         return redirect('addskill')
 
+def addlearn(request):
+    context = {}
+    profile = Profile.objects.get(user=request.user)
+    if request.POST:
+        skilltype = request.POST['skill']
+        name = request.POST['name'].lower()
+        try:
+            eskill = Skill.objects.get(name=name)
+        except:
+            eskill = Skill.objects.create(name=name)
+        description = request.POST['description']
+        if eskill in profile.recommendation.all():
+            profile.recommendation.remove(eskill)
+            profile.save()
+        if eskill:
+            profile = Profile.objects.get(user=request.user)
+            if skilltype == "learn":
+                if not eskill in profile.learn.all() and not eskill in profile.skills.all():
+                    addskill = SkillLearn.objects.create(description=description, user=profile, skill=eskill)
+                    addskill.save()
+            if skilltype == "know":
+                if not eskill in profile.skills.all() and not eskill in profile.learn.all():
+                    rank = request.POST['rank']
+                    addskill = SkillKnow.objects.create(rank=rank, description=description, user=profile, skill=eskill)
+                    addskill.save()
+        else:
+            profile = Profile.objects.get(user=request.user)
+            if skilltype == "learn":
+                addskill = SkillLearn.objects.create(description=description, user=profile, skill=eskill)
+                addskill.save()
+            if skilltype == "know":
+                rank = request.POST['rank']
+                addskill = SkillKnow.objects.create(rank=rank, description=description, user=profile, skill=eskill)
+                addskill.save()
+        page = request.POST['page']
+        print(page)
+        return redirect('userpage/'+page+'/')
 
 class UserPageView(DetailView):
     model = Profile

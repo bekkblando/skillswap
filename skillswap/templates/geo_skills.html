@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block body %}
+<body style="background:#00B8D4">
+{% if people %}
+    <div class="container flow-text">
+{% for person in people %}
+<div class="row">
+
+    <div class="col s6 m6 l6">
+<div style="color:#424242;">User:<a href="{% url 'userpage' person.0.user.id %}" style="color:#424242"> {{ person.0.user }}</a></div>
+    </div>
+<div class="col s6 m6 l6">
+<div style="color:whitesmoke; display:inline">Skills Available: </div>
+{% for skill in person.1 %}
+    <div style="color:whitesmoke;display:inline">{{ skill }}</div>
+{% endfor %}
+    </div>
+{% endfor %}
+    </div>
+</div>
+{% else %}
+<h1 class="center-align">Try adjusting your radius for matches</h1>
+{% endif %}
+</body>
+{% endblock %}
+</html>
