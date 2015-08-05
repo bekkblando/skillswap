@@ -42,13 +42,15 @@
     <textarea id="textbox{{ item.id }}">Message Here</textarea>
 
     {% if request.user == item.user1.user  %}
-    <input type="hidden" value="{{ item.user2}}" id="user{{ item.id }}"/>
+    <input type="hidden" value="{{ item.user1}}" id="user{{ item.id }}"/>
             <input type="hidden" value="check1" id="check{{ item.id }}"/>
+
            {% else %}
             <input type="hidden" value="check2" id="check{{ item.id }}"/>
 
-        <input type="hidden" value="{{ item.user1 }}" id="user{{ item.id }}"/>
+        <input type="hidden" value="{{ item.user2 }}" id="user{{ item.id }}"/>
     {% endif %}
+
     <input type="hidden" value="{{ item.id }}" id="chat{{ item.id }}"/>
 <button class="waves-effect btn b1{{ item.user2.id }}" onclick="formread{{ item.id }}()" type="button" style="background:#0BE186">
     Send Message</button>
@@ -64,14 +66,12 @@
             for (var i = 0; i < data.length; i++) {
                 var message = (data[i].text);
                 messages.push(message);
-                console.log(messages);
-                console.log("SENDER", data[i].sender);
-                console.log(message);
 
                 if (message === "undefined"){
-                    console.log(message)
                 }
-                if (data[i].sender == 1) {
+                console.log(data[i].sender);
+
+                if (data[i].sender == {{ item.user1.id }}) {
                     content = content + "<div class='left'>" + message + "</div><br/>";
                 } else {
                     content = content + "<div class='right'>" + message + "</div><br/>";
