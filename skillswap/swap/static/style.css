@@ -11,6 +11,60 @@ html {
   margin: 0 auto;
   text-align: center;
 }
+h4 {
+    color:#FFFFFF;
+}
+strong {
+    color:#FFFFFF;
+}
+input {
+    color: #FFFFFF;
+    border-bottom: #FFFFFF;
+}
+label {
+    color: #FFFFFF;
+}
+.helptext{
+    color:#FFFFFF;
+}
+input[type=text]
+{
+    color: #FFFFFF;
+    border-bottom: #FFFFFF;
+}
+input[type=email]
+{
+    color: #FFFFFF;
+    border-bottom: #FFFFFF;
+}
+ input[type=password]
+{
+    color: #FFFFFF;
+    border-bottom: #FFFFFF;
+}
+input[type=text]:focus:not([readonly])+label{
+    color: #FFFFFF;
+    border-bottom: #FFFFFF;
+    box-shadow: #FFFFFF;
+}
+input[type=email]:focus:not([readonly]){
+    color: #FFFFFF;
+    border-bottom: #FFFFFF;
+    box-shadow: #FFFFFF;
+}
+input[type=password]:focus:not([readonly]){
+    color: #FFFFFF;
+    border-bottom: #FFFFFF;
+    box-shadow: #FFFFFF;
+}
+#id_username{
+    color: #FFFFFF;
+    border-bottom: #FFFFFF;
+    box-shadow: #FFFFFF;
+}
+.active{
+    color: #FFFFFF;
+}
 
 .tt-menu,
 .gist {

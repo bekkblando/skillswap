@@ -44,7 +44,7 @@ class Profile(models.Model):
         return "{}".format(self.user)
 
 class SkillKnow(models.Model):
-    rank = models.IntegerField()
+    rank = models.CharField(max_length=15)
     description = models.TextField()
     user = models.ForeignKey(Profile)
     skill = models.ForeignKey(Skill)

@@ -11,20 +11,31 @@
     }
 
 </style>
+
 <div class="container">
 {% for item in object_list %}
-<br/>  <button class="waves-effect btn b{{ item.user2.id }}" style="background:#0BE186">Show Chat</button>
-    <button class="waves-effect btn hide{{ item.user2.id }}" style="background:#0BE186">Hide Chat</button>
-    <h6 id="titl{{ item.id }}" class="center-align"></h6>
-    <h6 class="left" style="color:white">{{ item.user1 }}</h6>
-    <h6 class="right" style="color:white">{{ item.user2 }}</h6>
+<div style="margin-top: 6%;"><div class="row">
+<div class="col s3 m3">
 
+<h6 class="left" style="color:white;margin:0;">{{ item.user1 }}</h6>
+</div>
+
+<div class="col s6 m6">
+<button class="waves-effect btn b{{ item.user2.id }}" style="background:#0BE186;">Show Chat</button>
+ <button class="waves-effect btn hide{{ item.user2.id }}" style="background:#0BE186">Hide Chat</button>
+</div>
+
+<div class="col s3 m3">
+    <h6 class="right" style="color:white;margin:0;">{{ item.user2 }}</h6>
+</div>
+</div>
+</div>
 <div class="card" id="cht{{ item.id }}" style="width:100%;margin-top: 6%; background:#0C93EB;display:none;">
  <div class="card-content m{{ item.id }}">
 
 </div>
 </div>
-    <form class="f{{ item.id }}">
+    <form class="f{{ item.id }}" style="display:none;">
 
 
     <input type="hidden" value="{{ request.user }}" id="user{{ request.user.id }}"/>
@@ -79,12 +90,16 @@
         var content = " ";
         $(".m{{ item.id }}").html(content);
         $(".m{{ item.id }}").css({display: 'none'});
+        $(".f{{ item.id }}").css({display: 'none'});
+
 
     };
 
     var showchat{{ item.id }} = function(){
         $(".m{{ item.id }}").css({display: 'block'})
         $("#cht{{ item.id }}").css({display: 'block'})
+        $(".f{{ item.id }}").css({display: 'block'});
+
 
     };
 

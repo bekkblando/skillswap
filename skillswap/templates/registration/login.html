@@ -2,15 +2,44 @@
 {% block body %}
 <body style="background:#00B8D4">
 <div class="container" style="margin-top: 10%">
-    <style>
-        input {
-            color: #FFFFFF;
-        }
-        label {
-            color: #FFFFFF;
-        }
+<style>
+    input {
+        color: #FFFFFF;
+        border-bottom: #FFFFFF;
+    }
+    label {
+        color: #FFFFFF;
+    }
 
-    </style>
+    input[type=text]
+    {
+        color: #FFFFFF;
+        border-bottom: #FFFFFF;
+    }
+     input[type=password]
+    {
+        color: #FFFFFF;
+        border-bottom: #FFFFFF;
+    }
+    input[type=text]:focus:not([readonly])+label{
+        color: #FFFFFF;
+        border-bottom: #FFFFFF;
+        box-shadow: #FFFFFF;
+    }
+    input[type=password]:focus:not([readonly]){
+        color: #FFFFFF;
+        border-bottom: #FFFFFF;
+        box-shadow: #FFFFFF;
+    }
+    #id_username{
+        color: #FFFFFF;
+        border-bottom: #FFFFFF;
+        box-shadow: #FFFFFF;
+    }
+    .active{
+        color: #FFFFFF;
+    }
+</style>
     <form method="Post">
         {% csrf_token %}
         {{ form.as_table }}
