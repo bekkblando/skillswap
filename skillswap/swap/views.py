@@ -60,10 +60,11 @@ def geo_skills(request):
                     profiledata.json()['results'][0]['geometry']['location']['lng'])
                 disdata = requests.get(
                     'https://maps.googleapis.com/maps/api/distancematrix/json?origins=' + currentusercords + '&destinations=' + profilecords + '&key=' + API_KEY)
-                distance = disdata.json()['rows'][0]['elements'][0]['distance']['text']
-                miles = 0.62137 * int(''.join(x for x in distance if x.isdigit()))
-                if miles <= distancemax:
-                    people.append((profile, profile.skills.all()))
+                if disdata.json()['rows'][0]['elements'][0]['status'] != 'ZERO_RESULTS':
+                    distance = disdata.json()['rows'][0]['elements'][0]['distance']['text']
+                    miles = 0.62137 * int(''.join(x for x in distance if x.isdigit()))
+                    if miles <= distancemax:
+                        people.append((profile, profile.skills.all()))
         context['people'] = people
         print(context)
     return render_to_response("geo_skills.html", context, context_instance=RequestContext(request))
