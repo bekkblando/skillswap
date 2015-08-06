@@ -7,13 +7,16 @@
 
 <div class="row">
     <div class="col s12 m12">
-       <a href="{% url 'addskill' %}"><div class="card hoverable" style="background:#3DC461;">
+       <div class="card" style="background:#3DC461;">
         <div class="card-content white-text">
           <span class="card-title">Skills they know <i class="fa fa-graduation-cap"></i></span>
-
-{% for item in know  %}
 <div class="row">
     <div class="col s6 m6"><p class="flow-text">Skill</p>{{ item.0 }}
+    </div>
+<div class="col s6 m6"><p class="flow-text">Rank</p></div></div>
+{% for item in know  %}
+<div class="row">
+    <div class="col s6 m6">{{ item.0 }}
         <form method="post" action="{% url 'addlearn' %}" style="display:inline">
             {% csrf_token %}
     <input id='learn' type="hidden" name="skill" value="learn"  />
@@ -27,7 +30,7 @@
         </form>
     </div>
 
-<div class="col s6 m6"><p class="flow-text">Rank</p>
+<div class="col s6 m6">
 {{ item.1.rank }}</div></div>
 {% endfor %}
 
@@ -37,20 +40,33 @@
   </div>
 <div class="row">
     <div class="col s12 m12">
-      <a href="{% url 'addskill' %}"><div class="card  hoverable" style="background:#34F7D6;">
+      <div class="card" style="background:#34F7D6;">
         <div class="card-content white-text">
           <span class="card-title">Skills they learn <i class="fa fa-cogs"></i></span>
-
+<div class="row">
+    <div class="col s12 m12"><p class="flow-text">Skill</p>
+    </div>
+</div>
 {% for item in learn  %}
 <div class="row">
-    <div class="col s12 m12"><p class="flow-text">Skill</p>{{ item.0 }}
+    <div class="col s12 m12">{{ item.0 }}        <form method="post" action="{% url 'addlearn' %}" style="display:inline">
+            {% csrf_token %}
+    <input id='learn' type="hidden" name="skill" value="learn"  />
+  <input  type="hidden" name="name" value="{{ item.0 }}">
+    <input type="hidden" name="description" placeholder="Description" value="nodescription"/>
+    <input type="hidden" name="page" value="{{ object.id }}"/>
+
+        <button type="submit" style="background-color: Transparent;outline:none;border: none;">
+            <i class="fa fa-plus"></i>
+        </button>
+        </form>
     </div>
 </div>
 {% endfor %}
 
         </div>
       </div>
-    </div></a>
+    </div>
   </div>
 
 <p class="flow-text" style="color:white">Meetings</p>
