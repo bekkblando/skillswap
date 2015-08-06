@@ -238,9 +238,23 @@
           <span class="card-title"><h3 class="center-align">You may also like</h3></span>
         </div>
         <div class="card-action flow-text center-align" style="font-weight: 600; color:whitesmoke">
+{% if recommendation %}
 {% for item in recommendation %}
-<p>{{ item }}</p>
+<p>{{ item }}        <form method="post" action="{% url 'addlearn' %}" style="display:inline">
+            {% csrf_token %}
+    <input id='learn' type="hidden" name="skill" value="learn"  />
+  <input  type="hidden" name="name" value="{{ item }}">
+    <input type="hidden" name="description" placeholder="Description" value="nodescription"/>
+    <input type="hidden" name="page" value="profile"/>
+
+        <button type="submit" style="background-color: Transparent;outline:none;border: none;">
+            <i class="fa fa-plus"></i>
+        </button>
+        </form></p>
 {% endfor %}
+        {% else %}
+        <p class="flow-text">Recommendations will appear here as they are calculated</p>
+        {% endif %}
         </div>
       </div>
     </div>

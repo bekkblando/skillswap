@@ -16,7 +16,8 @@ Including another URLconf
 from django.conf.urls import include, url
 from django.contrib import admin
 from swap.views import home, SkillLookup, add_skill, register, profile, knowdelete, learndelete, UserPageView, userchatview, \
-    ChatListView, meetingcreate, MessagesListView, MessagesCreateView, UpdateProfile, SkillZipcode, geo_skills, addlearn
+    ChatListView, meetingcreate, MessagesListView, MessagesCreateView, UpdateProfile, SkillZipcode, geo_skills, addlearn, \
+    LearnCreateView, KnowCreateView
 from django.contrib.auth.views import login, logout
 
 
@@ -44,6 +45,11 @@ urlpatterns = [
     url(r'messagelist(?P<pk>\d+)', MessagesListView.as_view(), name='messagelist'),
     url(r'sendmessage/', MessagesCreateView.as_view(), name='messagecreate'),
     url(r'home', home, name="home"),
+
+    url(r'apialearn/', LearnCreateView.as_view(), name="addlearnapi"),
+    url(r'apiaknow/', KnowCreateView.as_view(), name="addknowapi"),
+
     url(r'^', home, name="hom"),
+
 
 ]

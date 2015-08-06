@@ -4,7 +4,7 @@ from django.db.models import Q
 from django.shortcuts import render_to_response, redirect
 from django.template import RequestContext
 from django.views.generic import DeleteView, DetailView, ListView, CreateView, UpdateView
-from rest_framework.authentication import TokenAuthentication
+from rest_framework.authentication import TokenAuthentication, SessionAuthentication
 from rest_framework.authtoken.models import Token
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -51,7 +51,6 @@ def geo_skills(request):
                                         + streetad + ',' + currentuser.city + ',' + currentuser.state + '&key=' + API_KEY)
         currentusercords = str(currentuserdata.json()['results'][0]['geometry']['location']['lat']) + ',' + str(
             currentuserdata.json()['results'][0]['geometry']['location']['lng'])
-        print(currentusercords)
         for profile in profiles:
             if profile != currentuser and profile.skills.all():
                 streetad = profile.streetaddress.strip().replace(' ', '+')
@@ -62,14 +61,13 @@ def geo_skills(request):
                     profiledata.json()['results'][0]['geometry']['location']['lng'])
                 disdata = requests.get(
                     'https://maps.googleapis.com/maps/api/distancematrix/json?origins=' + currentusercords + '&destinations=' + profilecords + '&key=' + API_KEY)
-                print(disdata)
                 if disdata.json()['rows'][0]['elements'][0]['status'] != 'ZERO_RESULTS':
                     distance = disdata.json()['rows'][0]['elements'][0]['distance']['text']
-                    miles = 0.62137 * int(''.join(x for x in distance if x.isdigit()))
+                    distance = re.findall("\d+.\d+", distance)[0]
+                    miles = 0.62137 * float(distance)
                     if miles <= distancemax:
                         people.append((profile, profile.skills.all()))
         context['people'] = people
-        print(context)
     return render_to_response("geo_skills.html", context, context_instance=RequestContext(request))
 
 
@@ -82,6 +80,7 @@ def profile(request):
     exact = []
     smatch = []
     simmatch = []
+    filteredsmatch = []
     recommend = []
     profile = Profile.objects.get(user=request.user)
     recommendation = profile.recommendation.all()
@@ -103,7 +102,7 @@ def profile(request):
         for item in skillsvalue:
             skillname = str(item[0])
             mat = list(SearchQuerySet().filter(content=ite.name))
-            if mat != -1:
+            if len(mat) != 0:
                 for item in mat:
                     skil = Skill.objects.get(id=item.pk)
                     simmatch = Profile.objects.filter(skills__in=[skil])
@@ -116,15 +115,15 @@ def profile(request):
             exact.append((ite, match))
     for sitem in smatch:
         skillcheck = Skill.objects.get(name=sitem[2])
-        for item in exact:
-            if skillcheck == item[0]:
-                smatch.remove(sitem)
-    print(smatch)
-    print(exact)
+        checkexact = [item[0] for item in exact]
+        if skillcheck in checkexact:
+                pass
+        else:
+            filteredsmatch.append(sitem)
     context['exact'] = exact
     context['learn'] = learn
     context['know'] = know
-    context['similiar'] = smatch
+    context['similiar'] = filteredsmatch
 
     return render_to_response("profile.html", context, context_instance=RequestContext(request))
 
@@ -246,7 +245,6 @@ def addlearn(request):
                 addskill = SkillKnow.objects.create(rank=rank, description=description, user=profile, skill=eskill)
                 addskill.save()
         page = request.POST['page']
-        print(page)
         return redirect('userpage/'+page+'/')
 
 class UserPageView(DetailView):
@@ -374,3 +372,36 @@ class SkillZipcode(generics.ListAPIView):
         listofskills = Skill.objects.filter(pk__in=skills)
         print(listofskills)
         return listofskills
+
+class LearnCreateView(generics.GenericAPIView):
+    authentication_classes = (SessionAuthentication,)
+    permission_classes = (IsAuthenticated,)
+
+    def post(self, request, *args, **kwargs):
+        print("te")
+        skill = Skill.objects.get(name=request.data['skill'])
+        text = request.data['description']
+        user = request.data['user']
+        print(skill, text, user)
+        profile = Profile.objects.get(user_id=user)
+        if skill in profile.learn.all():
+            pass
+        else:
+            learn = SkillLearn.objects.create(user=profile, skill=skill, description=text)
+            learn.save()
+            print(learn)
+        return Response(status=status.HTTP_201_CREATED)
+
+class KnowCreateView(generics.GenericAPIView):
+    authentication_classes = (SessionAuthentication,)
+    permission_classes = (IsAuthenticated,)
+
+    def post(self, request, *args, **kwargs):
+        print("te")
+        skill = Skill.objects.get(skill=request.data['skill'])
+        text = request.data['description']
+        user = request.data['user']
+        profile = Profile.objects.get(user_id=user)
+        learn = SkillLearn.objects.create(user=profile, skill=skill, description=text)
+        learn.save()
+        return Response(status=status.HTTP_201_CREATED)

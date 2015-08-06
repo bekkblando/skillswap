@@ -3,6 +3,7 @@
 <body style="background:#00B8D4">
 {% if people %}
     <div class="container flow-text">
+    {% csrf_token %}
 {% for person in people %}
 <div class="row">
 
@@ -12,15 +13,49 @@
 <div class="col s6 m6 l6">
 <div style="color:whitesmoke; display:inline">Skills Available: </div>
 {% for skill in person.1 %}
-    <div style="color:whitesmoke;display:inline">{{ skill }}</div>
+    <div style="color:whitesmoke;display:inline"><div>{{ skill }}
+
+    <input id='learn' type="hidden" name="skill" value="learn"  />
+  <input  type="hidden" id="name{{ skill.id }}" value="{{ skill }}">
+  <input  type="hidden" id="user{{ request.user.id }}" value="{{ request.user.id }}">
+    <input type="hidden" id="description{{ skill.id }}" placeholder="Description" value="nodescription"/>
+        <button class="learn{{ skill.id }}" style="background-color: Transparent;outline:none;border: none;">
+            <i class="fa fa-plus"></i>
+        </button>
+    </div></div>
+
+
+    <script>
+
+var learnskill{{ skill.id }} = function(){
+var token = $('input[name=csrfmiddlewaretoken]').val();
+var learn = document.getElementById("learn").value;
+var skill = document.getElementById("name{{ skill.id }}").value;
+var user = document.getElementById("user{{ request.user.id }}").value;
+var description = document.getElementById("description{{ skill.id }}").value;
+$.ajax({
+  type: 'POST',
+  url: {% url 'addlearnapi' %},
+  data: {'skill': skill, "learn": learn, "description": description, "user": user, 'csrfmiddlewaretoken': token}
+  });
+};
+
+
+$(document).ready(function(){
+$(".learn{{ skill.id }}").click(learnskill{{ skill.id }});
+
+});
+ </script>
 {% endfor %}
     </div>
 {% endfor %}
     </div>
 </div>
+
 {% else %}
 <h1 class="center-align">Try adjusting your radius for matches</h1>
 {% endif %}
+
 </body>
 {% endblock %}
 </html>
