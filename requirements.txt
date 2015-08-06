@@ -27,4 +27,6 @@ django-haystack
 urllib3
 zope.interface
 django-material
+django-localflavor
+
 
