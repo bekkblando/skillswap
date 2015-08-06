@@ -23,7 +23,7 @@ import re
 
 class UpdateProfile(UpdateView):
     model = Profile
-    fields = ['streetnumber', 'street', 'city', 'state','zipcode', 'phone']
+    fields = ['streetaddress', 'city', 'state','zipcode', 'phone']
     template_name = 'user_update.html'
     success_url = reverse_lazy('profile')
 
@@ -45,21 +45,24 @@ def geo_skills(request):
         distancemax = int(''.join(x for x in distancemax if x.isdigit()))
         profiles = Profile.objects.all()
         currentuser = Profile.objects.get(user=request.user)
-        streetad = currentuser.street.strip().replace(' ', '+')
+        streetad = currentuser.streetaddress.strip().replace(' ', '+')
         API_KEY = os.environ.get('GOOGLE_API_KEY')
-        currentuserdata = requests.get('https://maps.googleapis.com/maps/api/geocode/json?address=' + str(
-            currentuser.streetnumber) + streetad + ',' + currentuser.city + ',' + currentuser.state + '&key=' + API_KEY)
+        currentuserdata = requests.get('https://maps.googleapis.com/maps/api/geocode/json?address='
+                                        + streetad + ',' + currentuser.city + ',' + currentuser.state + '&key=' + API_KEY)
         currentusercords = str(currentuserdata.json()['results'][0]['geometry']['location']['lat']) + ',' + str(
             currentuserdata.json()['results'][0]['geometry']['location']['lng'])
+        print(currentusercords)
         for profile in profiles:
             if profile != currentuser and profile.skills.all():
-                streetad = profile.street.strip().replace(' ', '+')
-                profiledata = requests.get('https://maps.googleapis.com/maps/api/geocode/json?address=' + str(
-                    profile.streetnumber) + streetad + ',' + profile.city + ',' + profile.state + '&key=' + API_KEY)
+                streetad = profile.streetaddress.strip().replace(' ', '+')
+                profiledata = requests.get('https://maps.googleapis.com/maps/api/geocode/json?address='
+                                           + streetad + ',' + profile.city + ',' + profile.state + '&key=' + API_KEY)
+                print(profiledata.json())
                 profilecords = str(profiledata.json()['results'][0]['geometry']['location']['lat']) + ',' + str(
                     profiledata.json()['results'][0]['geometry']['location']['lng'])
                 disdata = requests.get(
                     'https://maps.googleapis.com/maps/api/distancematrix/json?origins=' + currentusercords + '&destinations=' + profilecords + '&key=' + API_KEY)
+                print(disdata)
                 if disdata.json()['rows'][0]['elements'][0]['status'] != 'ZERO_RESULTS':
                     distance = disdata.json()['rows'][0]['elements'][0]['distance']['text']
                     miles = 0.62137 * int(''.join(x for x in distance if x.isdigit()))
@@ -73,32 +76,6 @@ def geo_skills(request):
 @login_required(redirect_field_name='login')
 def profile(request):
     context = {}
-    if request.POST:
-        people = []
-        distancemax = request.POST['distance']
-        distancemax = int(''.join(x for x in distancemax if x.isdigit()))
-        profiles = Profile.objects.all()
-        currentuser = Profile.objects.get(user=request.user)
-        streetad = currentuser.street.strip().replace(' ', '+')
-        API_KEY = os.environ.get('GOOGLE_API_KEY')
-        currentuserdata = requests.get('https://maps.googleapis.com/maps/api/geocode/json?address=' + str(
-            currentuser.streetnumber) + streetad + ',' + currentuser.city + ',' + currentuser.state + '&key=' + API_KEY)
-        currentusercords = str(currentuserdata.json()['results'][0]['geometry']['location']['lat']) + ',' + str(
-            currentuserdata.json()['results'][0]['geometry']['location']['lng'])
-        for profile in profiles:
-            if profile != currentuser and profile.skills.all():
-                streetad = profile.street.strip().replace(' ', '+')
-                profiledata = requests.get('https://maps.googleapis.com/maps/api/geocode/json?address=' + str(
-                    profile.streetnumber) + streetad + ',' + profile.city + ',' + profile.state + '&key=' + API_KEY)
-                profilecords = str(profiledata.json()['results'][0]['geometry']['location']['lat']) + ',' + str(
-                    profiledata.json()['results'][0]['geometry']['location']['lng'])
-                disdata = requests.get(
-                    'https://maps.googleapis.com/maps/api/distancematrix/json?origins=' + currentusercords + '&destinations=' + profilecords + '&key=' + API_KEY)
-                distance = disdata.json()['rows'][0]['elements'][0]['distance']['text']
-                miles = 0.62137 * int(''.join(x for x in distance if x.isdigit()))
-                if miles <= distancemax:
-                    people.append((profile, profile.skills.all()))
-        context['people'] = people
     know = []
     learn = []
     addedsimskill = []
@@ -112,7 +89,7 @@ def profile(request):
         for item in recommendation:
             recommend.append(item)
         context['recommendation'] = recommend
-    context['address'] = '{} {}, {} , {} '.format(profile.streetnumber, profile.street, profile.city, profile.state)
+    context['address'] = '{} {}, {} '.format(profile.streetaddress, profile.city, profile.state)
     context['phone'] = profile.phone
     knowall = profile.skills.all()
     learnall = profile.learn.all()
@@ -198,26 +175,24 @@ def register(request):
     registered = False
     if request.method == 'POST':
         user_form = UserForm(data=request.POST)
-        print("here")
-        # profile_form = ProfileForm(data=request.POST)
-        if user_form.is_valid(): #  and profile_form.is_valid():
-            print("madeit")
+        profile_form = ProfileForm(data=request.POST)
+        if user_form.is_valid() and profile_form.is_valid():
             user = user_form.save()
             user.set_password(user.password)
             user.save()
-            #profile = profile_form.save(commit=False)
-            profile = Profile.objects.create(user=user)
+            profile = profile_form.save(commit=False)
+            profile.user = user
             profile.save()
             registered = True
-            print("Ran")
+            return redirect('login')
         else:
             pass
     else:
         user_form = UserForm()
-        # profile_form = ProfileForm()
+        profile_form = ProfileForm()
     return render_to_response(
         'register.html',
-        {'user_form': user_form, 'registered': registered},
+        {'user_form': user_form, 'profile_form':profile_form, 'registered': registered},
         context)
 
 

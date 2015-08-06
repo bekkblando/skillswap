@@ -14,15 +14,24 @@ class Skill(models.Model):
     def __str__(self):
         return "{}".format(self.name)
 
+states = [('AL', 'Alabama'), ('AK', 'Alaska'), ('AS', 'American Samoa'), ('AZ', 'Arizona'),
+           ('AR', 'Arkansas'), ('AA', 'Armed Forces Americas'), ('AE', 'Armed Forces Europe'), ('AP', 'Armed Forces Pacific'),
+           ('CA', 'California'), ('CO', 'Colorado'), ('CT', 'Connecticut'), ('DE', 'Delaware'), ('DC', 'District of Columbia'), ('FL', 'Florida'),
+           ('GA', 'Georgia'), ('GU', 'Guam'), ('HI', 'Hawaii'), ('ID', 'Idaho'), ('IL', 'Illinois'), ('IN', 'Indiana'),
+           ('IA', 'Iowa'), ('KS', 'Kansas'), ('KY', 'Kentucky'), ('LA', 'Louisiana'), ('ME', 'Maine'), ('MD', 'Maryland'), ('MA', 'Massachusetts'), ('MI', 'Michigan'),
+           ('MN', 'Minnesota'), ('MS', 'Mississippi'), ('MO', 'Missouri'), ('MT', 'Montana'), ('NE', 'Nebraska'),
+           ('NV', 'Nevada'), ('NH', 'New Hampshire'), ('NJ', 'New Jersey'), ('NM', 'New Mexico'), ('NY', 'New York'),
+           ('NC', 'North Carolina'),('ND', 'North Dakota'), ('MP', 'Northern Mariana Islands'), ('OH', 'Ohio'), ('OK', 'Oklahoma'),
+           ('OR', 'Oregon'), ('PA', 'Pennsylvania'), ('PR', 'Puerto Rico'), ('RI', 'Rhode Island'), ('SC', 'South Carolina'), ('SD', 'South Dakota'), ('TN', 'Tennessee'),
+           ('TX', 'Texas'), ('UT', 'Utah'), ('VT', 'Vermont'), ('VI', 'Virgin Islands'), ('VA', 'Virginia'), ('WA', 'Washington'), ('WV', 'West Virginia'), ('WI', 'Wisconsin'), ('WY', 'Wyoming')]
 
 class Profile(models.Model):
     user = models.OneToOneField(User)
     skills = models.ManyToManyField(Skill, through="SkillKnow", related_name='skills')
     learn = models.ManyToManyField(Skill, through="SkillLearn", related_name='learn')
-    streetnumber = models.PositiveIntegerField(validators=[MinValueValidator(1)], null=True)
-    street = models.CharField(max_length=140, blank=True)
+    streetaddress = models.CharField(max_length=140, blank=True)
     city = models.CharField(max_length=140, blank=True)
-    state = models.CharField(max_length=2, blank=True)
+    state = models.CharField(max_length=2, blank=True, choices=states)
     zipcode = models.CharField(max_length=5, blank=True)
     created = models.DateTimeField(auto_now_add=True)
     phone_regex = RegexValidator(regex=r'^\+?1?\d{9,15}$', message="Phone number must be entered in the format: '+999999999'. Up to 15 digits allowed.")
@@ -32,11 +41,11 @@ class Profile(models.Model):
 
     @property
     def geo_enabled(self):
-        if self.streetnumber and self.street and self.city and self.state and self.zipcode:
-            print(self.streetnumber, self.street ,self.city , self.state , self.zipcode)
+        if self.streetaddress and self.city and self.state and self.zipcode:
+            print(self.streetaddress ,self.city , self.state , self.zipcode)
             return True
         else:
-            print(self.streetnumber, self.street ,self.city , self.state , self.zipcode)
+            print(self.streetaddress ,self.city , self.state , self.zipcode)
             print("Fail")
             return False
 

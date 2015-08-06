@@ -2,9 +2,20 @@
 {% block body %}
 <body style="background:#00B8D4">
 <style>
-    label{
+label{
         text-align: center;
     }
+input {
+    color: #FFFFFF;
+}
+
+select {
+    display:inline-block;
+    height: 4%;
+    line-height: 4%;
+    border: 1px solid #ccc;
+}
+
 </style>
 <div class="container">
 <form action="" method="post">{% csrf_token %}
