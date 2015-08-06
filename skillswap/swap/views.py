@@ -57,16 +57,19 @@ def geo_skills(request):
                 profiledata = requests.get('https://maps.googleapis.com/maps/api/geocode/json?address='
                                            + streetad + ',' + profile.city + ',' + profile.state + '&key=' + API_KEY)
                 print(profiledata.json())
-                profilecords = str(profiledata.json()['results'][0]['geometry']['location']['lat']) + ',' + str(
-                    profiledata.json()['results'][0]['geometry']['location']['lng'])
-                disdata = requests.get(
-                    'https://maps.googleapis.com/maps/api/distancematrix/json?origins=' + currentusercords + '&destinations=' + profilecords + '&key=' + API_KEY)
-                if disdata.json()['rows'][0]['elements'][0]['status'] != 'ZERO_RESULTS':
-                    distance = disdata.json()['rows'][0]['elements'][0]['distance']['text']
-                    distance = re.findall("\d+.\d+", distance)[0]
-                    miles = 0.62137 * float(distance)
-                    if miles <= distancemax:
-                        people.append((profile, profile.skills.all()))
+                try:
+                    profilecords = str(profiledata.json()['results'][0]['geometry']['location']['lat']) + ',' + str(
+                        profiledata.json()['results'][0]['geometry']['location']['lng'])
+                    disdata = requests.get(
+                        'https://maps.googleapis.com/maps/api/distancematrix/json?origins=' + currentusercords + '&destinations=' + profilecords + '&key=' + API_KEY)
+                    if disdata.json()['rows'][0]['elements'][0]['status'] != 'ZERO_RESULTS':
+                        distance = disdata.json()['rows'][0]['elements'][0]['distance']['text']
+                        distance = re.findall("\d+.\d+", distance)[0]
+                        miles = 0.62137 * float(distance)
+                        if miles <= distancemax:
+                            people.append((profile, profile.skills.all()))
+                except:
+                    pass
         context['people'] = people
     return render_to_response("geo_skills.html", context, context_instance=RequestContext(request))
 
