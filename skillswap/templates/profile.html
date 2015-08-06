@@ -128,7 +128,7 @@
             <div class="card-content white-text">
               <div class="card-title" style="text-align: center;">Matches</div>
 <div class="container">
-{% if exact and similiar %}
+{% if exact or similiar %}
 {% for tu in exact %}
 <div class="row" style="margin:0;margin-top:2%;margin-bottom: 2%;">
 
@@ -240,7 +240,7 @@
 <script>
 
     $(document).ready(function(){ // document ready
-{% if exact and similiar %}
+{% if exact or similiar %}
             {% else %}
 Materialize.toast("<span>You don't have any matches</span><a class='btn-flat yellow-text'; href='{% url 'addskill' %}';>Add Skills<a>", 8000)
         {% endif %}
