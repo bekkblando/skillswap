@@ -40,6 +40,7 @@ def geo_skills(request):
     context = {}
     if request.POST:
         people = []
+        distance = 0
         distancemax = request.POST['distance']
         distancemax = int(''.join(x for x in distancemax if x.isdigit()))
         profiles = Profile.objects.all()
