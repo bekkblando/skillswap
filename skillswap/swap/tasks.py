@@ -35,10 +35,12 @@ def recommend():
     for profile in profiles:
         for rules in itemlearnsets:
             testing.append(rules)
-            if rules[0] in profile.learn.all() and not rules[1] in profile.learn.all() and not rules[0] in profile.skills.all() \
-                and not rules[1] in profile.skills.all() and not rules[1] in profile.recommendation.all():
+            all_learn = list(profile.learn.all())
+            all_skills = list(profile.skills.all())
+            if rules[0] in all_learn and not rules[1] in all_learn and not rules[0] in all_skills \
+                and not rules[1] in all_skills and not rules[1] in profile.recommendation.all():
                 print(profile)
                 profile.recommendation.add(rules[1])
                 #testing.append((profile.recommendation.all(), profile))
         profile.save()
-    return testing
+    print(locals().values())
