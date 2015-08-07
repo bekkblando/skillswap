@@ -66,9 +66,10 @@ select {
         <option>Master</option>
     </select></div>
     <div style="margin-top: 5%;">
-     <button id="addbutton" class="btn waves-effect waves-light" type="submit" name="action">Add
+     <a id="addbutton" class="btn waves-effect waves-light tooltipped" type="submit" name="action"
+        data-position="bottom" data-delay="50" data-tooltip="Make sure to select know or learn!">Add
     <i class="fa fa-plus"></i>
-  </button></div>
+  </a></div>
     </form>
 </div>
 
@@ -86,7 +87,6 @@ select {
 
 <script>
 $(document).ready(function(){
-
     $(function () {
 $('input:radio').change(
     function(){
@@ -94,13 +94,26 @@ $('input:radio').change(
             $('#rankinput').css({display:'inline-block'});
             $('#addbutton').html('Know <i class="fa fa-graduation-cap"></i>');
             $('#addbutton').css({background: '#6EEE8F'})
+            $('#addbutton').removeClass('tooltipped');
+            $('.material-tooltip').remove()
+
+
+
+        }
+        else if ($('#learn').is(':checked')){
+           $('#rankinput').css({display:'none'});
+           $('#addbutton').html('Learn <i class="fa fa-cogs"></i>');
+           $('#addbutton').css({background: '#00B8D4'});
+           $('.tooltipped').removeClass('tooltipped');
+           $('.material-tooltip').remove()
+
 
 
         }
         else{
-           $('#rankinput').css({display:'none'});
-           $('#addbutton').html('Learn <i class="fa fa-cogs"></i>')
-           $('#addbutton').css({background: '#00B8D4'})
+           $('#addbutton').html('Add <i class="fa fa-plus"></i>');
+           $('#addbutton').addClass('tooltipped');
+           $('#addbutton').addClass('waves-light');
 
         }
     }

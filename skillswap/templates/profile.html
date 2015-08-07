@@ -122,9 +122,13 @@
 
 
 <div class="container">
+{% if exact or similiar %}
+{% else %}
+<a href="{% url 'addskill' %}">
+{% endif %}
       <div class="row">
         <div class="col s12 m12">
-          <div class="card" style="background:#0E7787;">
+          <div class="card hoverable" style="background:#0E7787;">
             <div class="card-content white-text">
               <div class="card-title" style="text-align: center;">Matches</div>
 {% if exact or similiar %}
@@ -182,13 +186,18 @@
           </div>
         </div>
       </div>
+{% if similiar or exact %}
+{% else %}
+</a>
+{% endif %}
+{% if user.profile.geo_enabled %}
+{% else %}
 
-
-
-
+<a href="{% url 'update_user' %}">
+{% endif %}
 <div class="row">
     <div class="col s6 m6" >
-      <div class="card geotip" style="background:#007687;" data-position="bottom" data-delay="50" data-tooltip="Add your address to use">
+      <div class="card geotip hoverable" style="background:#007687;" data-position="bottom" data-delay="50" data-tooltip="Add your address to use">
         <div class="card-content white-text">
           <span class="card-title " ><h3 class="center-align">Skills in Area</h3></span>
 {% if user.profile.geo_enabled %}
@@ -228,8 +237,10 @@
             </div>
         </div>
       </div>
-
-
+{% if user.profile.geo_enabled %}
+{% else %}
+</a>
+{% endif %}
 
 
 <div class="col s6 m6" >

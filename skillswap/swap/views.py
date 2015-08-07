@@ -51,12 +51,14 @@ def geo_skills(request):
                                         + streetad + ',' + currentuser.city + ',' + currentuser.state + '&key=' + API_KEY)
         currentusercords = str(currentuserdata.json()['results'][0]['geometry']['location']['lat']) + ',' + str(
             currentuserdata.json()['results'][0]['geometry']['location']['lng'])
+        print(profiles)
         for profile in profiles:
+            print(profile, profile.skills.all())
             if profile != currentuser and profile.skills.all():
                 streetad = profile.streetaddress.strip().replace(' ', '+')
                 profiledata = requests.get('https://maps.googleapis.com/maps/api/geocode/json?address='
                                            + streetad + ',' + profile.city + ',' + profile.state + '&key=' + API_KEY)
-                print(profiledata.json())
+                print("PROFILE DATA", profiledata.json())
                 try:
                     profilecords = str(profiledata.json()['results'][0]['geometry']['location']['lat']) + ',' + str(
                         profiledata.json()['results'][0]['geometry']['location']['lng'])
@@ -70,6 +72,9 @@ def geo_skills(request):
                             people.append((profile, profile.skills.all()))
                 except:
                     pass
+            context['radius'] = distancemax
+
+            context['address'] = "{}, {}, {}, {}".format(currentuser.streetaddress, currentuser.city, currentuser.zipcode, currentuser.state)
         context['people'] = people
     return render_to_response("geo_skills.html", context, context_instance=RequestContext(request))
 
@@ -119,7 +124,9 @@ def profile(request):
     for sitem in smatch:
         skillcheck = Skill.objects.get(name=sitem[2])
         checkexact = [item[0] for item in exact]
-        if skillcheck in checkexact:
+        knowcheck = [item.skill for item in know]
+        learncheck = [item.skill for item in learn]
+        if skillcheck in checkexact or skillcheck in knowcheck or skillcheck in learncheck:
                 pass
         else:
             filteredsmatch.append(sitem)

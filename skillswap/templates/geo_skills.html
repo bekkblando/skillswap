@@ -3,15 +3,18 @@
 <body style="background:#00B8D4">
 {% if people %}
     <div class="container flow-text">
+    <p class="flow-text">Current address is {{ address }}
+below are skills found in a {{ radius }} Mile radius:</p>
     {% csrf_token %}
 {% for person in people %}
 <div class="row">
+
 
     <div class="col s6 m6 l6">
 <div style="color:#424242;">User:<a href="{% url 'userpage' person.0.user.id %}" style="color:#424242"> {{ person.0.user }}</a></div>
     </div>
 <div class="col s6 m6 l6">
-<div style="color:whitesmoke; display:inline">Skills Available: </div>
+<div style="color:whitesmoke; display:inline">Skills Available in a {{ radius }} Mile radius: </div>
 {% for skill in person.1 %}
     <div style="color:whitesmoke;display:inline"><div>{{ skill }}
 
@@ -53,7 +56,8 @@ $(".learn{{ skill.id }}").click(learnskill{{ skill.id }});
 </div>
 
 {% else %}
-<h1 class="center-align">Try adjusting your radius for matches</h1>
+<p class="center-align flow-text"><a href="{% url 'profile' %}">No skills found for {{ radius }} Mile Radius<br/>
+    Try adjusting your radius for matches</a></p>
 {% endif %}
 
 </body>
