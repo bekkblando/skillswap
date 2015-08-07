@@ -148,37 +148,40 @@ def add_skill(request):
     context = {}
     profile = Profile.objects.get(user=request.user)
     if request.POST:
-        skilltype = request.POST['skill']
-        name = request.POST['name'].lower()
-        if len(name):
-            try:
-                eskill = Skill.objects.get(name=name)
-            except:
-                eskill = Skill.objects.create(name=name)
-            description = request.POST['description']
-            if eskill in profile.recommendation.all():
-                profile.recommendation.remove(eskill)
-                profile.save()
-            if eskill:
-                profile = Profile.objects.get(user=request.user)
-                if skilltype == "learn":
-                    if not eskill in profile.learn.all() and not eskill in profile.skills.all():
+        try:
+            skilltype = request.POST['skill']
+            name = request.POST['name'].lower()
+            if len(name):
+                try:
+                    eskill = Skill.objects.get(name=name)
+                except:
+                    eskill = Skill.objects.create(name=name)
+                description = request.POST['description']
+                if eskill in profile.recommendation.all():
+                    profile.recommendation.remove(eskill)
+                    profile.save()
+                if eskill:
+                    profile = Profile.objects.get(user=request.user)
+                    if skilltype == "learn":
+                        if not eskill in profile.learn.all() and not eskill in profile.skills.all():
+                            addskill = SkillLearn.objects.create(description=description, user=profile, skill=eskill)
+                            addskill.save()
+                    if skilltype == "know":
+                        if not eskill in profile.skills.all() and not eskill in profile.learn.all():
+                            rank = request.POST['rank']
+                            addskill = SkillKnow.objects.create(rank=rank, description=description, user=profile, skill=eskill)
+                            addskill.save()
+                else:
+                    profile = Profile.objects.get(user=request.user)
+                    if skilltype == "learn":
                         addskill = SkillLearn.objects.create(description=description, user=profile, skill=eskill)
                         addskill.save()
-                if skilltype == "know":
-                    if not eskill in profile.skills.all() and not eskill in profile.learn.all():
+                    if skilltype == "know":
                         rank = request.POST['rank']
                         addskill = SkillKnow.objects.create(rank=rank, description=description, user=profile, skill=eskill)
                         addskill.save()
-            else:
-                profile = Profile.objects.get(user=request.user)
-                if skilltype == "learn":
-                    addskill = SkillLearn.objects.create(description=description, user=profile, skill=eskill)
-                    addskill.save()
-                if skilltype == "know":
-                    rank = request.POST['rank']
-                    addskill = SkillKnow.objects.create(rank=rank, description=description, user=profile, skill=eskill)
-                    addskill.save()
+        except:
+            pass
     context['learn'] = profile.learn.all()
     context['know'] = profile.skills.all()
 
