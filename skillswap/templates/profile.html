@@ -151,7 +151,7 @@
 
 <div class="right-align col s6">
     {% for user in tu.1 %}
-   <div><a href="{% url 'userpage' user.user.id %}" style="color:white"> {{ user.user }}</a>
+   <div><a href="{% url 'userpage' user.user.profile.id %}" style="color:white"> {{ user.user }}</a>
        <form  method="POST" action="{% url 'userchatcreate'%}" style="vertical-align: middle; margin-bottom:0;display:inline">{% csrf_token %}
         <input type="hidden" name="user2" value="{{ user.user }}"/>
         <button type="submit" style="background-color: Transparent;outline:none;border: none;"><i class="fa fa-comment"></i></button>
@@ -169,7 +169,7 @@
 
 <div class="right-align col s6">
     {% for user in tu.1 %}
-   <div><a href="{% url 'userpage' user.user.id %}" style="color:white"> {{ user.user }}</a><form  method="POST" action="{% url 'userchatcreate'%}" style="vertical-align: middle; margin-bottom:0;display:inline;">{% csrf_token %}
+   <div><a href="{% url 'userpage' user.user.profile.id %}" style="color:white"> {{ user.user }}</a><form  method="POST" action="{% url 'userchatcreate'%}" style="vertical-align: middle; margin-bottom:0;display:inline;">{% csrf_token %}
         <input type="hidden" name="user2" value="{{ user.user }}"/>
         <button type="submit" style="background-color: Transparent;outline:none;border: none;"><i class="fa fa-comment"></i></button>
 </form></div>

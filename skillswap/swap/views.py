@@ -105,7 +105,7 @@ def profile(request):
     for ite in learnall:
         add = False
         learn.append(SkillLearn.objects.get(user=profile, skill=ite))
-        match = Profile.objects.filter(skills__in=[ite])
+        match = Profile.objects.filter(~Q(user=profile.user), skills__in=[ite])
         skillsvalue = Profile.objects.all().values_list('skills__name')
         for item in skillsvalue:
             skillname = str(item[0])
@@ -113,7 +113,7 @@ def profile(request):
             if len(mat) != 0:
                 for item in mat:
                     skil = Skill.objects.get(id=item.pk)
-                    simmatch = Profile.objects.filter(skills__in=[skil])
+                    simmatch = Profile.objects.filter(~Q(user=profile.user), skills__in=[skil])
                     add = True
                     if len(simmatch) and not skillname == ite.name and skillname != 'None' and add:
                         if not skillname in addedsimskill:
@@ -124,11 +124,14 @@ def profile(request):
     for sitem in smatch:
         skillcheck = Skill.objects.get(name=sitem[2])
         checkexact = [item[0] for item in exact]
-        knowcheck = [item.skill for item in know]
-        learncheck = [item.skill for item in learn]
+        knowcheck = [item for item in profile.skills.all()]
+        print(knowcheck)
+        print(skillcheck)
+        learncheck = [item for item in profile.learn.all()]
         if skillcheck in checkexact or skillcheck in knowcheck or skillcheck in learncheck:
                 pass
         else:
+            print(sitem)
             filteredsmatch.append(sitem)
     context['exact'] = exact
     context['learn'] = learn

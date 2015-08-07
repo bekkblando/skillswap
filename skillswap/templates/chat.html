@@ -18,7 +18,7 @@
 <div style="margin-top: 6%;"><div class="row">
 <div class="col s3 m3">
 
-<h6 class="left" style="color:white;margin:0;">{{ item.user1 }}</h6>
+<h6 class="left" style="color:white;margin:0;"><a href="{% url 'userpage' item.user1.id %}">{{ item.user1 }}</a></h6>
 </div>
 
 <div class="col s6 m6">
@@ -27,7 +27,7 @@
 </div>
 
 <div class="col s3 m3">
-    <h6 class="right" style="color:white;margin:0;">{{ item.user2 }}</h6>
+    <h6 class="right" style="color:white;margin:0;"><a href="{% url 'userpage' item.user2.id %}">{{ item.user2 }}</a></h6>
 </div>
 </div>
 </div>
