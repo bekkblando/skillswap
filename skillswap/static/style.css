@@ -20,8 +20,8 @@ strong {
 }
 input {
     color: #FFFFFF;
-    border-bottom: #FFFFFF;
-    text-align:center;
+    border-bottom:1px solid #FFFFFF;
+
 }
 label {
     color: #FFFFFF;
@@ -29,20 +29,25 @@ label {
 .helptext{
     color:#FFFFFF;
 }
+textarea{
+    color:#ffffff;
+    border: none;
+    
+}
 input[type=text]
 {
     color: #FFFFFF;
-    border-bottom: #FFFFFF;
+    border-bottom:1px solid #FFFFFF;
 }
 input[type=email]
 {
     color: #FFFFFF;
-    border-bottom: #FFFFFF;
+    border-bottom:1px solid #FFFFFF;
 }
  input[type=password]
 {
     color: #FFFFFF;
-    border-bottom: #FFFFFF;
+    border-bottom:1px solid #FFFFFF;
 }
 input[type=text]:focus:not([readonly])+label{
     color: #FFFFFF;
@@ -55,11 +60,6 @@ input[type=email]:focus:not([readonly]){
     box-shadow: #FFFFFF;
 }
 input[type=password]:focus:not([readonly]){
-    color: #FFFFFF;
-    border-bottom: #FFFFFF;
-    box-shadow: #FFFFFF;
-}
-#id_username{
     color: #FFFFFF;
     border-bottom: #FFFFFF;
     box-shadow: #FFFFFF;

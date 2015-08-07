@@ -66,27 +66,23 @@ right: 0;">
 
     <h1>Find skills in your area</h1>
 <style>
-
     input, select, textarea{
-    color: #212121;
+    color: #FFFFFF;
 }
 
 textarea:focus, input:focus {
-    color: #212121;
+    color: #FFFFFF;
 }
 </style>
 
-        <p class="flow-text">Enter you zipcode below</p>
+<p class="flow-text">Enter you zipcode below</p>
 
-
-
-        <input id="zipinput"/><div style="margin-top:3%">
-        {% if user.is_authenticated %}
-            <button id="zip" class="btn waves-effect" type="submit" style="vertical-align: top;background:#F78F66;">Submit <i class="material-icons">send</i>
-        {% else %}
-            <button id="zip" class="btn waves-effect" type="submit" style="vertical-align: top;background:#EE6E73;"">Submit <i class="material-icons">send</i>
-
-        {% endif %}
+<input placeholder="zipcode" type="text" id="zipinput" /><div style="margin-top:3%">
+{% if user.is_authenticated %}
+    <button id="zip" class="btn waves-effect" type="submit" style="vertical-align: top;background:#F78F66;">Submit <i class="material-icons">send</i>
+{% else %}
+    <button id="zip" class="btn waves-effect" type="submit" style="vertical-align: top;background:#EE6E73;"">Submit <i class="material-icons">send</i>
+{% endif %}
   </button>
             </div>
                 <p class="flow-text">Here are the skills available in your area.</p>
@@ -95,20 +91,40 @@ textarea:focus, input:focus {
 
 </div>
         <div></div>
+
 <script>
 $(document).ready(function(){
     String.prototype.toProperCase = function () {
     return this.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
 };
+    function isValidUSZip(sZip) {
+   return /^\d{5}(-\d{4})?$/.test(sZip);
+}
+
     $('#zip').click(function zip(){
     var zipcode = document.getElementById("zipinput").value;
+    if (isValidUSZip(zipcode)){
+
+    }
+    else{
+        var notval = "<p class='flow-text'><a href='{% url 'register' %}' style='color:white'>"+ "Not a valid zipcode" +"</a></p>";
+        $(".skillsinarea").html(" ");
+        $(".skillsinarea").append(notval);
+    }
+
     var getUrl = '/zipcodesearch/' + zipcode;
-    var skill = []
+    var skill = [];
     $.getJSON(getUrl, function (response){
-        console.log(response)
+        if (response.length){
+        $(".skillsinarea").html(" ");
         for (i = 0, len = response.length; i < len; i++){
             var newskill = "<p class='flow-text'><a href='{% url 'register' %}' style='color:white'>"+response[i]['name'].toProperCase() +"</a></p>";
-            $(".skillsinarea").append(newskill);}
+            $(".skillsinarea").append(newskill);}}
+        else{
+          var newskill = "<p class='flow-text'><a href='{% url 'register' %}' style='color:white'>"+"No skills found, be the first in your area"+"</a></p>";
+          $(".skillsinarea").html(newskill);
+        }
+
         });
     })
 });
