@@ -11,13 +11,6 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'skillswap.settings')
 from django.conf import settings
 app = Celery('skillswap', backend='amqp://localhost')
 
-app.conf.update(
-    CELERY_RESULT_BACKEND='djcelery.backends.database:DatabaseBackend',
-)
-
-app.conf.update(
-    CELERY_RESULT_BACKEND='djcelery.backends.cache:CacheBackend',
-)
 
 # Using a string here means the worker will not have to
 # pickle the object when using Windows.
