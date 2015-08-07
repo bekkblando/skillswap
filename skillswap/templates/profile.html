@@ -1,6 +1,8 @@
 {% extends 'base.html' %}
 {% block body %}
 <body style="background:#00B8D4">
+    {% csrf_token %}
+
 {% comment %}
     <nav id="submenu" style="z-index: 10;height:2.6em">
       <div class="nav-wrapper" style="background:#00B8D4; text-align: center;">
@@ -251,17 +253,44 @@
         <div class="card-action flow-text center-align" style="font-weight: 600; color:whitesmoke">
 {% if recommendation %}
 {% for item in recommendation %}
-<p>{{ item }}        <form method="post" action="{% url 'addlearn' %}" style="display:inline">
-            {% csrf_token %}
+<p>{{ item }}
     <input id='learn' type="hidden" name="skill" value="learn"  />
-  <input  type="hidden" name="name" value="{{ item }}">
-    <input type="hidden" name="description" placeholder="Description" value="nodescription"/>
-    <input type="hidden" name="page" value="profile"/>
-
-        <button type="submit" style="background-color: Transparent;outline:none;border: none;">
+  <input  type="hidden" id="name{{ item.id }}" value="{{ item }}">
+  <input  type="hidden" id="user{{ request.user.id }}" value="{{ request.user.id }}">
+    <input type="hidden" id="description{{ item.id }}" placeholder="Description" value="nodescription"/>
+        <button class="learn{{ item.id }}" style="background-color: Transparent;outline:none;border: none;">
             <i class="fa fa-plus"></i>
         </button>
-        </form></p>
+
+    <script>
+
+var learnskill{{ item.id }} = function(){
+var token = $('input[name=csrfmiddlewaretoken]').val();
+var learn = document.getElementById("learn").value;
+var skill = document.getElementById("name{{ item.id }}").value;
+var user = document.getElementById("user{{ request.user.id }}").value;
+var description = document.getElementById("description{{ item.id }}").value;
+$.ajax({
+  type: 'POST',
+  url: {% url 'addlearnapi' %},
+  data: {'skill': skill, "learn": learn, "description": description, "user": user, 'csrfmiddlewaretoken': token}
+  });
+    Materialize.toast('Added {{ item }} To Learn', 3000)
+};
+
+
+$(document).ready(function(){
+$(".learn{{ item.id }}").click(learnskill{{ item.id }});
+
+
+});
+ </script>
+
+
+
+
+
+    </p>
 {% endfor %}
         {% else %}
         <p class="flow-text">Recommendations will appear here as they are calculated</p>
@@ -276,6 +305,9 @@
 <script>
 
     $(document).ready(function(){ // document ready
+
+
+
 {% if exact or similiar %}
             {% else %}
 Materialize.toast("<span>You don't have any matches</span><a class='btn-flat yellow-text'; href='{% url 'addskill' %}';>Add Skills<a>", 4000);

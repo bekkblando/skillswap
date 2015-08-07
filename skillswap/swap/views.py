@@ -92,14 +92,15 @@ def profile(request):
     recommend = []
     profile = Profile.objects.get(user=request.user)
     recommendation = profile.recommendation.all()
+    knowall = profile.skills.all()
+    learnall = profile.learn.all()
     if len(recommendation):
         for item in recommendation:
-            recommend.append(item)
+            if item not in learnall and item not in knowall:
+                recommend.append(item)
         context['recommendation'] = recommend
     context['address'] = '{} {}, {} '.format(profile.streetaddress, profile.city, profile.state)
     context['phone'] = profile.phone
-    knowall = profile.skills.all()
-    learnall = profile.learn.all()
     for item in knowall:
         know.append(SkillKnow.objects.get(user=profile, skill=item))
     for ite in learnall:
