@@ -44,3 +44,4 @@ def recommend():
                 #testing.append((profile.recommendation.all(), profile))
         profile.save()
     print(locals().values())
+    return testing
