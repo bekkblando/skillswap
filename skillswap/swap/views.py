@@ -134,7 +134,6 @@ def profile(request):
                 pass
         else:
             filteredsmatch.append(list(sitem))
-    print("similiar", filteredsmatch[0][1][:5])
     try:
         filteredsmatch[0][1] = filteredsmatch[0][1][:5]
         exact[0][1] = exact[0][1][:5]
