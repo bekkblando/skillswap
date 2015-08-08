@@ -122,7 +122,7 @@ def profile(request):
                             addedsimskill.append(skillname)
                             smatch.append((ite, simmatch, skillname))
         if len(match):
-            exact.append((ite, match))
+            exact.append([ite, match])
     for sitem in smatch:
         skillcheck = Skill.objects.get(name=sitem[2])
         checkexact = [item[0] for item in exact]
@@ -133,8 +133,14 @@ def profile(request):
         if skillcheck in checkexact or skillcheck in knowcheck or skillcheck in learncheck:
                 pass
         else:
-            print(sitem)
-            filteredsmatch.append(sitem)
+            filteredsmatch.append(list(sitem))
+    print("similiar", filteredsmatch[0][1][:5])
+    try:
+        filteredsmatch[0][1] = filteredsmatch[0][1][:5]
+        exact[0][1] = exact[0][1][:5]
+    except:
+        pass
+
     context['exact'] = exact
     context['learn'] = learn
     context['know'] = know

@@ -75,13 +75,13 @@ textarea:focus, input:focus {
 }
 </style>
 
-<p class="flow-text">Enter you zipcode below</p>
+<p class="flow-text">Enter your zipcode below</p>
 
 <input placeholder="zipcode" type="text" id="zipinput" /><div style="margin-top:3%">
 {% if user.is_authenticated %}
     <button id="zip" class="btn waves-effect" type="submit" style="vertical-align: top;background:#F78F66;">Submit <i class="material-icons">send</i>
 {% else %}
-    <button id="zip" class="btn waves-effect" type="submit" style="vertical-align: top;background:#EE6E73;"">Submit <i class="material-icons">send</i>
+    <button id="zip" class="btn waves-effect" type="submit" style="vertical-align: top;background:#EE6E73;">Submit <i class="material-icons">send</i>
 {% endif %}
   </button>
             </div>
