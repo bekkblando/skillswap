@@ -15,6 +15,7 @@ Including another URLconf
 """
 from django.conf.urls import include, url
 from django.contrib import admin
+from django.views.generic import TemplateView
 from swap.views import home, SkillLookup, add_skill, register, profile, knowdelete, learndelete, UserPageView, userchatview, \
     ChatListView, meetingcreate, MessagesListView, MessagesCreateView, UpdateProfile, SkillZipcode, geo_skills, addlearn, \
     LearnCreateView, KnowCreateView, skillpage
@@ -46,7 +47,7 @@ urlpatterns = [
     url(r'sendmessage/', MessagesCreateView.as_view(), name='messagecreate'),
     url(r'home', home, name="home"),
     url(r'skillpage/(?P<pk>\d+)/', skillpage, name="skillpage"),
-
+    url(r'about/$', TemplateView.as_view(template_name='aboutbekk.html'), name='about'),
     url(r'apialearn/', LearnCreateView.as_view(), name="addlearnapi"),
     url(r'apiaknow/', KnowCreateView.as_view(), name="addknowapi"),
 

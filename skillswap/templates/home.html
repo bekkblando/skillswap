@@ -29,7 +29,7 @@ right: 0;">
         <p class="flow-text">This is a project made by Bekk Blando for his Iron Yard Final Project.  We hope you enjoy
         looking at the site!</p>
         {% if user.is_authenticated %}
-        <a class="waves-effect waves-lighten-2  btn-large" href="{% url 'profile' %}" style="background:#F78F66;">Read More About Bekk</a>
+        <a class="waves-effect waves-lighten-2  btn-large" href="{% url 'about' %}" style="background:#F78F66;">Read More About Bekk</a>
         {% else %}
             <a class="waves-effect waves-lighten-2  btn-large" href="{% url 'register' %}" style="background:#EE6E73;">Read More About Bekk</a>
         {% endif %}
