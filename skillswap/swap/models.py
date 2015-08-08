@@ -34,7 +34,7 @@ class Profile(models.Model):
     state = models.CharField(max_length=2, blank=True, choices=states)
     zipcode = models.CharField(max_length=5, blank=True)
     created = models.DateTimeField(auto_now_add=True)
-    phone_regex = RegexValidator(regex=r'^\+?1?\d{9,15}$', message="Phone number must be entered in the format: '+999999999'. Up to 15 digits allowed.")
+    phone_regex = RegexValidator(regex=r'1?\W*([2-9][0-8][0-9])\W*([2-9][0-9]{2})\W*([0-9]{4})(\se?x?t?(\d*))?', message="Phone number must be entered in the format: '+999999999'. Up to 15 digits allowed.")
     phone = models.CharField(validators=[phone_regex], blank=True, max_length=18) # validators should be a list
     recommendation = models.ManyToManyField(Skill, related_name="recommend")
 
