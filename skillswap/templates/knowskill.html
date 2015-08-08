@@ -27,7 +27,7 @@ select {
 </style>
 <body class="blue lighten-2">
 <div class="row">
-<div class="sideskill col s12 m3  cyan accent-4" style="text-align:center;"><div style="margin-top:3%;margin-bottom: 3%;">Know <i class="fa fa-graduation-cap"></i></div>
+<div class="know sideskill col s12 m3  cyan accent-4" style="text-align:center;"><div style="margin-top:3%;margin-bottom: 3%;">Know <i class="fa fa-graduation-cap"></i></div>
  {% for skill in know %}
     <div>{{ skill.name }}&nbsp;<form method="post" action="{% url 'deleteknow'  skill.id  %}" style="display:inline">
          {% csrf_token %}
@@ -74,7 +74,7 @@ select {
 </div>
 
 
- <div class="sideskill col s12 m3 green accent-3" style="text-align:center;"><div style="margin-top:3%;margin-bottom: 3%;">Learn <i class="fa fa-cogs"></i></div>
+ <div class="learn sideskill col s12 m3 green accent-3" style="text-align:center;"><div style="margin-top:3%;margin-bottom: 3%;">Learn <i class="fa fa-cogs"></i></div>
      {% for skill in learn %}<div>
         {{ skill.name }}&nbsp;<form method="post" action="{% url 'deletelearn'  skill.id  %}" style="display:inline">
          {% csrf_token %}
@@ -86,7 +86,7 @@ select {
 
 
 <script>
-$(document).ready(function(){
+$(document).ready(function() {
     $(function () {
 $('input:radio').change(
     function(){
@@ -120,7 +120,7 @@ $('input:radio').change(
 );
 
     });
-});
+
 
 
 
@@ -141,6 +141,33 @@ $('#skills .typeahead').typeahead(null, {
   name: 'skills',
   display: 'name',
   source: skills
+});
+
+
+$(window).resize( function() {
+    resize();
+});
+
+resize();
+
+
+function resize(){
+    if($(window).width() < 480)
+    {
+        //Mobile
+        $(".know").insertAfter(".learn");
+    }
+    else if($(window).width() < 800)
+    {
+        //Tablet
+        $(".know").insertAfter(".learn");
+    }
+    else
+    {
+        //Desktop
+        //Leave original layout
+    }
+}
 });
  </script>
 

@@ -1,10 +1,24 @@
 {% extends 'base.html' %}
 {% block body %}
 <body class="blue lighten-2">
+<style>
 
+@media only screen and (max-width: 767px) {
+
+   h1 {
+      font-size: 3em;
+   }
+
+   h2 {
+      font-size: 2em;
+   }
+
+}
+
+</style>
 
 <div class="blue lighten-2 col s12" style="height:100%; display:block; margin-top:0; width:100%; ">
-    <div class="container"><div class="container white-text" style="margin-top:10%; position:absolute; margin-left: auto;
+    <div class="container"><div class="container white-text" style="margin-top:10%; margin-left: auto;
 margin-right: auto;
 left: 0;
 right: 0;">
@@ -16,7 +30,9 @@ right: 0;">
             <a class="waves-effect waves-lighten-2  btn-large" href="{% url 'register' %}" style="background:#EE6E73;">sign up</a>
         {% endif %}
 
-    </div></div></div>
+    </div>
+    </div>
+</div>
 
 <div class="col s12" style="background:#19E1FF; height:100%; display:block; margin-top:0; width:100%;">
 

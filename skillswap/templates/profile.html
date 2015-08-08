@@ -3,7 +3,21 @@
 <body class="blue lighten-2">
     {% csrf_token %}
 
+<style>
+    @media only screen and (max-width: 767px) {
 
+   h1 {
+      font-size: 3em;
+   }
+
+   h2 {
+      font-size: 2em;
+   }
+
+}
+
+
+</style>
 <div class="container">
 {% if exact or similiar %}
 {% else %}
@@ -79,7 +93,7 @@
 <a href="{% url 'update_user' %}">
 {% endif %}
 <div class="row">
-    <div class="col s6 m6" >
+    <div class="col s12 m6" >
       <div class="card geotip hoverable" style="background:#007687;" data-position="bottom" data-delay="50" data-tooltip="Add your address to use">
         <div class="card-content white-text">
           <span class="card-title " ><h3 class="center-align">Skills in Area</h3></span>
@@ -126,7 +140,7 @@
 {% endif %}
 
 
-<div class="col s6 m6" >
+<div class="col s12 m6" >
       <div class="card" style="background:#007687;">
         <div class="card-content white-text">
           <span class="card-title"><h3 class="center-align">You may also like</h3></span>
@@ -163,7 +177,6 @@ $.ajax({
 $(document).ready(function(){
 $(".learn{{ item.id }}").click(learnskill{{ skill.id }});
 
-
 });
  </script>
 
@@ -191,7 +204,7 @@ $(".learn{{ item.id }}").click(learnskill{{ skill.id }});
 
 {% if exact or similiar %}
             {% else %}
-Materialize.toast("<span>You don't have any matches</span><a class='btn-flat yellow-text'; href='{% url 'addskill' %}';>Add Skills<a>", 4000);
+Materialize.toast("<span>Add Skills!</span><a class='btn-flat yellow-text'; href='{% url 'addskill' %}';>Add Skills<a>", 4000);
         {% endif %}
 
 
