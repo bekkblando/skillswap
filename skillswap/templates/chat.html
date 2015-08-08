@@ -3,6 +3,7 @@
 {% block body %}
 <body class="blue lighten-2">
 <div class="container">
+
 {% if object_list %}
     {% for item in object_list %}
 
@@ -13,20 +14,22 @@
                 </div>
 
             <div class="col s6 m6">
-                <button class="green accent-3 waves-effect btn b{{ item.user2.id }}">Show Chat</button>
-                <button class="green accent-3 waves-effect btn hide{{ item.user2.id }}">Hide Chat</button>
+                <button class="green accent-3 waves-effect btn b{{ item.id }}">Show Chat</button>
+                <button class="green accent-3 waves-effect btn hide{{ item.id }}">Hide Chat</button>
             </div>
 
             <div class="col s3 m3">
-                <h6 class="right white-text" style="margin:0;"><a href="{% url 'userpage' item.user2.id %}">{{ item.user2 }}</a></h6>
+                <h6 class="right white-text" style="margin:0;">
+                    <a href="{% url 'userpage' item.user2.id %}">{{ item.user2 }}</a>
+                </h6>
             </div>
             </div>
         </div>
 
         <div class="blue darken-3 card white-text" id="cht{{ item.id }}" style="width:100%;margin-top: 6%;display:none;">
-         <div class="card-content m{{ item.id }}">
+            <div class="card-content ms{{ item.id }}">
 
-        </div>
+            </div>
         </div>
             <form class="f{{ item.id }}" style="display:none;">
 
@@ -65,12 +68,12 @@
                         console.log(data[i].sender);
 
                         if (data[i].sender == {{ item.user1.id }}) {
-                            content = content + "<div class='left'>" + message + "</div><br/>";
+                            content = content + "<div class='left' style='text-align:left'>" + message + "</div><br/><hr>";
                         } else {
-                            content = content + "<div class='right'>" + message + "</div><br/>";
+                            content = content + "<div class='right' style='text-align:right'>" + message + "</div><br/><hr>";
                         }
                     }
-                    $(".m{{ item.id }}").html(content);
+                    $(".ms{{ item.id }}").html(content);
 
                 });
                 var poll{{ item.id }} = (function poll() {
@@ -81,26 +84,26 @@
             };
             var hidechat{{ item.id }} = function(){
                 var content = " ";
-                $(".m{{ item.id }}").html(content);
-                $(".m{{ item.id }}").css({display: 'none'});
+                $(".ms{{ item.id }}").html(content);
+                $(".ms{{ item.id }}").css({display: 'none'});
                 $(".f{{ item.id }}").css({display: 'none'});
 
 
             };
 
             var showchat{{ item.id }} = function(){
-                $(".m{{ item.id }}").css({display: 'block'})
-                $("#cht{{ item.id }}").css({display: 'block'})
+                $(".ms{{ item.id }}").css({display: 'block'});
+                $("#cht{{ item.id }}").css({display: 'block'});
                 $(".f{{ item.id }}").css({display: 'block'});
 
 
             };
 
             $('document').ready(function (){
-                $(".b{{ item.user2.id }}").click(openchat{{ item.id }});
-                $(".b{{ item.user2.id }}").click(showchat{{ item.id }});
+                $(".b{{ item.id }}").click(openchat{{ item.id }});
+                $(".b{{ item.id }}").click(showchat{{ item.id }});
 
-                $(".hide{{ item.user2.id }}").click(hidechat{{ item.id }})
+                $(".hide{{ item.id }}").click(hidechat{{ item.id }})
             });
 
             var formread{{ item.id }} = function() {
