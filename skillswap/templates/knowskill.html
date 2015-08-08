@@ -25,9 +25,9 @@ select {
     }
 }
 </style>
-<body style="background:#19E1FF">
+<body class="blue lighten-2">
 <div class="row">
-<div class="sideskill col s12 m3" style="text-align:center;background:#6EEE8F;"><div style="margin-top:3%;margin-bottom: 3%;">Know <i class="fa fa-graduation-cap"></i></div>
+<div class="sideskill col s12 m3  cyan accent-4" style="text-align:center;"><div style="margin-top:3%;margin-bottom: 3%;">Know <i class="fa fa-graduation-cap"></i></div>
  {% for skill in know %}
     <div>{{ skill.name }}&nbsp;<form method="post" action="{% url 'deleteknow'  skill.id  %}" style="display:inline">
          {% csrf_token %}
@@ -46,18 +46,18 @@ select {
 
     <p>
     <input id="know" type="radio"  required name="skill" value="know"/>
-        <label for="know">A Skill You Know</label>
+        <label for="know">Know</label>
     <input id='learn' type="radio" name="skill" value="learn"  />
-        <label for="learn" style="float:right">A Skill You Want To Learn</label>
+        <label for="learn" class="right">Learn</label>
     </p>
-    <div id="skills" class="left">
-  <input class="typeahead" type="text" placeholder="Skills" name="name" spellcheck="true" required>
+    <div id="skills">
+  <input class="typeahead align-center" type="text" placeholder="Skills" name="name" spellcheck="true" required>
 </div>
-    <div class="right">
-    <input type="text" name="description" placeholder="Description" spellcheck="true"/>
+    <div class="center-align">
+    <input style="width:auto" type="text" name="description" placeholder="Description" spellcheck="true"/>
 </div>
 <div id="rankinput" style="display:none;margin-bottom: 2%">
-<div style="color:white">Rank Yourself</div>
+<div class="white-text">Rank Yourself</div>
     <select name="rank" style>
         <option>Novice</option>
         <option>Apprentice</option>
@@ -74,7 +74,7 @@ select {
 </div>
 
 
- <div class="sideskill col s12 m3" style="text-align:center;background:#00B8D4;"><div style="margin-top:3%;margin-bottom: 3%;">Learn <i class="fa fa-cogs"></i></div>
+ <div class="sideskill col s12 m3 green accent-3" style="text-align:center;"><div style="margin-top:3%;margin-bottom: 3%;">Learn <i class="fa fa-cogs"></i></div>
      {% for skill in learn %}<div>
         {{ skill.name }}&nbsp;<form method="post" action="{% url 'deletelearn'  skill.id  %}" style="display:inline">
          {% csrf_token %}
@@ -93,7 +93,7 @@ $('input:radio').change(
         if ($('#know').is(':checked')){
             $('#rankinput').css({display:'inline-block'});
             $('#addbutton').html('Know <i class="fa fa-graduation-cap"></i>');
-            $('#addbutton').css({background: '#6EEE8F'})
+            $('#addbutton').css({background: '#00b8d4'})
             $('#addbutton').removeClass('tooltipped');
             $('.material-tooltip').remove()
 
@@ -103,7 +103,7 @@ $('input:radio').change(
         else if ($('#learn').is(':checked')){
            $('#rankinput').css({display:'none'});
            $('#addbutton').html('Learn <i class="fa fa-cogs"></i>');
-           $('#addbutton').css({background: '#00B8D4'});
+           $('#addbutton').css({background: '#00e676'});
            $('.tooltipped').removeClass('tooltipped');
            $('.material-tooltip').remove()
 

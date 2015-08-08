@@ -148,7 +148,7 @@
 {% for tu in exact %}
 <div class="row" style="margin-top:15px;margin-bottom: 15px;">
 
-<div class="left-align col s6" > {{ tu.0.name }}</div>
+<div class="left-align col s6" ><a href="{% url 'skillpage' tu.0.id %}"> {{ tu.0.name }}</a></div>
 
 
 <div class="right-align col s6">
@@ -167,7 +167,7 @@
 {% for tu in similiar %}
 <div class="row" style="margin-top:15px;margin-bottom: 15px;">
 
-<div class="left-align col s6" >{{ tu.2 }}</div>
+<div class="left-align col s6" ><a href="{% url 'skillpage' tu.3 %}">{{ tu.2 }}</a></div>
 
 <div class="right-align col s6">
     {% for user in tu.1 %}

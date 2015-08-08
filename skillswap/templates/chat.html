@@ -1,150 +1,142 @@
 {% extends 'base.html' %}
 
 {% block body %}
-<body style="background:#00B8D4">
-<style>
-    input {
-        color: #FFFFFF;
-    }
-    label {
-        color: #FFFFFF;
-    }
-
-</style>
-
+<body class="blue lighten-2">
 <div class="container">
 {% if object_list %}
-{% for item in object_list %}
-<div style="margin-top: 6%;"><div class="row">
-<div class="col s3 m3">
+    {% for item in object_list %}
 
-<h6 class="left" style="color:white;margin:0;"><a href="{% url 'userpage' item.user1.id %}">{{ item.user1 }}</a></h6>
-</div>
+        <div style="margin-top: 40px;">
+            <div class="row">
+                <div class="col s3 m3">
+                    <h6 class="white-text left" style="margin:0;"><a href="{% url 'userpage' item.user1.id %}">{{ item.user1 }}</a></h6>
+                </div>
 
-<div class="col s6 m6">
-<button class="waves-effect btn b{{ item.user2.id }}" style="background:#0BE186;">Show Chat</button>
- <button class="waves-effect btn hide{{ item.user2.id }}" style="background:#0BE186">Hide Chat</button>
-</div>
+            <div class="col s6 m6">
+                <button class="green accent-3 waves-effect btn b{{ item.user2.id }}">Show Chat</button>
+                <button class="green accent-3 waves-effect btn hide{{ item.user2.id }}">Hide Chat</button>
+            </div>
 
-<div class="col s3 m3">
-    <h6 class="right" style="color:white;margin:0;"><a href="{% url 'userpage' item.user2.id %}">{{ item.user2 }}</a></h6>
-</div>
-</div>
-</div>
-<div class="card" id="cht{{ item.id }}" style="width:100%;margin-top: 6%; background:#0C93EB;display:none;">
- <div class="card-content m{{ item.id }}">
+            <div class="col s3 m3">
+                <h6 class="right white-text" style="margin:0;"><a href="{% url 'userpage' item.user2.id %}">{{ item.user2 }}</a></h6>
+            </div>
+            </div>
+        </div>
 
-</div>
-</div>
-    <form class="f{{ item.id }}" style="display:none;">
+        <div class="blue darken-3 card white-text" id="cht{{ item.id }}" style="width:100%;margin-top: 6%;display:none;">
+         <div class="card-content m{{ item.id }}">
 
-
-    <input type="hidden" value="{{ request.user }}" id="user{{ request.user.id }}"/>
-    <textarea class="light-blue" id="textbox{{ item.id }}" placeholder="Type Message Here"></textarea>
-
-    {% if request.user == item.user1.user  %}
-    <input type="hidden" value="{{ item.user1}}" id="user{{ item.id }}"/>
-            <input type="hidden" value="check1" id="check{{ item.id }}"/>
-
-           {% else %}
-            <input type="hidden" value="check2" id="check{{ item.id }}"/>
-
-        <input type="hidden" value="{{ item.user2 }}" id="user{{ item.id }}"/>
-    {% endif %}
-
-    <input type="hidden" value="{{ item.id }}" id="chat{{ item.id }}"/>
-<button class="waves-effect btn b1{{ item.user2.id }}" onclick="formread{{ item.id }}()" type="button" style="background:#0BE186">
-    Send Message</button>
-    </form>
+        </div>
+        </div>
+            <form class="f{{ item.id }}" style="display:none;">
 
 
-<script type="application/javascript">
-    var openchat{{ item.id }} = function (){
-        var content = ' ';
-        var getUrl = "{% url 'messagelist' item.id %}";
-        var messages = [];
-        $.getJSON(getUrl, function (data){
-            for (var i = 0; i < data.length; i++) {
-                var message = (data[i].text);
-                messages.push(message);
+            <input type="hidden" value="{{ request.user }}" id="user{{ request.user.id }}"/>
+            <textarea class="light-blue" id="textbox{{ item.id }}" placeholder="Type Message Here"></textarea>
 
-                if (message === "undefined"){
+            {% if request.user == item.user1.user  %}
+            <input type="hidden" value="{{ item.user1}}" id="user{{ item.id }}"/>
+                    <input type="hidden" value="check1" id="check{{ item.id }}"/>
+
+                   {% else %}
+                    <input type="hidden" value="check2" id="check{{ item.id }}"/>
+
+                <input type="hidden" value="{{ item.user2 }}" id="user{{ item.id }}"/>
+            {% endif %}
+
+            <input type="hidden" value="{{ item.id }}" id="chat{{ item.id }}"/>
+        <button class="green accent-3 waves-effect btn b1{{ item.user2.id }}" onclick="formread{{ item.id }}()" type="button">
+            Send Message</button>
+            </form>
+
+
+        <script type="application/javascript">
+            var openchat{{ item.id }} = function (){
+                var content = ' ';
+                var getUrl = "{% url 'messagelist' item.id %}";
+                var messages = [];
+                $.getJSON(getUrl, function (data){
+                    for (var i = 0; i < data.length; i++) {
+                        var message = (data[i].text);
+                        messages.push(message);
+
+                        if (message === "undefined"){
+                        }
+                        console.log(data[i].sender);
+
+                        if (data[i].sender == {{ item.user1.id }}) {
+                            content = content + "<div class='left'>" + message + "</div><br/>";
+                        } else {
+                            content = content + "<div class='right'>" + message + "</div><br/>";
+                        }
+                    }
+                    $(".m{{ item.id }}").html(content);
+
+                });
+                var poll{{ item.id }} = (function poll() {
+                        setTimeout(function() {
+                openchat{{ item.id }}();
+            }, 10000);
+            })();
+            };
+            var hidechat{{ item.id }} = function(){
+                var content = " ";
+                $(".m{{ item.id }}").html(content);
+                $(".m{{ item.id }}").css({display: 'none'});
+                $(".f{{ item.id }}").css({display: 'none'});
+
+
+            };
+
+            var showchat{{ item.id }} = function(){
+                $(".m{{ item.id }}").css({display: 'block'})
+                $("#cht{{ item.id }}").css({display: 'block'})
+                $(".f{{ item.id }}").css({display: 'block'});
+
+
+            };
+
+            $('document').ready(function (){
+                $(".b{{ item.user2.id }}").click(openchat{{ item.id }});
+                $(".b{{ item.user2.id }}").click(showchat{{ item.id }});
+
+                $(".hide{{ item.user2.id }}").click(hidechat{{ item.id }})
+            });
+
+            var formread{{ item.id }} = function() {
+                var check = document.getElementById("check{{ item.id }}").value;
+                if (check == 'check1') {
+                    var user1 = document.getElementById("user{{ request.user.id }}").value;
+                    var chat = document.getElementById("chat{{ item.id }}").value;
+                    var text = document.getElementById("textbox{{ item.id }}").value;
+
+                    $.ajax({
+                      type: 'POST',
+                      url: {% url 'messagecreate' %},
+                      data: {user1: user1, chat: chat, text: text},
+                      beforeSend: function(xhr) {
+                        xhr.setRequestHeader('Authorization','Token {{ token }}' );
+                      }});
+                    openchat{{ item.id }}();
                 }
-                console.log(data[i].sender);
+                else{
+                    var user1 = document.getElementById("user{{ request.user.id }}").value;
+                    var chat = document.getElementById("chat{{ item.id }}").value;
+                    var text = document.getElementById("textbox{{ item.id }}").value;
 
-                if (data[i].sender == {{ item.user1.id }}) {
-                    content = content + "<div class='left'>" + message + "</div><br/>";
-                } else {
-                    content = content + "<div class='right'>" + message + "</div><br/>";
+
+                    $.ajax({
+                      type: 'POST',
+                      url: {% url 'messagecreate' %},
+                      data: {user1: user1, chat: chat, text: text},
+                      beforeSend: function(xhr) {
+                        xhr.setRequestHeader('Authorization','Token {{ token }}' );
+                      }});
+                    openchat{{ item.id }}();
+
+        }
                 }
-            }
-            $(".m{{ item.id }}").html(content);
-
-        });
-        var poll{{ item.id }} = (function poll() {
-                setTimeout(function() {
-        openchat{{ item.id }}();
-    }, 10000);
-    })();
-    };
-    var hidechat{{ item.id }} = function(){
-        var content = " ";
-        $(".m{{ item.id }}").html(content);
-        $(".m{{ item.id }}").css({display: 'none'});
-        $(".f{{ item.id }}").css({display: 'none'});
-
-
-    };
-
-    var showchat{{ item.id }} = function(){
-        $(".m{{ item.id }}").css({display: 'block'})
-        $("#cht{{ item.id }}").css({display: 'block'})
-        $(".f{{ item.id }}").css({display: 'block'});
-
-
-    };
-
-    $('document').ready(function (){
-        $(".b{{ item.user2.id }}").click(openchat{{ item.id }});
-        $(".b{{ item.user2.id }}").click(showchat{{ item.id }});
-
-        $(".hide{{ item.user2.id }}").click(hidechat{{ item.id }})
-    });
-
-    var formread{{ item.id }} = function() {
-        var check = document.getElementById("check{{ item.id }}").value;
-        if (check == 'check1') {
-            var user1 = document.getElementById("user{{ request.user.id }}").value;
-            var chat = document.getElementById("chat{{ item.id }}").value;
-            var text = document.getElementById("textbox{{ item.id }}").value;
-
-            $.ajax({
-              type: 'POST',
-              url: {% url 'messagecreate' %},
-              data: {user1: user1, chat: chat, text: text},
-              beforeSend: function(xhr) {
-                xhr.setRequestHeader('Authorization','Token {{ token }}' );
-              }});
-            openchat{{ item.id }}();
-        }
-        else{
-            var user1 = document.getElementById("user{{ request.user.id }}").value;
-            var chat = document.getElementById("chat{{ item.id }}").value;
-            var text = document.getElementById("textbox{{ item.id }}").value;
-
-
-            $.ajax({
-              type: 'POST',
-              url: {% url 'messagecreate' %},
-              data: {user1: user1, chat: chat, text: text},
-              beforeSend: function(xhr) {
-                xhr.setRequestHeader('Authorization','Token {{ token }}' );
-              }});
-            openchat{{ item.id }}();
-
-};
-        }
-</script>
+        </script>
 
 {% endfor %}
 {% else %}

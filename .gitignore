@@ -70,3 +70,6 @@ data/
 *.sqlite3
 celerybeat-schedule
 skillswap/static
+skillswap/swap/static/font/
+skillswap/swap/static/js/
+skillswap/swap/static/stylesheets/

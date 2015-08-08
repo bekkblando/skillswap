@@ -31,6 +31,14 @@ class UpdateProfile(UpdateView):
         return Profile.objects.get(user=self.request.user)
 
 
+def skillpage(request, pk):
+    context = {}
+    skill = Skill.objects.get(id=pk)
+    context['skill'] = skill
+    context['knowskill'] = SkillKnow.objects.filter(skill=skill)
+    return render_to_response('skillpage.html', context, context_instance=RequestContext(request))
+
+
 def home(request):
     return render_to_response("home.html", context_instance=RequestContext(request))
 
@@ -119,16 +127,15 @@ def profile(request):
                     add = True
                     if len(simmatch) and not skillname == ite.name and skillname != 'None' and add:
                         if not skillname in addedsimskill:
+                            skillobject = Skill.objects.get(name=skillname)
                             addedsimskill.append(skillname)
-                            smatch.append((ite, simmatch, skillname))
+                            smatch.append((ite, simmatch, skillname, skillobject.id))
         if len(match):
             exact.append([ite, match])
     for sitem in smatch:
         skillcheck = Skill.objects.get(name=sitem[2])
         checkexact = [item[0] for item in exact]
         knowcheck = [item for item in profile.skills.all()]
-        print(knowcheck)
-        print(skillcheck)
         learncheck = [item for item in profile.learn.all()]
         if skillcheck in checkexact or skillcheck in knowcheck or skillcheck in learncheck:
                 pass
@@ -136,6 +143,9 @@ def profile(request):
             filteredsmatch.append(list(sitem))
     try:
         filteredsmatch[0][1] = filteredsmatch[0][1][:5]
+    except:
+        pass
+    try:
         exact[0][1] = exact[0][1][:5]
     except:
         pass

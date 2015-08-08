@@ -3,28 +3,17 @@
     <html>
     <head>
 <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
-      <script type="text/javascript" src="js/materialize.min.js"></script>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
-     <!-- Compiled and minified CSS -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.0/css/materialize.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.0/css/materialize.min.css">
 <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
-
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-
-<script src="{% static 'twitter_typeahead.js' %}"></script>
-
-
-{% comment %}<link href="{% static 'stylesheets/swap.css' %}" type="text/css" rel="stylesheet"/>{% endcomment %}
-{% comment %}<script src="{% static 'js/bin/materialize.js' %}"></script>{% endcomment %}
-    <link rel="stylesheet" type="text/css"  href = "{% static 'style.css' %}"/>
-
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<link rel="stylesheet" type="text/css"  href = "{% static 'style.css' %}"/>
 </head>
 
 
     
 {% if user.is_authenticated %}
-   {% comment %} <div class="navbar-fixed" > {% endcomment %}
     <nav>
       <div class="nav-wrapper" style="background:#F78F66">
 <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
@@ -44,20 +33,17 @@
               <li><a href="{% url 'profile' %}">Dashboard</a></li>
              <li> <a href="{% url 'logout' %}">Logout</a></li>
       </ul>
-      </div>
-    </nav>
-  {% comment %}</div>{% endcomment %}
+  </div>
+</nav>
 
 
 
 
 
     {% else %}
-        {% comment %}<div class="navbar-fixed">{% endcomment %}
     <nav class="z-depth-5">
       <div class="nav-wrapper">
           <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
-
           <ul class="left hide-on-med-and-down">
           <li><a href="{% url 'home' %}"> Home </a></li>
               </ul>
@@ -70,11 +56,9 @@
              <li> <a href="{% url 'login' %}">Login</a></li>
             <li><a href="{% url 'register' %}">SignUp</a></li>
       </ul>
-      </div>
-    </nav>
- {% comment %} </div>{% endcomment %}
+  </div>
+</nav>
 {% endif %}
-
 {% endblock %}
 
 <script>
@@ -86,11 +70,9 @@
     });
 
 </script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.0/js/materialize.min.js"></script>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.0/js/materialize.min.js"></script>
+<script type="text/javascript" src="js/materialize.min.js"></script>
+<script src="{% static 'twitter_typeahead.js' %}"></script>
 
 {% block body %}
-
-HO LETS GO
-
 {% endblock %}

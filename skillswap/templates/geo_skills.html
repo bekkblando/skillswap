@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% block body %}
-<body style="background:#00B8D4">
+<body class="blue lighten-2">
 {% if people %}
     <div class="container flow-text">
     <p class="flow-text">Current address is {{ address }}
@@ -11,10 +11,10 @@ below are skills found in a {{ radius }} Mile radius:</p>
 
 
     <div class="col s6 m6 l6">
-<div style="color:#424242;">User:<a href="{% url 'userpage' person.0.user.profile.id %}" style="color:#424242"> {{ person.0.user }}</a></div>
+<div class="text-grey darken-3">User:<a href="{% url 'userpage' person.0.user.profile.id %}" class="text-grey darken-3"> {{ person.0.user }}</a></div>
     </div>
 <div class="col s6 m6 l6">
-<div style="color:whitesmoke; display:inline">Skills Available in a {{ radius }} Mile radius: </div>
+<div class="text-white" style="display:inline">Skills in a {{ radius }} Mile radius: </div>
 {% for skill in person.1 %}
     <div style="color:whitesmoke;display:inline"><div>{{ skill }}
 
