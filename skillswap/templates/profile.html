@@ -15,9 +15,7 @@
    }
 
 }
-    .distance{
 
-    }
 
 </style>
 <div class="container">
@@ -101,7 +99,7 @@
           <span class="card-title " ><h3 class="center-align">Skills in Area</h3></span>
 {% if user.profile.geo_enabled %}
 <form method="POST" action="{% url 'geo_skills' %}">{% csrf_token %}
-    <select name="distance" style="visibility:visible;display:inline-block;background:#007687;-webkit-appearance:none;">
+    <select class="distance" name="distance" style="visibility:visible;display:inline-block;background:#007687;-webkit-appearance:;">
         <option>10 Miles</option>
         <option>20 Miles</option>
         <option>30 Miles</option>
@@ -113,7 +111,7 @@
         <option>90 Miles</option>
         <option>100 Miles</option>
     </select>
-    <button  type="submit" class="waves-effect blue accent-2 btn" style="margin-top:3%;">Get Skills in Area</button>
+    <button  type="submit" class="waves-effect blue accent-2 btn" style="margin-top:5%;">Get Skills in Area</button>
     </form>
 {% else %}
 
