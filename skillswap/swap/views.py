@@ -418,7 +418,8 @@ class LearnCreateView(generics.GenericAPIView):
         user = request.data['user']
         print(skill, text, user)
         profile = Profile.objects.get(user_id=user)
-        if skill in profile.learn.all():
+        print(profile.learn.all())
+        if skill in profile.learn.all() or skill in profile.skills.all():
             pass
         else:
             learn = SkillLearn.objects.create(user=profile, skill=skill, description=text)
