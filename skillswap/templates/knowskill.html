@@ -79,7 +79,7 @@ select {
         {{ skill.name }}&nbsp;<form method="post" action="{% url 'deletelearn'  skill.id  %}" style="display:inline">
          {% csrf_token %}
          <button style="background-color: Transparent;outline:none;border: none;" onclick="Materialize.toast('Deleted {{ skill.name }}', 2000)" type='submit'>
-             <i class="fa fa-minus"></i>
+             <i class="fa fa-minus right"></i>
          </button></form></div>
      {% endfor %}
  </div>
