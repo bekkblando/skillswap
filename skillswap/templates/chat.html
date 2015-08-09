@@ -68,7 +68,7 @@
                         console.log(data[i].sender);
 
                         if (data[i].sender == {{ item.user1.id }}) {
-                            content = content + "<div class='left' style='text-align:left'>" + message + "</div><br/><hr>";
+                            content = content + "<div style='text-align:left;'>" + message + "</div><br/><hr>";
                         } else {
                             content = content + "<div class='right' style='text-align:right'>" + message + "</div><br/><hr>";
                         }
@@ -79,7 +79,7 @@
                 var poll{{ item.id }} = (function poll() {
                         setTimeout(function() {
                 openchat{{ item.id }}();
-            }, 10000);
+            }, 9000);
             })();
             };
             var hidechat{{ item.id }} = function(){
@@ -112,7 +112,7 @@
                     var user1 = document.getElementById("user{{ request.user.id }}").value;
                     var chat = document.getElementById("chat{{ item.id }}").value;
                     var text = document.getElementById("textbox{{ item.id }}").value;
-
+                    $('#textbox{{ item.id }}').val(" ");
                     $.ajax({
                       type: 'POST',
                       url: {% url 'messagecreate' %},
@@ -126,6 +126,7 @@
                     var user1 = document.getElementById("user{{ request.user.id }}").value;
                     var chat = document.getElementById("chat{{ item.id }}").value;
                     var text = document.getElementById("textbox{{ item.id }}").value;
+                    $('#textbox{{ item.id }}').val(" ");
 
 
                     $.ajax({
