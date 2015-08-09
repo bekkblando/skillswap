@@ -16,7 +16,6 @@
 
 }
 
-
 </style>
 <div class="container">
 {% if exact or similiar %}
@@ -111,7 +110,7 @@
         <option>90 Miles</option>
         <option>100 Miles</option>
     </select>
-    <button type="submit" class="waves-effect blue accent-2 btn">Get Skills in Area</button>
+    <button type="submit" class="waves-effect blue accent-2 btn" style="margin-top:2%;">Get Skills in Area</button>
     </form>
 {% else %}
 
@@ -175,7 +174,8 @@ $.ajax({
 
 
 $(document).ready(function(){
-$(".learn{{ item.id }}").click(learnskill{{ skill.id }});
+$(".learn{{ item.id }}").click(learnskill{{ item.id }});
+
 
 });
  </script>
