@@ -101,7 +101,7 @@
           <span class="card-title " ><h3 class="center-align">Skills in Area</h3></span>
 {% if user.profile.geo_enabled %}
 <form method="POST" action="{% url 'geo_skills' %}">{% csrf_token %}
-    <select name="distance" style="visibility:visible;display:inline-block;background:#007687;">
+    <select name="distance" style="visibility:visible;display:inline-block;background:#007687;-webkit-appearance:none;">
         <option>10 Miles</option>
         <option>20 Miles</option>
         <option>30 Miles</option>
