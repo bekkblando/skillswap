@@ -25,7 +25,6 @@ select {
        <strong>thank you for registering!</strong>
         <a href="{% url 'login' %}">Click here to login!</a><br />
         {% else %}
-         <strong>Apartment not needed, Your address will never be given out to other users</strong><br />
 
         <form id="user_form" method="post" action="/register/"
                 enctype="multipart/form-data">
