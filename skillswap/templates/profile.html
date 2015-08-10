@@ -83,6 +83,8 @@
           </div>
         </div>
       </div>
+<a class="placehold"></a>
+
 {% if similiar or exact %}
 {% else %}
 </a>
@@ -116,6 +118,7 @@
 {% else %}
 
 <div class="container">
+
 
 
     <p class="flow-text" style="color:white;"><a href="{% url 'update_user' %}">
@@ -156,7 +159,6 @@
         <button class="learn{{ item.id }}" style="background-color: Transparent;outline:none;border: none;">
             <i class="fa fa-plus"></i>
         </button>
-
     <script>
 
 var learnskill{{ item.id }} = function(){
@@ -215,6 +217,34 @@ $('.geotip').tooltip({delay: 50});
 {% endif %}
 
 
+
+
+    $(window).resize( function() {
+    resize();
+});
+
+resize();
+
+
+function resize(){
+    if($(window).width() < 480)
+    {
+        //Mobile
+        $(".placehold").insertAfter("<div class='container'>");
+    }
+    else if($(window).width() < 800)
+    {
+        //Tablet
+        $(".placehold").insertAfter("<div class='container'>");
+    }
+    else
+    {
+        //Desktop
+        //Leave original layout
+       $(".placehold").insertAfter(" ");
+
+    }
+}
 
 });
 

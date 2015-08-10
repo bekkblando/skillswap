@@ -154,6 +154,7 @@ def profile(request):
     context['learn'] = learn
     context['know'] = know
     context['similiar'] = filteredsmatch
+    print("FILTERED SEARCH", filteredsmatch)
 
     return render_to_response("profile.html", context, context_instance=RequestContext(request))
 

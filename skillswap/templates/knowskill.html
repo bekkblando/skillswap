@@ -27,17 +27,20 @@ select {
 </style>
 <body class="blue lighten-2">
 <div class="row">
-<div class="know sideskill col s12 m3  cyan accent-4" style="text-align:center;"><div style="margin-top:3%;margin-bottom: 3%;">Know <i class="fa fa-graduation-cap"></i></div>
- {% for skill in know %}
-    <div>{{ skill.name }}&nbsp;<form method="post" action="{% url 'deleteknow'  skill.id  %}" style="display:inline">
+<div class="know sideskill col s12 m3  cyan accent-4" ><div class="center" style="margin-top:3%;margin-bottom: 3%;">Know <i class="fa fa-graduation-cap"></i></div>
+ <div class='container' style="text-align: left">
+     {% for skill in know %}
+    <div>
+        <form method="post" action="{% url 'deleteknow'  skill.id  %}" style="display:inline">
          {% csrf_token %}
          <button onclick="Materialize.toast('Deleted {{ skill.name }}', 2000)" type='submit'
                  style="background-color: Transparent;outline:none;border: none;">
              <i class="fa fa-minus"></i>
          </button>
 
-     </form></div>
- {% endfor %}
+     </form>&nbsp;{{ skill.name }}
+    </div>
+ {% endfor %}</div>
 </div>
 
 <div class="col s12 m6">
@@ -74,14 +77,14 @@ select {
 </div>
 
 
- <div class="learn sideskill col s12 m3 green accent-3" style="text-align:center;"><div style="margin-top:3%;margin-bottom: 3%;">Learn <i class="fa fa-cogs"></i></div>
-     {% for skill in learn %}<div>
+ <div class="learn sideskill col s12 m3 green accent-3"><div class="center" style="margin-top:3%;margin-bottom: 3%;">Learn <i class="fa fa-cogs"></i></div>
+     <div class='container' style="text-align: right">{% for skill in learn %}<div>
         {{ skill.name }}&nbsp;<form method="post" action="{% url 'deletelearn'  skill.id  %}" style="display:inline">
          {% csrf_token %}
          <button style="background-color: Transparent;outline:none;border: none;" onclick="Materialize.toast('Deleted {{ skill.name }}', 2000)" type='submit'>
              <i class="fa fa-minus right"></i>
          </button></form></div>
-     {% endfor %}
+     {% endfor %}</div>
  </div>
 
 
