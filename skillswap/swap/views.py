@@ -23,7 +23,7 @@ import re
 
 class UpdateProfile(UpdateView):
     model = Profile
-    fields = ['streetaddress', 'city', 'state','zipcode', 'phone']
+    fields = ['streetaddress', 'city', 'state','zipcode', 'phone', 'gender', 'age']
     template_name = 'user_update.html'
     success_url = reverse_lazy('profile')
 
@@ -154,7 +154,6 @@ def profile(request):
     context['learn'] = learn
     context['know'] = know
     context['similiar'] = filteredsmatch
-    print("FILTERED SEARCH", filteredsmatch)
 
     return render_to_response("profile.html", context, context_instance=RequestContext(request))
 
@@ -292,6 +291,7 @@ class UserPageView(DetailView):
         learnall = []
         profile = kwargs['object']
         reviews = Meeting.objects.filter(usercommentedon=profile)
+        print(reviews)
         know = context['profile'].skills.all()
         learn = context['profile'].learn.all()
         for skill in know:
@@ -334,9 +334,11 @@ def meetingcreate(request):
         profile1 = Profile.objects.get(user=request.user)
         profile2 = Profile.objects.get(user__id=request.POST['user'])
         content = request.POST['content']
+        print(profile2)
         meeting = Meeting.objects.create(meeting=content, usercommenting=profile1, usercommentedon=profile2)
         meeting.save()
-        return redirect('userpage', int(request.POST['user']))
+        print(request.POST['user'])
+        return redirect('userpage', int(profile2.id))
 
 
 ###### API VIEWS

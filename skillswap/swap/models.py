@@ -1,4 +1,4 @@
-from django.core.validators import RegexValidator, MinValueValidator
+from django.core.validators import RegexValidator, MinValueValidator, MaxValueValidator
 from django.db import models
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
@@ -24,7 +24,7 @@ states = [('AL', 'Alabama'), ('AK', 'Alaska'), ('AS', 'American Samoa'), ('AZ', 
            ('NC', 'North Carolina'),('ND', 'North Dakota'), ('MP', 'Northern Mariana Islands'), ('OH', 'Ohio'), ('OK', 'Oklahoma'),
            ('OR', 'Oregon'), ('PA', 'Pennsylvania'), ('PR', 'Puerto Rico'), ('RI', 'Rhode Island'), ('SC', 'South Carolina'), ('SD', 'South Dakota'), ('TN', 'Tennessee'),
            ('TX', 'Texas'), ('UT', 'Utah'), ('VT', 'Vermont'), ('VI', 'Virgin Islands'), ('VA', 'Virginia'), ('WA', 'Washington'), ('WV', 'West Virginia'), ('WI', 'Wisconsin'), ('WY', 'Wyoming')]
-
+gender = [('Female', 'Female'), ('Male', 'Male')]
 class Profile(models.Model):
     user = models.OneToOneField(User)
     skills = models.ManyToManyField(Skill, through="SkillKnow", related_name='skills')
@@ -37,6 +37,8 @@ class Profile(models.Model):
     phone_regex = RegexValidator(regex=r'1?\W*([2-9][0-8][0-9])\W*([2-9][0-9]{2})\W*([0-9]{4})(\se?x?t?(\d*))?', message="Phone number must be entered in the format: '+999999999'. Up to 15 digits allowed.")
     phone = models.CharField(validators=[phone_regex], blank=True, max_length=18) # validators should be a list
     recommendation = models.ManyToManyField(Skill, related_name="recommend")
+    gender = models.CharField(max_length=7, blank=True, choices=gender)
+    age = models.IntegerField(validators=[MinValueValidator(13), MaxValueValidator(120)], null=True)
 
 
     @property
