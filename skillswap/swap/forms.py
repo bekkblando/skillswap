@@ -30,13 +30,8 @@ class ProfileForm(forms.ModelForm):
         self.fields['zipcode'].label = "Zipcode ↓"
         self.fields['phone'].label = "Phone ↓"
         self.fields['age'].label = "Age ↓"
-
         self.fields['gender'].label = "Gender ↓"
-
-
-
         self.fields['gender'].widget.attrs['placeholder'] = "Gender Here"
-
         self.fields['age'].widget.attrs['age'] = "Enter Your Age Here"
         self.fields['streetaddress'].widget.attrs['placeholder'] = "Type Street Address Here"
         self.fields['city'].widget.attrs['placeholder'] = "Type City Name Here"
