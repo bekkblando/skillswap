@@ -20,7 +20,6 @@ import os
 from haystack.query import SearchQuerySet
 import re
 
-
 class UpdateProfile(UpdateView):
     model = Profile
     fields = ['streetaddress', 'city', 'state','zipcode', 'phone']
@@ -48,6 +47,9 @@ def geo_skills(request):
     context = {}
     if request.POST:
         people = []
+        peopleinarea = []
+        skillsinarea = []
+        complete = []
         distance = 0
         distancemax = request.POST['distance']
         distancemax = int(''.join(x for x in distancemax if x.isdigit()))
@@ -74,14 +76,25 @@ def geo_skills(request):
                         distance = re.findall("(\d+)", distance)[0]
                         miles = 0.62137 * float(distance)
                         if miles <= distancemax:
-                            people.append((profile, profile.skills.all()))
+                            peopleinarea.append(profile)
+                            skillsinarea.append(profile.skills.all())
+                            people.append([profile, profile.skills.all()])
                 except:
                     pass
             context['radius'] = distancemax
 
             context['address'] = "{}, {}, {}, {}".format(currentuser.streetaddress, currentuser.city, currentuser.zipcode, currentuser.state)
-        context['people'] = people
-        print(people)
+        skillspeople = []
+        if len(skillsinarea) > 1:
+            skillsinarea = list(set([skill for skilllist in skillsinarea for skill in skilllist]))
+
+        for skill in skillsinarea:
+            for profile in peopleinarea:
+                if skill in profile.skills.all():
+                    skillspeople.append(profile)
+                skillspeople = list(set(skillspeople))
+            complete.append([skill, skillspeople])
+        context['people'] = complete
     return render_to_response("geo_skills.html", context, context_instance=RequestContext(request))
 
 
@@ -322,9 +335,12 @@ def userchatview(request):
         profile1 = Profile.objects.get(user=request.user)
         profile2 = Profile.objects.get(user__username=request.POST['user2'])
         if not UserChat.objects.filter(user1=profile1, user2=profile2) and not UserChat.objects.filter(user1=profile2,
-                                                                                                       user2=profile1):
+                                                                                                user2=profile1):
+
             chat = UserChat.objects.create(user1=profile1, user2=profile2)
             chat.save()
+            content = "New Chat Created With" + profile2.user
+            chatemail.delay(content, profile2.user.email)
         return redirect('chatlist')
 
 

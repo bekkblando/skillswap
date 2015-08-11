@@ -121,6 +121,13 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+####Email Config
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.mailgun.org'
+EMAIL_HOST_USER = 'postmaster@skillswap.com'
+EMAIL_HOST_PASSWORD = 'skillswap123'
+EMAIL_PORT = 587
 
 ###Haystack
 HAYSTACK_CONNECTIONS = {

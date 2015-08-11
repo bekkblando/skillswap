@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% block body %}
 <body class="blue lighten-2">
+
 {% if people %}
     <div class="container flow-text">
     <p class="flow-text">Current address is {{ address }}
@@ -15,49 +16,40 @@ below are skills found in a {{ radius }} Mile radius:</p>
 
 
     <div class="col s6 m6 l6">
-<div class="text-grey darken-3">User:</div>
+<div class="text-grey darken-3">Skills in a {{ radius }} Mile radius: </div>
     </div>
 <div class="col s6 m6 l6">
-<div class="text-white" style="display:inline">Skills in a {{ radius }} Mile radius: </div>
+<div class="text-white" style="display:inline">User: </div>
     </div>
 </div>
 <div class="row">
 {% for person in people %}
 
-<div class="container">
     <div class="col s6 m6 l6">
-<div class="text-grey darken-3 left">
-    <a href="{% url 'userpage' person.0.user.profile.id %}" class="text-grey darken-3"> {{ person.0.user }}</a>
-</div>
-    </div>
-</div>
+<div class="text-grey darken-3 right">
 
-<div class="col s6 m6 l6">
-{% for skill in person.1 %}
-
-    <div class="right" style="color:whitesmoke;display:inline" >
+        <div class="left" style="color:whitesmoke;display:inline" >
         <div>
-            {{ skill }}
+            {{ person.0 }}
 
         <input id='learn' type="hidden" name="skill" value="learn" />
-        <input  type="hidden" id="name{{ skill.id }}" value="{{ skill }}">
+        <input  type="hidden" id="name{{ person.0.id }}" value="{{ person.0 }}">
         <input  type="hidden" id="user{{ request.user.id }}" value="{{ request.user.id }}">
-        <input type="hidden" id="description{{ skill.id }}" placeholder="Description" value="nodescription"/>
-        <button class="learn{{ skill.id }}" style="background-color:Transparent;outline:none;border:none;">
+        <input type="hidden" id="description{{ person.0.id }}" placeholder="Description" value="nodescription"/>
+        <button class="learn{{ person.0.id }}" style="background-color:Transparent;outline:none;border:none;">
         <i class="fa fa-plus"></i>
         </button>
     </div>
 
 </div>
-
     <script>
 
-var learnskill{{ skill.id }} = function(){
+var learnskill{{ person.0.id }} = function(){
 var token = $('input[name=csrfmiddlewaretoken]').val();
 var learn = document.getElementById("learn").value;
-var skill = document.getElementById("name{{ skill.id }}").value;
+var skill = document.getElementById("name{{ person.0.id }}").value;
 var user = document.getElementById("user{{ request.user.id }}").value;
-var description = document.getElementById("description{{ skill.id }}").value;
+var description = document.getElementById("description{{ person.0.id }}").value;
 $.ajax({
   type: 'POST',
   url: {% url 'addlearnapi' %},
@@ -68,17 +60,30 @@ $.ajax({
 
 
 $(document).ready(function(){
-$(".learn{{ skill.id }}").click(learnskill{{ skill.id }});
+$(".learn{{ person.0.id }}").click(learnskill{{ person.0.id }});
 
 
 });
  </script>
-{% endfor %}
-    </div>
-        <hr/>
-{% endfor %}
-    </div>
+
+
+
 </div>
+    </div>
+
+
+
+<div class="col s6 m6 l6">
+{% for profile in person.1 %}
+    <div class="container right">
+    <div class="left" style="color:whitesmoke;" >
+     <a href="{% url 'userpage' profile.id %}" class="text-grey darken-3"> {{ profile }}</a>
+</div><br/></div>
+{% endfor %}
+    </div>        <hr/>
+
+{% endfor %}
+    </div>
 
 {% else %}
 <p class="center-align flow-text"><a href="{% url 'profile' %}">No skills found for {{ radius }} Mile Radius<br/>

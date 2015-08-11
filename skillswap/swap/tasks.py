@@ -1,5 +1,6 @@
 from __future__ import absolute_import
 from datetime import timedelta
+from django.core.mail import send_mail
 from .models import Skill, Profile
 from .recommend import load_dataset, createC1, scanD, aprioriGen
 import os
@@ -43,3 +44,9 @@ def recommend():
                 profile.recommendation.add(rules[1])
                 #testing.append((profile.recommendation.all(), profile))
         profile.save()
+
+@app.task(name='tasks.sendemail')
+def chatemail(content, sendto):
+ send_mail('New Connection Created',
+           content, 'postmaster@skillswap.com',
+           [sendto], fail_silently=False)
