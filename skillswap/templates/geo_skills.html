@@ -26,12 +26,12 @@ below are skills found in a {{ radius }} Mile radius:</p>
 <div class="row">
 
 
-    <div class="col s6 m6 l6">
+    <div class="col s6 m6 l6 align-left">
 <div class="text-grey darken-3"><a href="{% url 'userpage' person.0.user.profile.id %}" class="text-grey darken-3"> {{ person.0.user }}</a></div>
     </div>
 <div class="col s6 m6 l6">
 {% for skill in person.1 %}
-    <div style="color:whitesmoke;display:inline"><div>{{ skill }}
+    <div style="color:whitesmoke;display:inline"><div class="aligh-right">{{ skill }}
 
     <input id='learn' type="hidden" name="skill" value="learn"  />
   <input  type="hidden" id="name{{ skill.id }}" value="{{ skill }}">

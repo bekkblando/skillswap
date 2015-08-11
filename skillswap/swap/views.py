@@ -23,7 +23,7 @@ import re
 
 class UpdateProfile(UpdateView):
     model = Profile
-    fields = ['streetaddress', 'city', 'state','zipcode', 'phone', 'gender', 'age']
+    fields = ['streetaddress', 'city', 'state','zipcode', 'phone']
     template_name = 'user_update.html'
     success_url = reverse_lazy('profile')
 
@@ -59,31 +59,37 @@ def geo_skills(request):
                                         + streetad + ',' + currentuser.city + ',' + currentuser.state + '&key=' + API_KEY)
         currentusercords = str(currentuserdata.json()['results'][0]['geometry']['location']['lat']) + ',' + str(
             currentuserdata.json()['results'][0]['geometry']['location']['lng'])
-        print(profiles)
         for profile in profiles:
             print(profile, profile.skills.all())
             if profile != currentuser and profile.skills.all():
                 streetad = profile.streetaddress.strip().replace(' ', '+')
                 profiledata = requests.get('https://maps.googleapis.com/maps/api/geocode/json?address='
                                            + streetad + ',' + profile.city + ',' + profile.state + '&key=' + API_KEY)
-                print("PROFILE DATA", profiledata.json())
                 try:
                     profilecords = str(profiledata.json()['results'][0]['geometry']['location']['lat']) + ',' + str(
                         profiledata.json()['results'][0]['geometry']['location']['lng'])
+                    print(profile, profilecords)
                     disdata = requests.get(
                         'https://maps.googleapis.com/maps/api/distancematrix/json?origins=' + currentusercords + '&destinations=' + profilecords + '&key=' + API_KEY)
+                    print(disdata.json()['rows'][0]['elements'][0]['status'])
                     if disdata.json()['rows'][0]['elements'][0]['status'] != 'ZERO_RESULTS':
                         distance = disdata.json()['rows'][0]['elements'][0]['distance']['text']
-                        distance = re.findall("\d+.\d+", distance)[0]
+                        print("PAST IF", profile)
+                        print(profile, distance)
+                        distance = re.findall("(\d+)", distance)[0]
+                        print("Distance", distance)
                         miles = 0.62137 * float(distance)
+                        print("Miles", miles)
                         if miles <= distancemax:
                             people.append((profile, profile.skills.all()))
+                            print("MADE IT TO END", profile)
                 except:
                     pass
             context['radius'] = distancemax
 
             context['address'] = "{}, {}, {}, {}".format(currentuser.streetaddress, currentuser.city, currentuser.zipcode, currentuser.state)
         context['people'] = people
+        print(people)
     return render_to_response("geo_skills.html", context, context_instance=RequestContext(request))
 
 
@@ -154,6 +160,7 @@ def profile(request):
     context['learn'] = learn
     context['know'] = know
     context['similiar'] = filteredsmatch
+    print("FILTERED SEARCH", filteredsmatch)
 
     return render_to_response("profile.html", context, context_instance=RequestContext(request))
 
