@@ -59,6 +59,7 @@
                 var getUrl = "{% url 'messagelist' item.id %}";
                 var messages = [];
                 $.getJSON(getUrl, function (data){
+                    var lastuser = 'un'
                     for (var i = 0; i < data.length; i++) {
                         var message = (data[i].text);
                         messages.push(message);
@@ -66,11 +67,35 @@
                         if (message === "undefined"){
                         }
                         console.log(data[i].sender);
-
                         if (data[i].sender == {{ item.user1.id }}) {
-                            content = content + "<div style='text-align:left;'>" + message + "</div><br/><hr>";
-                        } else {
-                            content = content + "<div class='right' style='text-align:right'>" + message + "</div><br/><hr>";
+                            if (lastuser === 'un'){
+                                console.log("Changed user");
+                                content = content + "<hr>";
+                            }
+                            if (lastuser === 'user2'){
+                                console.log("Changed user");
+                                content = content + "<hr>";
+                            }
+
+                            var lastuser = 'user1';
+                            content = content + "<div style='text-align:left;'>" + message + "</div><br/>";
+                            console.log(lastuser);
+
+
+                        }
+                        else {
+                            if (lastuser === 'un'){
+                                console.log("Changed user");
+                                content = content + "<hr>";
+                            }
+                            if (lastuser === 'user1'){
+                                console.log("Changed user");
+                                content = content + "<hr>";
+                            }
+                            var lastuser = 'user2';
+                            content = content + "<div class='right' style='text-align:right'>" + message + "</div><br/>";
+                            console.log(lastuser);
+
                         }
                     }
                     $(".ms{{ item.id }}").html(content);
