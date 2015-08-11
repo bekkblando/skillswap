@@ -146,7 +146,7 @@ CELERYBEAT_SCHEDULER = 'djcelery.schedulers.DatabaseScheduler'
 CELERYBEAT_SCHEDULE = {
     'add-every-30-seconds': {
         'task': 'tasks.recommend',
-        'schedule': timedelta(seconds=10),
+        'schedule': timedelta(seconds=100),
     },
 }
 

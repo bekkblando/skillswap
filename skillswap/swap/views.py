@@ -19,10 +19,11 @@ from rest_framework import status
 import os
 from haystack.query import SearchQuerySet
 import re
+from swap.tasks import chatemail
 
 class UpdateProfile(UpdateView):
     model = Profile
-    fields = ['streetaddress', 'city', 'state','zipcode', 'phone']
+    fields = ['streetaddress', 'city', 'state','zipcode', 'phone', 'gender', 'age']
     template_name = 'user_update.html'
     success_url = reverse_lazy('profile')
 
@@ -137,13 +138,14 @@ def profile(request):
                     simmatch = Profile.objects.filter(~Q(user=profile.user), skills__in=[skil])
                     add = True
                     if len(simmatch) and not skillname == ite.name and skillname != 'None' and add:
-                        if not skillname in addedsimskill:
+                        if not skil in addedsimskill:
                             skillobject = Skill.objects.get(name=skillname)
-                            addedsimskill.append(skillname)
-                            smatch.append((ite, simmatch, skillname, skillobject.id))
+                            addedsimskill.append(skil)
+                            smatch.append((ite, simmatch, skil, skillobject.id))
         if len(match):
             exact.append([ite, match])
     for sitem in smatch:
+        print("SITEM", sitem)
         skillcheck = Skill.objects.get(name=sitem[2])
         checkexact = [item[0] for item in exact]
         knowcheck = [item for item in profile.skills.all()]
@@ -152,6 +154,7 @@ def profile(request):
                 pass
         else:
             filteredsmatch.append(list(sitem))
+    print(filteredsmatch)
     try:
         filteredsmatch[0][1] = filteredsmatch[0][1][:5]
     except:
@@ -165,7 +168,6 @@ def profile(request):
     context['learn'] = learn
     context['know'] = know
     context['similiar'] = filteredsmatch
-    print("FILTERED SEARCH", filteredsmatch)
 
     return render_to_response("profile.html", context, context_instance=RequestContext(request))
 
@@ -339,7 +341,7 @@ def userchatview(request):
 
             chat = UserChat.objects.create(user1=profile1, user2=profile2)
             chat.save()
-            content = "New Chat Created With" + profile2.user
+            content = "New Chat Created With " + str(profile2.user.username)
             chatemail.delay(content, profile2.user.email)
         return redirect('chatlist')
 
