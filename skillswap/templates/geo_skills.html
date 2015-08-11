@@ -25,24 +25,26 @@ below are skills found in a {{ radius }} Mile radius:</p>
 {% for person in people %}
 <div class="row">
 
+<div class="container">
+    <div class="col s6 m6 l6">
+<div class="text-grey darken-3 left"><a href="{% url 'userpage' person.0.user.profile.id %}" class="text-grey darken-3"> {{ person.0.user }}</a></div>
+    </div>    </div>
 
-    <div class="col s6 m6 l6 align-left">
-<div class="text-grey darken-3"><a href="{% url 'userpage' person.0.user.profile.id %}" class="text-grey darken-3"> {{ person.0.user }}</a></div>
-    </div>
+
 <div class="col s6 m6 l6">
 {% for skill in person.1 %}
-    <div style="color:whitesmoke;display:inline"><div class="aligh-right">{{ skill }}
 
-    <input id='learn' type="hidden" name="skill" value="learn"  />
+    <div class="right-align" style="color:whitesmoke;display:inline"><div>{{ skill }}
+
+    <input id='learn' type="hidden" name="skill" value="learn" />
   <input  type="hidden" id="name{{ skill.id }}" value="{{ skill }}">
   <input  type="hidden" id="user{{ request.user.id }}" value="{{ request.user.id }}">
     <input type="hidden" id="description{{ skill.id }}" placeholder="Description" value="nodescription"/>
         <button class="learn{{ skill.id }}" style="background-color: Transparent;outline:none;border: none;">
-            <i class="fa fa-plus"></i>
-        </button>
-    </div></div>
+            <i class="fa fa-plus"></i></button>
+    </div>
 
-
+</div>
     <script>
 
 var learnskill{{ skill.id }} = function(){
@@ -71,7 +73,6 @@ $(".learn{{ skill.id }}").click(learnskill{{ skill.id }});
         <hr/>
 
 {% endfor %}
-
     </div>
 </div>
 

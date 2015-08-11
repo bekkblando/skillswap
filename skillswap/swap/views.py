@@ -60,7 +60,6 @@ def geo_skills(request):
         currentusercords = str(currentuserdata.json()['results'][0]['geometry']['location']['lat']) + ',' + str(
             currentuserdata.json()['results'][0]['geometry']['location']['lng'])
         for profile in profiles:
-            print(profile, profile.skills.all())
             if profile != currentuser and profile.skills.all():
                 streetad = profile.streetaddress.strip().replace(' ', '+')
                 profiledata = requests.get('https://maps.googleapis.com/maps/api/geocode/json?address='
@@ -68,21 +67,14 @@ def geo_skills(request):
                 try:
                     profilecords = str(profiledata.json()['results'][0]['geometry']['location']['lat']) + ',' + str(
                         profiledata.json()['results'][0]['geometry']['location']['lng'])
-                    print(profile, profilecords)
                     disdata = requests.get(
                         'https://maps.googleapis.com/maps/api/distancematrix/json?origins=' + currentusercords + '&destinations=' + profilecords + '&key=' + API_KEY)
-                    print(disdata.json()['rows'][0]['elements'][0]['status'])
                     if disdata.json()['rows'][0]['elements'][0]['status'] != 'ZERO_RESULTS':
                         distance = disdata.json()['rows'][0]['elements'][0]['distance']['text']
-                        print("PAST IF", profile)
-                        print(profile, distance)
                         distance = re.findall("(\d+)", distance)[0]
-                        print("Distance", distance)
                         miles = 0.62137 * float(distance)
-                        print("Miles", miles)
                         if miles <= distancemax:
                             people.append((profile, profile.skills.all()))
-                            print("MADE IT TO END", profile)
                 except:
                     pass
             context['radius'] = distancemax
