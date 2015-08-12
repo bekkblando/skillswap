@@ -52,54 +52,57 @@ def geo_skills(request):
         skillsinarea = []
         complete = []
         distance = 0
-        distancemax = request.POST['distance']
-        distancemax = int(''.join(x for x in distancemax if x.isdigit()))
-        profiles = Profile.objects.all()
-        currentuser = Profile.objects.get(user=request.user)
-        streetad = currentuser.streetaddress.strip().replace(' ', '+')
-        API_KEY = os.environ.get('GOOGLE_API_KEY')
-        currentuserdata = requests.get('https://maps.googleapis.com/maps/api/geocode/json?address='
-                                        + streetad + ',' + currentuser.city + ',' + currentuser.state + '&key=' + API_KEY)
-        currentusercords = str(currentuserdata.json()['results'][0]['geometry']['location']['lat']) + ',' + str(
-            currentuserdata.json()['results'][0]['geometry']['location']['lng'])
-        for profile in profiles:
-            if profile != currentuser and profile.skills.all():
-                streetad = profile.streetaddress.strip().replace(' ', '+')
-                profiledata = requests.get('https://maps.googleapis.com/maps/api/geocode/json?address='
-                                           + streetad + ',' + profile.city + ',' + profile.state + '&key=' + API_KEY)
-                try:
-                    profilecords = str(profiledata.json()['results'][0]['geometry']['location']['lat']) + ',' + str(
-                        profiledata.json()['results'][0]['geometry']['location']['lng'])
-                    disdata = requests.get(
-                        'https://maps.googleapis.com/maps/api/distancematrix/json?origins=' + currentusercords + '&destinations=' + profilecords + '&key=' + API_KEY)
-                    if disdata.json()['rows'][0]['elements'][0]['status'] != 'ZERO_RESULTS':
-                        distance = disdata.json()['rows'][0]['elements'][0]['distance']['text']
-                        distance = re.findall("(\d+)", distance)[0]
-                        miles = 0.62137 * float(distance)
-                        if miles <= distancemax:
-                            peopleinarea.append(profile)
-                            skillsinarea.append(profile.skills.all())
-                            people.append([profile, profile.skills.all()])
-                except:
-                    pass
-            context['radius'] = distancemax
+        try:
+            distancemax = request.POST['distance']
+            distancemax = int(''.join(x for x in distancemax if x.isdigit()))
+            profiles = Profile.objects.all()
+            currentuser = Profile.objects.get(user=request.user)
+            streetad = currentuser.streetaddress.strip().replace(' ', '+')
+            API_KEY = os.environ.get('GOOGLE_API_KEY')
+            currentuserdata = requests.get('https://maps.googleapis.com/maps/api/geocode/json?address='
+                                            + streetad + ',' + currentuser.city + ',' + currentuser.state + '&key=' + API_KEY)
+            currentusercords = str(currentuserdata.json()['results'][0]['geometry']['location']['lat']) + ',' + str(
+                currentuserdata.json()['results'][0]['geometry']['location']['lng'])
+            for profile in profiles:
+                if profile != currentuser and profile.skills.all():
+                    streetad = profile.streetaddress.strip().replace(' ', '+')
+                    profiledata = requests.get('https://maps.googleapis.com/maps/api/geocode/json?address='
+                                               + streetad + ',' + profile.city + ',' + profile.state + '&key=' + API_KEY)
+                    try:
+                        profilecords = str(profiledata.json()['results'][0]['geometry']['location']['lat']) + ',' + str(
+                            profiledata.json()['results'][0]['geometry']['location']['lng'])
+                        disdata = requests.get(
+                            'https://maps.googleapis.com/maps/api/distancematrix/json?origins=' + currentusercords + '&destinations=' + profilecords + '&key=' + API_KEY)
+                        if disdata.json()['rows'][0]['elements'][0]['status'] != 'ZERO_RESULTS':
+                            distance = disdata.json()['rows'][0]['elements'][0]['distance']['text']
+                            distance = re.findall("(\d+)", distance)[0]
+                            miles = 0.62137 * float(distance)
+                            if miles <= distancemax:
+                                peopleinarea.append(profile)
+                                skillsinarea.append(profile.skills.all())
+                                people.append([profile, profile.skills.all()])
+                    except:
+                        pass
+                context['radius'] = distancemax
 
-            context['address'] = "{}, {}, {}, {}".format(currentuser.streetaddress, currentuser.city, currentuser.zipcode, currentuser.state)
-        skillspeople = []
-        if len(skillsinarea) > 1 and len(skillsinarea) != 0:
-            skillsinarea = list(set([skill for skilllist in skillsinarea for skill in skilllist]))
-
-        else:
-            skillsinarea= skillsinarea[0]
-
-        for skill in skillsinarea:
+                context['address'] = "{}, {}, {}, {}".format(currentuser.streetaddress, currentuser.city, currentuser.zipcode, currentuser.state)
             skillspeople = []
-            for profile in peopleinarea:
-                if skill in profile.skills.all():
-                    skillspeople.append(profile)
-                skillspeople = list(set(skillspeople))
-            complete.append([skill, skillspeople])
-        context['people'] = complete
+            if len(skillsinarea) > 1 and len(skillsinarea) != 0:
+                skillsinarea = list(set([skill for skilllist in skillsinarea for skill in skilllist]))
+
+            else:
+                skillsinarea= skillsinarea[0]
+
+            for skill in skillsinarea:
+                skillspeople = []
+                for profile in peopleinarea:
+                    if skill in profile.skills.all():
+                        skillspeople.append(profile)
+                    skillspeople = list(set(skillspeople))
+                complete.append([skill, skillspeople])
+            context['people'] = complete
+        except:
+            pass
     return render_to_response("geo_skills.html", context, context_instance=RequestContext(request))
 
 

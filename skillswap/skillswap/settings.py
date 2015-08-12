@@ -125,8 +125,8 @@ STATIC_URL = '/static/'
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.mailgun.org'
-EMAIL_HOST_USER = 'postmaster@skillswap.com'
-EMAIL_HOST_PASSWORD = 'skillswap123'
+EMAIL_HOST_USER = 'postmaster@sandbox07626c33988645cb99c9646586085c52.mailgun.org'
+EMAIL_HOST_PASSWORD = '02b49bc4b72d01483aea18ff0ed58ed4'
 EMAIL_PORT = 587
 
 ###Haystack
