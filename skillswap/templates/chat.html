@@ -27,7 +27,7 @@
         </div>
 
         <div class="blue lighten-1 card grey-darken-3-text" id="cht{{ item.id }}" style="width:100%;margin-top: 6%;display:none;">
-            <div class="card-content "><div class="ms{{ item.id }} blue lighten-3">
+            <div class="card-content cardcon{{ item.id }}"><div class="ms{{ item.id }} blue lighten-3">
 
             </div>
 
@@ -114,6 +114,7 @@
                 $(".ms{{ item.id }}").html(content);
                 $(".ms{{ item.id }}").css({display: 'none'});
                 $(".f{{ item.id }}").css({display: 'none'});
+                $(".cardcon{{ item.id }}").css({display:'none'})
 
 
             };
@@ -122,6 +123,7 @@
                 $(".ms{{ item.id }}").css({display: 'block'});
                 $("#cht{{ item.id }}").css({display: 'block'});
                 $(".f{{ item.id }}").css({display: 'block'});
+                $(".cardcon{{ item.id }}").css({display:'block'})
 
 
             };
