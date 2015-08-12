@@ -62,7 +62,7 @@
 {% for tu in similiar %}
 <div class="row" style="margin-top:15px;margin-bottom: 15px;">
 
-<div class="left-align col s6" ><a href="{% url 'skillpage' tu.3 %}">{{ tu.2 }}</a></div>
+<div class="left-align col s6" ><a href="{% url 'skillpage' tu.2.id %}">{{ tu.2 }}</a></div>
 
 <div class="right-align col s6">
     {% for user in tu.1 %}
