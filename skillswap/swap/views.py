@@ -345,7 +345,7 @@ def userchatview(request):
 
             chat = UserChat.objects.create(user1=profile1, user2=profile2)
             chat.save()
-            content = "New Chat Created With " + str(profile2.user.username)
+            content = "New Chat Created With " + str(profile1.user.username)
             chatemail.delay(content, profile2.user.email)
         return redirect('chatlist')
 

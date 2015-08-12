@@ -47,7 +47,8 @@ def recommend():
 
 @app.task(name='tasks.sendemail')
 def chatemail(content, sendto):
- result = send_mail('Skill Swap New Connection Created',
+ result = send_mail('Skill Share! New Connection Created',
            content, 'tester@skillswap.com',
            [sendto], fail_silently=False)
+ print(sendto)
  return result
