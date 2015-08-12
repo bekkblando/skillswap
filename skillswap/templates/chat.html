@@ -26,16 +26,18 @@
             </div>
         </div>
 
-        <div class="blue darken-3 card white-text" id="cht{{ item.id }}" style="width:100%;margin-top: 6%;display:none;">
-            <div class="card-content ms{{ item.id }}">
+        <div class="blue lighten-1 card grey-darken-3-text" id="cht{{ item.id }}" style="width:100%;margin-top: 6%;display:none;">
+            <div class="card-content "><div class="ms{{ item.id }} blue lighten-3">
 
             </div>
+
+
         </div>
-            <form class="f{{ item.id }}" style="display:none;">
+            <form class="f{{ item.id }}" style="display:none;margin-left:2%;margin-right:2%;">
 
 
             <input type="hidden" value="{{ request.user }}" id="user{{ request.user.id }}"/>
-            <textarea class="light-blue" id="textbox{{ item.id }}" placeholder="Type Message Here"></textarea>
+            <textarea class="blue lighten-2 " id="textbox{{ item.id }}" placeholder="Type Message Here"></textarea>
 
             {% if request.user == item.user1.user  %}
             <input type="hidden" value="{{ item.user1}}" id="user{{ item.id }}"/>
@@ -47,11 +49,11 @@
                 <input type="hidden" value="{{ item.user2 }}" id="user{{ item.id }}"/>
             {% endif %}
 
-            <input type="hidden" value="{{ item.id }}" id="chat{{ item.id }}"/>
+            <input type="hidden" value="{{ item.id }}" id="chat{{ item.id }}" />
         <button class="green accent-3 waves-effect btn b1{{ item.user2.id }}" onclick="formread{{ item.id }}()" type="button">
             Send Message</button>
             </form>
-
+</div>
 
         <script type="application/javascript">
             var openchat{{ item.id }} = function (){
