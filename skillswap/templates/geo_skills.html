@@ -24,9 +24,9 @@ below are skills found in a {{ radius }} Mile radius:</p>
 </div>
 <div class="row">
 {% for person in people %}
-
+<div class="row">
     <div class="col s6 m6 l6">
-<div class="text-grey darken-3 right">
+<div class="text-grey darken-3 left">
 
         <div class="left" style="color:whitesmoke;display:inline" >
         <div>
@@ -75,12 +75,11 @@ $(".learn{{ person.0.id }}").click(learnskill{{ person.0.id }});
 
 <div class="col s6 m6 l6">
 {% for profile in person.1 %}
-    <div class="container right">
-    <div class="left" style="color:whitesmoke;" >
+    <div class="center" style="color:whitesmoke;" >
      <a href="{% url 'userpage' profile.id %}" class="text-grey darken-3"> {{ profile }}</a>
-</div><br/></div>
+</div><br/>
 {% endfor %}
-    </div>        <hr/>
+    </div></div><hr/>
 
 {% endfor %}
     </div>
