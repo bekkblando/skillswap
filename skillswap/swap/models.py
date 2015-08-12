@@ -38,7 +38,7 @@ class Profile(models.Model):
     phone = models.CharField(validators=[phone_regex], blank=True, max_length=18) # validators should be a list
     recommendation = models.ManyToManyField(Skill, related_name="recommend")
     gender = models.CharField(max_length=7, blank=True, choices=gender)
-    age = models.IntegerField(validators=[MinValueValidator(13), MaxValueValidator(120)], null=True)
+    age = models.IntegerField(validators=[MinValueValidator(13), MaxValueValidator(120)], null=True, blank=True)
 
 
     @property
