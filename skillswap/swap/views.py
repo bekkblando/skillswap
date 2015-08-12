@@ -86,8 +86,11 @@ def geo_skills(request):
 
             context['address'] = "{}, {}, {}, {}".format(currentuser.streetaddress, currentuser.city, currentuser.zipcode, currentuser.state)
         skillspeople = []
-        if len(skillsinarea) > 1:
+        if len(skillsinarea) > 1 and len(skillsinarea) != 0:
             skillsinarea = list(set([skill for skilllist in skillsinarea for skill in skilllist]))
+
+        else:
+            skillsinarea= skillsinarea[0]
 
         for skill in skillsinarea:
             for profile in peopleinarea:
