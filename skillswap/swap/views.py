@@ -93,6 +93,7 @@ def geo_skills(request):
             skillsinarea= skillsinarea[0]
 
         for skill in skillsinarea:
+            skillpeople = []
             for profile in peopleinarea:
                 if skill in profile.skills.all():
                     skillspeople.append(profile)
