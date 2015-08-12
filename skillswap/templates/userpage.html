@@ -135,7 +135,7 @@
 
 <form method="POST" action="{% url 'meetingcreate' %}">{% csrf_token %}
 
-<div><textarea name="content" placeholder="Type how it went here"></textarea></div>
+<div><textarea name="content" placeholder="Type how it went here" required></textarea></div>
     <input type="hidden" name="user" value="{{ object.user.id }}"/>
     <button class="waves-effect btn" type="submit" style="background:#F78F66">Talk about it</button>
 </form></div>
