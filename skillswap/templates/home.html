@@ -51,7 +51,7 @@ right: 0;">
         <div>{% if user.is_authenticated %}
         <a class="waves-effect waves-lighten-2  btn-large" href="{% url 'profile' %}" style="background:#F78F66;">Dashboard</a>
         {% else %}
-            <a class="waves-effect waves-lighten-2  btn-large" href="{% url 'register' %}" style="background:#EE6E73;">sign up</a>
+            <a class="waves-effect waves-lighten-2  btn-large" href="{% url 'register' %}" style="background:#F78F66">sign up</a>
         {% endif %}</div>
 <!--<div class="arrow-down"></div>-->
     </div>
@@ -121,7 +121,7 @@ textarea:focus, input:focus {
 {% if user.is_authenticated %}
     <button id="zip" class="btn waves-effect" type="submit" style="vertical-align: top;background:#F78F66;">Submit <i class="material-icons">send</i>
 {% else %}
-    <button id="zip" class="btn waves-effect" type="submit" style="vertical-align: top;background:#EE6E73;">Submit <i class="material-icons">send</i>
+    <button id="zip" class="btn waves-effect" type="submit" style="vertical-align: top;background:#F78F66;">Submit <i class="material-icons">send</i>
 {% endif %}
   </button>
             </div>
