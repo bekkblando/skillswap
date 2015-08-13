@@ -18,6 +18,7 @@ select {
 
 </style>
 <div class="container">
+    <p class="flow-text">{{ request.user }}</p>
 <form action="" method="post">{% csrf_token %}
     {{ form.as_p }}
     <div style="text-align: center;">
