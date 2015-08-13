@@ -162,12 +162,18 @@ function resize(){
     else if($(window).width() < 800)
     {
         //Tablet
-        //$(".know").insertAfter(".learn");
+        $(".know").insertAfter(".learn");
+        $(".know").removeClass('m3');
+        $(".learn").removeClass('m3');
+        $(".know").addClass('m12');
+        $(".learn").addClass('m12')
+
     }
     else
     {
         //Desktop
         //Leave original layout
+
     }
 }
 });
