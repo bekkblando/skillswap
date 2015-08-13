@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% block body %}
+{% load static from staticfiles %}
 <body class="blue lighten-2">
 <style>
 
@@ -83,13 +84,13 @@ right: 0;">
 <div class="col s12" style="background:#6EEE8F ; height:100%; display:block; margin-top:0; width:100%;">
 
 
-    <div id="use" class="container"><div class="container white-text" style="margin-top:10%; position:absolute; margin-left: auto;
+    <div id="use" class="container"><div class="container white-text" style="margin-top:8%; position:absolute; margin-left: auto;
 margin-right: auto;
 left: 0;
 right: 0;">
     <h1>Site Help</h1>
-        <p class="flow-text">We hope the site is self explanatory but if not this tutorial should help!</p>
-
+        <p class="flow-text">Here's a quick run through of the site!</p>
+<img src="{% static 'TutorialGif.gif' %}" style="height:50%; width:80%;"/>
     </div></div>
 
 
